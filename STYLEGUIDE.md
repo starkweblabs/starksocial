@@ -342,8 +342,115 @@ starksocial/
 │   ├── stark-reveal.js ← IntersectionObserver reveal + tilt
 │   └── author-box.js   ← Author login attribute
 ├── img/                ← Theme-specific SVGs
-├── passgen/            ← Password generator (keep as-is)
+├── passgen/            ← Password generator (rebuild in Phase 2)
 └── framework/          ← Custom template views
     └── views/custom/
         └── wp-404.php
 ```
+
+---
+
+## Feature Decisions & Scope
+
+### 1. Password Generator (Rebuild in Phase 2)
+**Current:** Pill-shaped form, doesn't match site design  
+**Decision:** Rebuild to match Stark design system — `stark-card` container, `--stark-radius-field` inputs, Barlow font, brand colors. Remove pill shapes. Should feel like a native part of the site, not a widget drop-in.  
+**Location:** `/password-generator/` — keep as shortcode `[password_generator]`, just rebuild the CSS  
+**Owner:** Claude — Build
+
+---
+
+### 2. Live Chat (Olark → Evaluate)
+**Current:** Olark free tier — button style is good, service is adequate. Also integrated with Perfex Hub.  
+**Decision:** Evaluate before committing to Olark Pro.
+
+**Options to consider:**
+| Service | Pro | Con |
+|---|---|---|
+| **Olark Pro** | Already integrated with Hub, familiar | Older product, limited AI features |
+| **Crisp** | Modern, free tier generous, good design | No native Perfex integration |
+| **Tidio** | AI features, clean UI | Can get expensive |
+| **Tawk.to** | Free forever | Design less polished |
+
+**Recommendation:** If Hub integration is important, pay for Olark Pro. If Hub integration isn't critical for chat, Crisp is the better modern product.  
+**Keep current Olark styling** from global CSS regardless of which service is chosen — the button style is already on-brand.  
+**Decision needed by:** Before Phase 2 launch
+
+---
+
+### 3. Podcast (Podlove → Evaluate)
+**Current:** Podlove Podcasting Plugin — hasn't been updated recently. Audio files on AWS S3.  
+**Status:** Podcast on pause, considering relaunch.
+
+**Options:**
+| Option | Pro | Con |
+|---|---|---|
+| **Keep Podlove** | Already set up, AWS connected, CPT working | Plugin aging, less active development |
+| **Seriously Simple Podcasting** | Active development, clean UI, good RSS | Migration work |
+| **Castos** | Hosted platform, great analytics, WordPress plugin | Monthly cost, moves files off AWS |
+| **Buzzsprout embed** | Simple, reliable | Loses on-site player control |
+
+**Recommendation:** Keep Podlove for now since podcast is on pause. When relaunching evaluate Seriously Simple Podcasting — active development, better WordPress integration. Audio stays on AWS either way.  
+**AWS S3 bucket:** Already configured, keep regardless of plugin choice.
+
+---
+
+### 4. Blog Audio Player — ElevenLabs AI Voice (Phase 2 Feature)
+**Current:** Audio files manually created in Speechify, hosted on AWS S3, embedded in blog posts. Labor intensive.  
+**Decision:** Replace manual Speechify workflow with ElevenLabs API — auto-generate audio from blog post content using Nathan or Deanna's cloned voice.
+
+**Proposed workflow:**
+1. Blog post published/updated in WordPress
+2. WordPress hook triggers ElevenLabs API call with post content
+3. ElevenLabs generates MP3 using cloned voice
+4. MP3 uploaded to existing AWS S3 bucket automatically
+5. Player on blog post pulls from S3 URL (same as today)
+
+**Voice cloning:** ElevenLabs Professional Voice Clone — requires ~30 min of clean audio. Podcast episodes are ideal source material for both Nathan and Deanna.  
+**ElevenLabs plan needed:** Creator ($22/mo) minimum for voice cloning  
+**AWS:** Keep existing bucket and structure  
+**Owner:** Claude — Build (WordPress hook + API integration)  
+**Priority:** Phase 2 — high value, replaces manual labor entirely
+
+---
+
+### 5. Unified Audio Player (Blog + Podcast)
+**Decision:** Both blog and podcast use the same base player component with different feature sets.
+
+**Blog player (simple):**
+- Play/pause, progress bar, speed control, volume
+- "Listen to this post" label
+- Matches `.stark-card` glass morphism style
+
+**Podcast player (full):**
+- All blog player features PLUS
+- Chapter markers
+- Transcript toggle (collapsible below player)
+- Episode number + duration display
+- Download button
+- Subscribe links (Spotify, Apple, etc.)
+
+**Design:** Same visual language — dark glass `rgba(10,16,28,.92)`, accent blue progress bar, Barlow font, `border-radius: 18px`. Feels like one product at two feature levels.  
+**Owner:** Claude — Build  
+**Note:** If switching from Podlove, verify chapter + transcript support in new plugin before committing.
+
+---
+
+### 6. Support Ticket Button → Perfex Hub
+**Decision:** Add "Open a Support Ticket" as a utility action that redirects to `hub.starksocial.com/clients/open_ticket`
+
+**Behavior:**
+- Clicking opens `https://hub.starksocial.com/clients/open_ticket` in a new tab
+- Perfex Hub handles authentication — existing clients log in, non-clients see login/register
+- No custom auth needed on the WordPress side
+
+**Placement:**
+- Support page (`/support/`) — primary CTA
+- Knowledgebase pages — sidebar or footer of articles
+- Utility nav (top right alongside Client Portal)
+- Mobile menu — utility section at bottom
+
+**Button style:** `.stark-btn.blue-btn` — matches Client Portal button treatment  
+**Label:** "Open a Support Ticket"  
+**Icon:** ticket or message icon  
+**Owner:** Claude — Build
