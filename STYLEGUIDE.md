@@ -186,6 +186,45 @@ Dot animates on hover: `rgba(48,127,226,0.7)` fill.
 
 ---
 
+## Signature Features — DO NOT REMOVE
+
+These are defining UI moments that must survive the Phase 2 migration exactly as they work today. They are non-negotiable design decisions.
+
+### 1. Scroll Progress Bar
+A thin blue line that runs edge-to-edge along the bottom of the sticky nav, growing from left to right as the user scrolls down the page.
+
+- Only visible when the sticky nav is in frosted glass state (scrolled)
+- Color: `color-mix(in srgb, var(--stark-accent) 78%, white 0%)`
+- Height: `2px` desktop / `3px` at `≥ 900px`
+- Driven by `--stark-scroll` CSS variable (0 to 1) set via scroll event listener
+- Velocity glow: as scroll speed increases, the bar glows via `--stark-vel` variable
+- Transition: `120ms linear` — feels live, not laggy
+- Implementation: CSS `scaleX(var(--stark-scroll))` on `::after` pseudo-element of `.x-bar-content`
+- Reduced motion: transition disabled, bar still shows statically
+
+### 2. A11y Button + Back-to-Top Choreography
+Two fixed-position utility buttons that perform a coordinated entrance as the user scrolls.
+
+**A11y button (`.stark-a11y-btn`):**
+- Labeled "A11y" — accessibility settings shortcut
+- Fixed to bottom-left, starts at `left: 10px`
+- As user scrolls to 50% of page, it smoothly slides right to `left: 64px` — making room for the back-to-top button to appear beside it
+- Movement eased with `cubic-bezier(.22,.61,.36,1)`
+- Icon: accessibility symbol
+
+**Back-to-top button (`.x-scroll-top`):**
+- Fixed bottom-right
+- Hidden off-screen (`translateX(-18px)`, `opacity: 0`) until user scrolls
+- Slides in from the left with `opacity: 1` when triggered
+- Pure CSS chevron pointing up (no icon font dependency)
+- Subtle `starkChevronNudge` animation pulses every 4.2s to hint at the action
+- Hover: chevron turns accent blue, button lifts `translateY(-2px)`
+- Both buttons share the same glass morphism style: `rgba(255,255,255,.62)`, `backdrop-filter: blur(10px)`, `border-radius: 14px`
+
+**The choreography:** A11y slides left → gap opens → back-to-top slides into the gap. Feels intentional, not accidental.
+
+---
+
 ## Interaction Patterns
 
 - **Hover lift:** `translateY(-2px)` — universal for cards, buttons

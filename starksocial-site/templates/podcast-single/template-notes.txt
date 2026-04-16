@@ -1,0 +1,10 @@
+=========================================================
+TEMPLATE: Podcast Single
+=========================================================
+
+NOTES ON THIS TEMPLATE:
+- Dynamic template, not a static page
+- Document any special logic or CPT fields here
+- Note which plugins power this template
+
+PASTE TEMPLATE CONTENT STRUCTURE HERE
