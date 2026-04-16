@@ -166,25 +166,58 @@
 
 ## Workstream Ownership
 
-| Workstream | Chat | Scope |
+| Chat | Name | Scope |
 |---|---|---|
-| Build | Claude — Build | GeneratePress, templates, CSS, PHP, components |
-| SEO & Local | Claude — SEO | RankMath, local pages, schema, keyword mapping |
-| Copy & Voice | Claude — Copy | Voice guide, page copy, blog briefs, local messaging |
-| Portfolio | Build + Copy + SEO | Template (Build), copy (Copy), schema (SEO) |
-| QA | Claude — QA | PageSpeed, accessibility, schema, cross-browser |
+| `Stark — Build` | Build | GeneratePress, templates, CSS, PHP, components, nav |
+| `Stark — SEO` | SEO & Local | RankMath, local landing pages, schema, keyword mapping |
+| `Stark — Copy` | Copy & Voice | Voice guide, page copy, service pages, local messaging |
+| `Stark — Blog` | Blog | Audit existing posts, cull, refresh, 2026 content calendar |
+| `Stark — QA` | QA | PageSpeed, accessibility, schema validation, cross-browser |
 
-Each chat starts with the standard START-PROMPT pulling all `.md` files from GitHub.
+**Portfolio ownership:** Template (Build) + Copy (Copy) + Schema (SEO) — coordinated via .md files  
+**Nathan's role:** Project Director — decisions, approvals, cross-chat coordination  
+Each chat starts with the standard START-PROMPT pulling all `.md` files from GitHub.  
+Each chat logs completed work to CHANGELOG.md, errors to ERRORLOG.md, and checks off BUILDPLAN.md at session end.
 
 ---
 
 ## Phase 3 (Future)
 
+### Phase 3.1 — Stark Social Ongoing
 - Drip campaigns via Perfex CRM for client services
 - MainWP full integration + client site reporting
 - Navigation/menu refinement based on analytics
 - Performance push (target: mobile 90+)
 - Wincher rank tracking review + content gap fill
+
+### Phase 3.2 — Stark Hosting (Separate Website)
+**Scope:** Standalone hosting brand built on Cloudways reseller (Cloudways Agency)
+
+**What it offers:**
+- Domain registration
+- Business email hosting
+- Managed WordPress hosting (white-labeled Cloudways)
+- Unmanaged hosting options
+
+**Structure:**
+- Separate brand and domain (TBD — not Stark Social)
+- Separate WordPress site, separate Cloudways app
+- Cross-promoted on `starksocial.com` as a partner service
+- Billing/client management: integrate with Perfex Hub or dedicated billing platform (WHMCS or Blesta)
+
+**Tech stack (planned):**
+- Cloudways Agency reseller account
+- WHMCS or Blesta for client billing + provisioning
+- Domain registration via OpenSRS or Enom reseller API
+- Email hosting via Zoho Mail reseller or similar
+
+**Advertising on Stark Social:**
+- Service card on homepage "stack" section
+- Dedicated page: `starksocial.com/hosting/`
+- Footer link
+- Blog content: "Why hosting matters for your business"
+
+**Do not start until Phase 2 is live.**
 
 ---
 
