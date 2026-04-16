@@ -18,14 +18,14 @@
 
 ### What Stays
 - All custom PHP in `functions.php` (Podcast CPT, Podlove, shortcodes, security headers)
-- All plugin logic: Gravity Forms → Perfex CRM webhook, AIOSEO, SearchWP, BetterDocs, FacetWP
+- All plugin logic: Gravity Forms → Perfex CRM webhook, SearchWP, BetterDocs, FacetWP
 - Portfolio CPT structure + ACF Pro fields
 - Barlow font stack (self-hosted WOFF2 already in child theme)
 
 ### What Changes
 - Theme: Pro/X → GeneratePress Premium
 - Builder: Cornerstone → GenerateBlocks (or native Gutenberg + custom patterns)
-- SEO: AIOSEO (5 addons) → evaluate RankMath Pro consolidation in Phase 3
+- SEO: AIOSEO (5 addons) → RankMath Pro (Phase 2, installed fresh on staging)
 - CSS delivery: WPCode global → child theme `style.css` + page-specific CSS via `wp_enqueue_scripts`
 
 ---
@@ -37,7 +37,7 @@
 | Theme | Themeco Pro/X | GeneratePress Premium |
 | Builder | Cornerstone | GenerateBlocks + Gutenberg |
 | CSS | WPCode global + per-page | Child theme + enqueued page CSS |
-| SEO | AIOSEO + 5 addons | AIOSEO (keep) → evaluate RankMath Phase 3 |
+| SEO | AIOSEO + 5 addons | RankMath Pro (fresh install, AIOSEO data imported) |
 | Forms | Gravity Forms | Gravity Forms (keep) |
 | CRM | Perfex Hub (custom webhook) | Perfex Hub (keep) |
 | Caching | Breeze + Object Cache Pro | Breeze + Object Cache Pro (keep) |
@@ -62,6 +62,8 @@
 - [ ] SEO (`/seo/`)
 - [ ] Content Creation (`/content-creation/`)
 - [ ] Brand Strategy & Identity (`/brand-strategy-identity/`)
+- [ ] Digital Marketing Audit & Consulting (`/audit-consulting/`) — **NEW**
+- [ ] Fractional CMO (`/fractional-cmo/`) — **NEW**
 
 ### Portfolio (Priority 2 — NEW in Phase 2)
 - [ ] Portfolio archive (`/portfolio/`)
@@ -98,15 +100,20 @@
 ## Phase 2 Build Phases
 
 ### Phase 2.0 — Environment Setup
-- [ ] Migrate current site to staging subdomain
-- [ ] Create new GeneratePress install on production
-- [ ] Install GeneratePress Premium + GenerateBlocks
+- [x] Set up GitHub repo for project docs
+- [x] Migration decision made (GeneratePress)
+- [ ] Fresh WordPress install on staging (`staging.starksocial.com`)
+- [ ] Install GeneratePress Premium + GenerateBlocks Pro
+- [ ] Install RankMath Pro (fresh — no AIOSEO import needed on staging)
+- [ ] Install Gravity Forms + existing license
+- [ ] Install ACF Pro
 - [ ] Port `functions.php` to new child theme
 - [ ] Port global CSS to child theme `style.css`
 - [ ] Port global + page JS to enqueued scripts
-- [ ] Verify Gravity Forms → Perfex webhook still fires
-- [ ] Verify all plugin connections (AIOSEO, SearchWP, BetterDocs)
-- [ ] Set up GitHub repo for project docs
+- [ ] Disable Redis on staging (`WP_REDIS_DISABLED = true`)
+- [ ] Disable Gravity Forms → Perfex webhook on staging
+- [ ] Verify nav: transparent → frosted glass transition
+- [ ] Verify mega menu (desktop) + accordion (mobile)
 
 ### Phase 2.1 — Core Pages
 - [ ] Home
@@ -115,13 +122,18 @@
 - [ ] Services hub
 
 ### Phase 2.2 — Service Pages
-- [ ] All 6 service pages (shared template, unique content)
+- [ ] All 8 service pages (shared template, unique content)
+- [ ] New: Digital Marketing Audit & Consulting page
+- [ ] New: Fractional CMO page
 
 ### Phase 2.3 — Portfolio
 - [ ] Portfolio CPT + ACF fields audit
 - [ ] Portfolio archive page
-- [ ] Portfolio single template
+- [ ] Portfolio single template (case study layout: hero, carousel, 3-stat row, overview/challenge/solution/results, project details sidebar, prev/next)
 - [ ] Migrate existing case studies
+- [ ] Mockup assets: supplied by Nathan, assembled in Build chat
+- [ ] Case study copy: Claude — Copy/Voice chat
+- [ ] Portfolio SEO + schema: Claude — SEO chat
 
 ### Phase 2.4 — Blog & Podcast
 - [ ] Blog archive template
@@ -140,12 +152,29 @@
 - [ ] Verify Complianz GDPR cookie banner placement
 
 ### Phase 2.7 — QA & Launch
-- [ ] PageSpeed audit (target: desktop 90+, mobile 70+)
+- [ ] PageSpeed audit (target: desktop 95+, mobile 85+)
+- [ ] Core Web Vitals — all green
 - [ ] Cross-browser + device testing
-- [ ] Accessibility audit (target: maintain 95)
-- [ ] Schema/SEO audit
+- [ ] Accessibility audit (target: 98+)
+- [ ] RankMath SEO score 90+ per page
+- [ ] Schema validation — zero errors
+- [ ] Local SEO landing pages verified
 - [ ] DNS cutover from staging to production
 - [ ] Post-launch monitoring
+
+---
+
+## Workstream Ownership
+
+| Workstream | Chat | Scope |
+|---|---|---|
+| Build | Claude — Build | GeneratePress, templates, CSS, PHP, components |
+| SEO & Local | Claude — SEO | RankMath, local pages, schema, keyword mapping |
+| Copy & Voice | Claude — Copy | Voice guide, page copy, blog briefs, local messaging |
+| Portfolio | Build + Copy + SEO | Template (Build), copy (Copy), schema (SEO) |
+| QA | Claude — QA | PageSpeed, accessibility, schema, cross-browser |
+
+Each chat starts with the standard START-PROMPT pulling all `.md` files from GitHub.
 
 ---
 
@@ -153,22 +182,50 @@
 
 - Drip campaigns via Perfex CRM for client services
 - MainWP full integration + client site reporting
-- SEO stack consolidation (evaluate RankMath Pro)
-- Navigation/menu final lockdown
-- Performance push (target: mobile 85+)
+- Navigation/menu refinement based on analytics
+- Performance push (target: mobile 90+)
+- Wincher rank tracking review + content gap fill
+
+---
+
+## Navigation Structure (Locked)
+
+**Desktop:** Transparent on load → slim frosted glass on scroll  
+**Mobile:** Same transition, burger → full screen dark glass overlay
+
+**Primary nav (5 items):**
+- Work (portfolio)
+- Services (mega menu, 2x4 grid)
+- Blog
+- Podcast
+- Contact
+
+**Services mega menu:**
+```
+Social Media Mgmt     Paid Advertising
+Web Design            SEO
+Content Creation      Brand Strategy
+Audit & Consulting    Fractional CMO
+[View All Services →]
+```
+
+**Utility (top right):** Support · Client Portal  
+**Mobile services:** Accordion expand inline (no separate screen, no Back button)
 
 ---
 
 ## Key URLs & Infrastructure
 
 - **Live site:** `starksocial.com`
-- **Staging:** TBD
+- **Staging:** `staging.starksocial.com`
 - **Perfex Hub:** `hub.starksocial.com`
 - **MainWP:** `cpanel.starksocial.com`
 - **Cloudways Server:** 676057
 - **Perfex App ID:** `knaqmwdvju`
+- **Staging App ID:** `rctcpyewsk`
 - **Gravity Forms → Perfex webhook:** `hub.starksocial.com/webhooks/lead.php`
 - **Webhook secret:** stored in `wp-config.php`
+- **GitHub:** `github.com/starkweblabs/starksocial`
 
 ---
 
