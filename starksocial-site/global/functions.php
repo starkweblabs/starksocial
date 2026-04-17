@@ -1,8 +1,513 @@
 <?php
-/* =========================================================
-   STARK SOCIAL — FUNCTIONS.PHP
-   Source: child theme functions.php on live site
-   Already extracted — copy from starksocial.zip
-   ========================================================= */
+/**
+ * FUNCTIONS.PHP — Stark Social (Themeco Pro child theme)
+ *
+ * ✅ Stable blog setup (no custom blog rewrites)
+ * Blog URLs + pagination should be handled by WP Permalinks:
+ * - Settings → Permalinks: /blog/%postname%/
+ * - Settings → Reading: Posts page = Blog
+ *
+ * Notes:
+ * - Cloudflare Enterprise should handle HTTPS redirects; do NOT force_https() in PHP.
+ * - Do NOT store API keys in functions.php. Use wp-config.php constants or env vars.
+ */
 
-/* PASTE FUNCTIONS.PHP HERE */
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Enqueue parent stylesheet (Themeco Pro / X child theme helper).
+ */
+add_filter( 'x_enqueue_parent_stylesheet', '__return_true' );
+
+/**
+ * Compatibility: WordPress warns if a style dependency isn't registered.
+ * Pro/X may enqueue "x-child-theme" with dependency "x-theme" even when that handle
+ * isn't registered anymore. Register a no-op alias to satisfy the dependency.
+ */
+add_action( 'wp_enqueue_scripts', function () {
+    if ( ! wp_style_is( 'x-theme', 'registered' ) ) {
+        wp_register_style( 'x-theme', false, array(), null );
+    }
+}, 1 );
+
+/**
+ * Register Podcast custom post type.
+ */
+function stark_register_podcast_post_type() {
+    $labels = array(
+        'name'               => _x( 'Podcasts', 'post type general name' ),
+        'singular_name'      => _x( 'Podcast', 'post type singular name' ),
+        'menu_name'          => _x( 'Podcasts', 'admin menu' ),
+        'name_admin_bar'     => _x( 'Podcast', 'add new on admin bar' ),
+        'add_new'            => _x( 'Add New', 'podcast' ),
+        'add_new_item'       => __( 'Add New Podcast' ),
+        'new_item'           => __( 'New Podcast' ),
+        'edit_item'          => __( 'Edit Podcast' ),
+        'view_item'          => __( 'View Podcast' ),
+        'all_items'          => __( 'All Podcasts' ),
+        'search_items'       => __( 'Search Podcasts' ),
+        'parent_item_colon'  => __( 'Parent Podcasts:' ),
+        'not_found'          => __( 'No podcasts found.' ),
+        'not_found_in_trash' => __( 'No podcasts found in Trash.' ),
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'publicly_queryable' => true,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'podcast', 'with_front' => false ),
+        'capability_type'    => 'post',
+        'has_archive'        => true,
+        'hierarchical'       => false,
+        'menu_position'      => null,
+        'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
+        'taxonomies'         => array( 'category', 'post_tag' ),
+    );
+
+    register_post_type( 'podcast', $args );
+}
+add_action( 'init', 'stark_register_podcast_post_type' );
+
+/**
+ * Flush rewrite rules on theme activation.
+ */
+function stark_flush_rewrite_rules_on_theme_activation() {
+    stark_register_podcast_post_type();
+    flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'stark_flush_rewrite_rules_on_theme_activation' );
+
+
+/**
+ * Add data-author-login attribute on <html> for single posts (cached via transient).
+ */
+function stark_add_author_login_attribute() {
+    if ( is_admin() || ! is_singular( 'post' ) ) {
+        return;
+    }
+
+    $post_id       = (int) get_queried_object_id();
+    $transient_key = 'stark_author_login_' . $post_id;
+    $login         = get_transient( $transient_key );
+
+    if ( false === $login ) {
+        $author_id = (int) get_post_field( 'post_author', $post_id );
+        if ( ! $author_id ) {
+            return;
+        }
+
+        $user = get_userdata( $author_id );
+        if ( ! $user || empty( $user->user_login ) ) {
+            return;
+        }
+
+        $login = sanitize_key( $user->user_login );
+        set_transient( $transient_key, $login, DAY_IN_SECONDS );
+    }
+
+    wp_enqueue_script( 'wp-util' );
+    wp_add_inline_script(
+        'wp-util',
+        'document.documentElement.setAttribute("data-author-login","' . esc_js( $login ) . '");',
+        'after'
+    );
+}
+add_action( 'wp_enqueue_scripts', 'stark_add_author_login_attribute', 20 );
+
+/**
+ * Export filters: cast nulls to safe strings.
+ */
+function stark_export_null_cast_filters( $value ) {
+    return ( null === $value ) ? '' : (string) $value;
+}
+add_filter( 'the_title_export', 'stark_export_null_cast_filters', 999 );
+add_filter( 'the_content_export', 'stark_export_null_cast_filters', 999 );
+add_filter( 'the_excerpt_export', 'stark_export_null_cast_filters', 999 );
+add_filter( 'term_description', 'stark_export_null_cast_filters', 999 );
+
+add_filter( 'get_term_metadata', function( $meta ) {
+    return ( null === $meta ) ? '' : $meta;
+}, 999 );
+
+/**
+ * Add body class on single posts for safe CSS scoping.
+ */
+function stark_body_class_single_post( $classes ) {
+    if ( is_singular( 'post' ) ) {
+        $classes[] = 'stark-single-post';
+    }
+    return $classes;
+}
+add_filter( 'body_class', 'stark_body_class_single_post' );
+
+/**
+ * Conditionally enqueue Password Generator assets (page slug: password-generator).
+ */
+function stark_enqueue_passgen_assets() {
+    if ( is_admin() || ! is_page( 'password-generator' ) ) {
+        return;
+    }
+    wp_enqueue_style( 'stark-passgen-style', get_stylesheet_directory_uri() . '/passgen/passgen.css', array(), null );
+    wp_enqueue_script( 'stark-passgen-script', get_stylesheet_directory_uri() . '/passgen/passgen.js', array(), null, true );
+}
+add_action( 'wp_enqueue_scripts', 'stark_enqueue_passgen_assets' );
+
+/**
+ * Shortcode: [password_generator] includes passgen.php.
+ */
+function stark_password_generator_shortcode() {
+    $file = get_stylesheet_directory() . '/passgen/passgen.php';
+    if ( ! file_exists( $file ) ) {
+        return '';
+    }
+    ob_start();
+    include $file;
+    return ob_get_clean();
+}
+add_shortcode( 'password_generator', 'stark_password_generator_shortcode' );
+
+/**
+ * Disable BetterDocs CSS styles site-wide.
+ */
+function stark_disable_betterdocs_styles() {
+    wp_dequeue_style( 'betterdocs-frontend' );
+    wp_dequeue_style( 'betterdocs-pro-frontend' );
+    wp_dequeue_style( 'betterdocs-icon-font' );
+    wp_dequeue_style( 'betterdocs-single' );
+    wp_dequeue_style( 'betterdocs-archive' );
+    wp_dequeue_style( 'betterdocs-search' );
+}
+add_action( 'wp_enqueue_scripts', 'stark_disable_betterdocs_styles', 100 );
+
+/**
+ * Disable Gravity Forms CSS styles site-wide.
+ */
+function stark_disable_gravityforms_styles() {
+    wp_dequeue_style( 'gforms_css' );
+    wp_dequeue_style( 'gform_basic' );
+    wp_dequeue_style( 'gform_theme_css' );
+    wp_dequeue_style( 'gforms_browsers_css' );
+}
+add_action( 'wp_enqueue_scripts', 'stark_disable_gravityforms_styles', 100 );
+
+/**
+ * AIOSEO: Podcast breadcrumbs
+ * - Archive: Home > Podcast
+ * - Single Podcast: Home > Podcast > Title
+ */
+add_filter( 'aioseo_breadcrumbs_trail', function( $crumbs ) {
+
+    $normalize = function( $crumb, $defaults = array() ) {
+        $base = array(
+            'label'     => '',
+            'link'      => '',
+            'type'      => '',
+            'subType'   => '',
+            'reference' => null,
+        );
+        return array_merge( $base, (array) $crumb, (array) $defaults );
+    };
+
+    $home = isset( $crumbs[0] )
+        ? $normalize( $crumbs[0], array( 'type' => 'home' ) )
+        : $normalize( array( 'label' => 'Home', 'link' => home_url( '/' ) ), array( 'type' => 'home' ) );
+
+    $podcastCrumb = $normalize(
+        array(
+            'label' => 'Podcast',
+            'link'  => home_url( '/podcast/' ),
+        ),
+        array(
+            'type'      => 'postTypeArchive',
+            'subType'   => 'podcast',
+            'reference' => 'podcast',
+        )
+    );
+
+    if ( is_post_type_archive( 'podcast' ) ) {
+        return array( $home, $podcastCrumb );
+    }
+
+    if ( is_singular( 'podcast' ) ) {
+        $post_id    = (int) get_queried_object_id();
+        $titleCrumb = $normalize(
+            array(
+                'label' => get_the_title( $post_id ),
+                'link'  => get_permalink( $post_id ),
+            ),
+            array(
+                'type'      => 'single',
+                'subType'   => 'podcast',
+                'reference' => $post_id,
+            )
+        );
+        return array( $home, $podcastCrumb, $titleCrumb );
+    }
+
+    return $crumbs;
+
+}, 200 );
+
+/**
+ * Helpers: seconds -> H:MM:SS or M:SS
+ */
+function stark_seconds_to_hms( $seconds ) {
+    $seconds = (int) $seconds;
+    if ( $seconds <= 0 ) {
+        return '';
+    }
+    $h = (int) floor( $seconds / 3600 );
+    $m = (int) floor( ( $seconds % 3600 ) / 60 );
+    $s = (int) ( $seconds % 60 );
+
+    return ( $h > 0 )
+        ? sprintf( '%d:%02d:%02d', $h, $m, $s )
+        : sprintf( '%d:%02d', $m, $s );
+}
+
+/**
+ * Podlove Meta Shortcode: [starkpodmeta]
+ * Output: Episode {number} • {duration} • {date}
+ */
+function starkpodmeta_shortcode() {
+    $post_id = (int) get_the_ID();
+
+    if ( ! $post_id || 'podcast' !== get_post_type( $post_id ) ) {
+        return get_the_date( 'M j, Y', $post_id );
+    }
+
+    $transient_key = 'stark_podmeta_' . $post_id;
+    $output        = get_transient( $transient_key );
+
+    if ( false === $output ) {
+        global $wpdb;
+
+        $episode_table = $wpdb->prefix . 'podlove_episode';
+        $table_exists  = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $episode_table ) );
+
+        if ( $table_exists !== $episode_table ) {
+            $output = get_the_date( 'M j, Y', $post_id );
+            set_transient( $transient_key, $output, DAY_IN_SECONDS );
+            return $output;
+        }
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT number, duration FROM `$episode_table` WHERE post_id = %d LIMIT 1",
+                $post_id
+            )
+        );
+
+        $number   = ( $row && isset( $row->number ) ) ? (string) $row->number : '';
+        $duration = ( $row && isset( $row->duration ) ) ? $row->duration : '';
+
+        $dur_out = '';
+        if ( is_string( $duration ) ) {
+            $duration = trim( $duration );
+            if ( preg_match( '/^\d{1,2}:\d{2}(:\d{2})?$/', $duration ) ) {
+                $dur_out = $duration;
+            } elseif ( is_numeric( $duration ) ) {
+                $dur_out = stark_seconds_to_hms( (int) $duration );
+            }
+        } elseif ( is_numeric( $duration ) ) {
+            $dur_out = stark_seconds_to_hms( (int) $duration );
+        }
+
+        $date  = get_the_date( 'M j, Y', $post_id );
+        $parts = array();
+
+        if ( $number && '0' !== $number ) {
+            $parts[] = 'Episode ' . esc_html( $number );
+        }
+        if ( $dur_out ) {
+            $parts[] = esc_html( $dur_out );
+        }
+        if ( $date ) {
+            $parts[] = esc_html( $date );
+        }
+
+        $output = implode( ' • ', $parts );
+        set_transient( $transient_key, $output, DAY_IN_SECONDS );
+    }
+
+    return $output;
+}
+add_shortcode( 'starkpodmeta', 'starkpodmeta_shortcode' );
+
+/**
+ * Invalidate transients on podcast save/update.
+ */
+add_action( 'save_post_podcast', function( $post_id ) {
+    $post_id = (int) $post_id;
+    if ( wp_is_post_revision( $post_id ) || 'publish' !== get_post_status( $post_id ) ) {
+        return;
+    }
+    delete_transient( 'stark_podmeta_' . $post_id );
+    delete_transient( 'stark_author_login_' . $post_id );
+}, 10, 1 );
+
+/**
+ * Weekly DB prune event (optional).
+ */
+add_action( 'nate_prune_db_event', function() {
+    global $wpdb;
+
+    $wpdb->query( "DELETE FROM {$wpdb->prefix}podlove_downloadintent WHERE accessed_at < DATE_SUB(NOW(), INTERVAL 1 YEAR)" );
+    $wpdb->query( "DELETE FROM {$wpdb->prefix}podlove_downloadintentclean WHERE accessed_at < DATE_SUB(NOW(), INTERVAL 1 YEAR)" );
+    $wpdb->query( "OPTIMIZE TABLE {$wpdb->prefix}podlove_downloadintent, {$wpdb->prefix}podlove_downloadintentclean" );
+
+    $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}aioseo_cache" );
+    $wpdb->query( "OPTIMIZE TABLE {$wpdb->prefix}aioseo_cache" );
+
+    $wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}betterdocs_search_log" );
+    $wpdb->query( "OPTIMIZE TABLE {$wpdb->prefix}betterdocs_search_log" );
+} );
+
+if ( ! wp_next_scheduled( 'nate_prune_db_event' ) ) {
+    wp_schedule_event( time(), 'weekly', 'nate_prune_db_event' );
+}
+
+/**
+ * Preload featured image on podcast singles (LCP assist).
+ */
+add_action( 'wp_head', function() {
+    if ( is_singular( 'podcast' ) && has_post_thumbnail() ) {
+        $img = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
+        if ( is_array( $img ) && ! empty( $img[0] ) ) {
+            echo '<link rel="preload" as="image" href="' . esc_url( $img[0] ) . '">' . "\n";
+        }
+    }
+}, 1 );
+
+/**
+ * Security headers.
+ */
+function stark_add_security_headers() {
+    header( 'X-Content-Type-Options: nosniff' );
+    header( 'X-Frame-Options: SAMEORIGIN' );
+    header( 'X-XSS-Protection: 1; mode=block' );
+    header( 'Strict-Transport-Security: max-age=31536000; includeSubDomains' );
+}
+add_action( 'send_headers', 'stark_add_security_headers' );
+
+remove_action( 'wp_head', 'wp_generator' );
+add_filter( 'the_generator', '__return_empty_string' );
+add_filter( 'xmlrpc_enabled', '__return_false' );
+
+/**
+ * Only load podcast/web-player scripts on podcast pages.
+ */
+add_action('wp_enqueue_scripts', function () {
+
+    $is_podcast_page =
+        is_singular('podcast') ||
+        is_post_type_archive('podcast') ||
+        ( is_tax() && (is_tax('podcast_category') || is_tax('podcast_tag')) ) ||
+        is_page('podcast');
+
+    if ( $is_podcast_page ) {
+        return;
+    }
+
+    $handles = array(
+        'web-player',
+        'web-player-embed',
+        'podlove-web-player',
+        'podlove-web-player-embed',
+        'podlove-player',
+        'podlove-player-embed',
+    );
+
+    foreach ( $handles as $h ) {
+        wp_dequeue_script($h);
+        wp_deregister_script($h);
+    }
+
+}, 100);
+
+/**
+ * Remove MediaElement unless the page actually needs it.
+ */
+add_action('wp_enqueue_scripts', function () {
+
+    if ( is_singular('podcast') || is_post_type_archive('podcast') || is_page('podcast') ) {
+        return;
+    }
+
+    wp_dequeue_script('wp-mediaelement');
+    wp_dequeue_style('wp-mediaelement');
+
+    wp_dequeue_script('mediaelement-core');
+    wp_dequeue_script('mediaelement-migrate');
+    wp_dequeue_style('mediaelement');
+}, 100);
+
+add_action('wp_enqueue_scripts', function () {
+    if ( ! is_admin() ) {
+        wp_dequeue_style('admin-font');
+    }
+}, 100);
+
+add_action('wp_enqueue_scripts', function () {
+    if ( is_front_page() ) {
+        wp_dequeue_script('masonry');
+        wp_dequeue_script('imagesloaded');
+    }
+}, 100);
+
+/**
+ * Remove comment support from all post types.
+ */
+add_action('init', function () {
+    foreach ( get_post_types() as $post_type ) {
+        if ( post_type_supports($post_type, 'comments') ) {
+            remove_post_type_support($post_type, 'comments');
+            remove_post_type_support($post_type, 'trackbacks');
+        }
+    }
+});
+
+add_filter('aioseo_llms_post_types', function($types) {
+    return array_diff($types, array('podcast'));
+});
+
+add_filter('the_content', function($content) {
+    if (doing_action('aioseo_generate_llms_full_txt_single')) {
+        return preg_replace('/\$\$\s+cs_component id="vlx4abNFodM1TxWobB".*?\s+\$\$/s', '[Download Link]', $content);
+    }
+    return $content;
+});
+add_action('init', function () {
+    add_rewrite_rule('^blog/?$', 'index.php?pagename=blog', 'top');
+    add_rewrite_rule('^blog/page/([0-9]+)/?$', 'index.php?pagename=blog&paged=$matches[1]', 'top');
+}, 1);
+
+/**
+ * Fix BetterDocs breadcrumb /docs/ URL to /support/knowledgebase/
+ */
+add_action('template_redirect', function() {
+    if (is_singular('docs') || is_tax('doc_category') || is_tax('doc_tag')) {
+        ob_start(function($html) {
+            return str_replace(
+                'href="' . home_url('/docs/') . '"',
+                'href="' . home_url('/support/knowledgebase/') . '"',
+                $html
+            );
+        });
+    }
+});
+
+// Disable wpautop on Gravity Forms notification emails
+add_filter( 'gform_pre_send_email', function( $email ) {
+    $email['body'] = str_replace( 
+        array( '<br />', '<br/>', '<br>' ), 
+        '', 
+        $email['body'] 
+    );
+    return $email;
+}, 1, 1 );

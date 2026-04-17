@@ -454,3 +454,176 @@ starksocial/
 **Label:** "Open a Support Ticket"  
 **Icon:** ticket or message icon  
 **Owner:** Claude — Build
+
+---
+
+## Page-by-Page Visual Reference (From Live Site Screenshots — April 2026)
+
+### Homepage Hero
+- Full-bleed cloud photo background
+- All-caps white headline (keep weight and drama)
+- Yellow all-caps subtitle — **Phase 2: replace with white/muted subtitle, sentence case** — yellow all-caps conflicts with Apple-minimal direction
+- Single magenta CTA button — keep color, **replace pill shape with `--stark-radius-btn` (12px)**
+- Transparent nav state on load, logo top-left, burger top-right
+
+### Homepage — Who We're For Section
+- Two-column: copy + H2 left, halo bullet points right
+- Halo dots: `rgba(48,127,226,0.55)` with ring — keep exactly
+- Service cards: 2×2 grid, icon + title + description — this is the reference layout for Phase 2 service card pattern
+
+### Scroll Progress Bar (Confirmed Live)
+- Thin blue line visible under sticky nav when scrolled
+- Runs full width edge to edge ✅
+- Must be pixel-perfect match in Phase 2
+
+### Blog Single — Audio Player
+**Current state:**
+- White card container, subtle border
+- Label: "Listen to this article"
+- Timestamps left (current) and right (total, negative format e.g. -5:53)
+- Large play button center
+- ±15 second skip buttons
+- Speed control pill (1x dropdown)
+- Download audio link with download icon
+
+**Phase 2 upgrade:**
+- Replace white card with dark glass: `rgba(10,16,28,.92)`, `backdrop-filter: blur(22px)`
+- Accent blue progress bar
+- Keep same controls, same layout
+- Remove pill shape from speed control — use `--stark-radius-btn`
+- "Listen to this article" label in eyebrow style (small caps, muted)
+- ElevenLabs AI voice integration replaces manual Speechify workflow
+
+### Podcast Single — Podlove Player
+**Current state:**
+- Episode art square left
+- Episode title + podcast name
+- Blue pill "Play Podcast" button
+- Progress bar with timestamps
+- Chapters button, download button, share button (icon row)
+- Chapters panel: numbered list, chapter name, timestamp, X to close
+
+**Phase 2 upgrade:**
+- Same feature set, unified visual language with blog player
+- Dark glass container matching blog player
+- **Replace blue pill Play button** with `stark-btn blue-btn` style
+- Keep chapters panel — it's a strong feature, just restyle to dark glass
+- Transcript toggle to be added alongside chapters button
+
+### Password Generator
+**Current state (keep layout, fix styles):**
+- Two-column: copy/tips left, widget right — **keep this layout**
+- Widget: COPY PASSWORD button (top-right), password output area, length slider, toggle switches, GENERATE PASSWORD button
+
+**What's wrong:**
+- Pill-shaped iOS-style toggle switches — replace with Stark-styled checkboxes or squared toggles with `--stark-radius-ui`
+- COPY PASSWORD and GENERATE PASSWORD buttons are pill-shaped — replace with `stark-btn` style
+- Widget background too plain — upgrade to `stark-card` glass morphism
+
+**Phase 2 target:**
+- `stark-card` container for the widget
+- Slider: accent blue `--stark-accent` thumb and fill
+- Toggles: replace pill iOS style — use styled checkboxes or small `--stark-radius-btn` toggles in brand blue
+- Buttons: `.stark-btn.blue-btn` for Generate, ghost/secondary for Copy
+- Generated password output: monospace font, red (`--stark-primary-red`) to match existing `code` element style
+
+### Footer Structure (Current → Phase 2)
+**Current columns:** Logo+tagline | SERVICES | COMPANY | RESOURCES
+
+**Phase 2 columns:** Logo+tagline | SERVICES (all 8) | COMPANY | RESOURCES + Support Ticket
+
+**SERVICES column update (add new services):**
+- Social Media Management
+- Paid Advertising
+- Web Design
+- SEO
+- Content Creation
+- Brand Strategy & Identity
+- Audit & Consulting ← NEW
+- Fractional CMO ← NEW
+
+**RESOURCES column update:**
+- Knowledgebase
+- Password Generator
+- Client Portal
+- Blog
+- Podcast
+- Open a Support Ticket ← NEW (links to `hub.starksocial.com/clients/open_ticket`)
+
+**Social icons:** Facebook, Instagram, LinkedIn, YouTube, Apple Podcasts — keep all five
+
+### CTA Section (Global)
+- Dark blue gradient background — keep
+- "Start a conversation" headline — good, keep
+- Subtext: "Tell us what you're working on and we'll help you think it through. No pressure. If we're not a fit, we'll tell you." — keep this copy, it's very on-brand
+- Magenta Contact Us button — keep color, fix pill shape to `--stark-radius-btn`
+
+---
+
+## Annotated Feature Notes (From Nathan — April 2026)
+*These notes come directly from annotated screenshots and override any earlier general descriptions.*
+
+### Password Generator — Exact Notes
+- **Bigger widget** — the right-column widget needs to be larger and fill more space
+- **More spacing, more intentional** — generous padding inside the widget, don't crowd the controls
+- **Copy button + form = one unified thing** — COPY PASSWORD button should be integrated into the password output field, not floating above it separately. Think: output field with copy icon/button embedded on the right end — one component
+- **No pill shapes anywhere** — toggles, buttons, all of it. Glass feel throughout
+- **Glass buttons** — `.stark-btn` glass morphism style for Generate and Copy. Not flat, not pill — frosted glass with subtle border and depth
+- **Toggles** — replace iOS pill toggles with Stark-styled checkbox buttons or small glass toggle chips using `--stark-radius-btn`
+
+### Blog Audio Player — Exact Notes  
+- **Love this look** — use the current blog player visual as the reference for the unified player design across the site
+- **AI voice via ElevenLabs** — no more manual Speechify. Auto-generate on publish
+- **Voice selection logic: based on post author**
+  - Nathan wrote the post → Nathan's cloned voice
+  - Deanna wrote the post → Deanna's cloned voice
+  - Override field in post meta for edge cases
+- **Avatar for each voice** — small circular avatar appears in the player next to "Listen to this article"
+  - Nathan's avatar: his photo/headshot cropped to circle
+  - Deanna's avatar: her photo/headshot cropped to circle
+  - Sits left of the label, gives the player a human, personal feel
+- **Label update:** "Listen to this article · Nathan" or "Listen to this article · Deanna" — identifies whose voice is reading
+
+### Podcast Player — Exact Notes
+- **Chapters: collapsible, not auto-open** — chapters panel should be closed by default, opened on tap/click. Currently opens automatically which takes up too much space on load
+- **Play button: consistent site-wide button style** — the dark blue pill "Play Podcast" button needs to become `.stark-btn.blue-btn` to match every other button on the site. This is the site-wide button standardization note — applies everywhere
+- **Sidebar search = site-wide form standard** — the sidebar search box style (white glass, rounded, focus ring) is the reference style for ALL forms: password generator, contact form, gravity forms, any input anywhere on the site
+- **Categories sidebar widget** — should adopt the blog player's visual language: darker background treatment, cleaner typography. Currently too plain with grey counts
+
+### Scroll Progress Bar — Exact Behavior (Confirmed)
+- Grows from left edge → right edge as user scrolls
+- **Touches both edges** — full viewport width, edge to edge, no padding/margin
+- Moves in real time as user scrolls
+- At 100% scroll = fully touches right edge
+
+### A11y + Back-to-Top Choreography — Exact Behavior (Confirmed)
+**Starting state (page load):**
+- A11y button: far bottom-left corner
+- Back-to-top: hidden
+
+**As user scrolls:**
+- A11y button slowly slides right
+- Scroll progress bar grows left to right
+
+**Arriving state (mid-to-bottom of page):**
+- Back-to-top button slides IN from the right into position
+- Back-to-top button looks identical to A11y button — same glass style, same size, same border radius
+- Both buttons sit bottom-left together: [↑] [A11y]
+- Back-to-top is leftmost, A11y is to its right
+
+**Both buttons share identical styling:**
+- `background: rgba(255,255,255,.62)`
+- `backdrop-filter: blur(10px) saturate(140%)`
+- `border: 1px solid rgba(17,17,17,.10)`
+- `border-radius: 14px`
+- `width: 44px` / `height: 44px`
+- `box-shadow: 0 16px 34px rgba(17,17,17,.14)`
+
+### Site-Wide Form Standard (From Sidebar Search Reference)
+All forms, inputs, and search fields across the site use this style:
+- `background: rgba(255,255,255,0.92)`
+- `border: 1px solid rgba(0,0,0,0.10)`
+- `border-radius: var(--stark-radius-field)` (14px)
+- `box-shadow: 0 0.75rem 1.75rem rgba(0,0,0,0.08)`
+- Focus: `border-color: rgba(48,127,226,0.55)`, `box-shadow: 0 0 0 0.25rem rgba(48,127,226,0.18)`
+- Applies to: contact form, password generator inputs, sidebar search, all Gravity Forms inputs, knowledgebase search

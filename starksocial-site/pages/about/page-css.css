@@ -3,4 +3,9 @@
    Source: Cornerstone page settings → Custom CSS
    ========================================================= */
 
-/* PASTE PAGE-SPECIFIC CSS HERE */
+.why-stark-exists .stark-inner,
+.how-we-think .stark-inner,
+.stark-leadership .leadership-intro{
+  max-width: 47.5rem !important;
+  margin: auto !important;
+}

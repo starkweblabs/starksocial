@@ -3,4 +3,361 @@
    Source: Cornerstone page settings → Custom CSS
    ========================================================= */
 
-/* PASTE PAGE-SPECIFIC CSS HERE */
+/* =========================================================
+   HOMEPAGE HERO: Set height and positioning
+   ========================================================= */
+.stark-hero {
+  height: auto !important;
+  min-height: clamp(560px, 78vh, 860px) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+@media (max-width: 899px) {
+  .stark-hero {
+    min-height: clamp(520px, 68vh, 740px) !important;
+  }
+}
+.stark-hero.x-bar {
+  height: auto !important;
+  min-height: clamp(560px, 78vh, 860px) !important;
+}
+
+
+
+/* =========================================================
+   HOMEPAGE HERO — GLASS OVERLAY: Add dark glass and haze
+   ========================================================= */
+.stark-hero .x-bg-layer-upper-color {
+  background: rgba(0, 34, 84, 0.86) !important; /* DARK Stark blue */
+  opacity: 0.7 !important;
+  background-image:
+    radial-gradient(900px 420px at 12% 0%, rgba(48,127,226,0.26) 0%, rgba(48,127,226,0.00) 58%),
+    radial-gradient(700px 420px at 95% 10%, rgba(48,127,226,0.18) 0%, rgba(48,127,226,0.00) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.00) 30%) !important;
+}
+.stark-hero .x-bg-layer-upper-color::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  -webkit-backdrop-filter: blur(14px) saturate(125%) !important;
+  backdrop-filter: blur(14px) saturate(125%) !important;
+  opacity: 0.65 !important;
+}
+@media (max-width: 899px) {
+  .stark-hero > .x-bg .x-bg-layer-upper-color {
+    -webkit-backdrop-filter: blur(6px) saturate(112%) !important;
+    backdrop-filter: blur(6px) saturate(112%) !important;
+  }
+}
+.stark-hero .hero-headline-text,
+.stark-hero .hero-subhead {
+  text-shadow: 0 2px 14px rgba(0,0,0,0.38) !important;
+}
+.stark-hero .hero-logo img {
+  filter: saturate(1.02) contrast(1.02) !important;
+  opacity: 0.98 !important;
+}
+@media (max-width: 899px) {
+  .stark-hero .hero-headline-wrap {
+    gap: 14px !important;
+  }
+  .stark-hero h3 {
+    font-size: clamp(1.95rem, 8vw, 2.45rem) !important;
+    line-height: 1.08 !important;
+  }
+  .stark-hero h4 {
+    font-size: 1.05rem !important;
+    line-height: 1.55 !important;
+  }
+}
+
+/* ================================
+   WHO WE’RE FOR: Editorial list wrapper
+   ================================ */
+.who-we-are-for {
+  position: relative !important;
+}
+.who-we-are-for::before,
+.who-we-are-for::after {
+  content: none !important;
+}
+
+/* =========================================================
+   HOMEPAGE — HALO CARDS (restore first section)
+   Scope: body.home + .who-we-are-for only
+   ========================================================= */
+
+body.home .who-we-are-for .stark-halo-card{
+  position: relative !important;
+
+  /* remove any global "card" treatment */
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+
+  /* editorial spacing */
+  padding: 0 0 1.35rem 1.75rem !important; /* room for halo dot */
+  margin: 0 0 1.35rem 0 !important;
+
+  /* type */
+  font-size: 1.08rem !important;
+  line-height: 1.65 !important;
+  font-weight: 500 !important;
+  color: rgba(17,17,17,.86) !important;
+
+  /* interaction */
+  cursor: default !important;
+  transform: none !important;
+  transition: transform 160ms ease, color 160ms ease !important;
+}
+
+/* Halo dot */
+.who-we-are-for .stark-halo-card::before{
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 1.05em !important;
+
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 999px !important;
+
+  background: color-mix(in srgb, var(--stark-accent) 78%, white 0%) !important;
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--stark-accent) 14%, transparent) !important;
+
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease !important;
+}
+
+/* Hairline divider */
+.who-we-are-for .stark-halo-card:not(:last-child)::after{
+  content: "" !important;
+  position: absolute !important;
+  left: 1.75rem !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 1px !important;
+  background: rgba(17,17,17,.06) !important;
+}
+
+/* Subtle hover: gentle pull (not "card hover") */
+@media (hover: hover){
+.who-we-are-for .stark-halo-card:hover{
+    transform: translateX(4px) !important;
+  }
+
+.who-we-are-for .stark-halo-card:hover::before{
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--stark-accent) 18%, transparent) !important;
+    transform: scale(1.05) !important;
+  }
+}
+
+/* Move halo dot inward so glow is not clipped */
+body.stark-homepage .stark-halo-card::before{
+  left: 0.55rem !important;
+}
+
+/* Keep divider aligned with text start */
+body.stark-homepage .stark-halo-card:not(:last-child)::after{
+  left: 2.3rem !important;
+}
+
+/* Ensure pseudo-elements can render fully */
+body.stark-homepage .stark-halo-card{
+  overflow: visible !important;
+}
+
+/* Mobile rhythm */
+@media (max-width: 899px){
+.who-we-are-for .stark-halo-card{
+    font-size: 1rem !important;
+    padding: 0 0 1.1rem 1.55rem !important;
+    margin: 0 0 1.1rem 0 !important;
+  }
+
+.who-we-are-for .stark-halo-card:not(:last-child)::after{
+    left: 1.55rem !important;
+  }
+}
+
+
+/* -----------------------------------------
+   WHAT WE DO: Mobile stack and grid fixes
+   ------------------------------------------ */
+.stark-what-we-do {
+  padding: 12vh 5% !important;
+}
+.stark-what-we-do .x-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+}
+.stark-what-we-do .service-card {
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 899px) {
+  .stark-what-we-do .x-row {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .stark-what-we-do .x-row > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+
+
+/* ================================
+   HOW WE WORK: Intro wrapper
+   ================================ */
+.process-intro {
+  max-width: 46rem !important;
+  margin-bottom: 2.25rem !important;
+}
+.process-intro .section-eyebrow {
+  margin-bottom: 0.6rem !important;
+}
+.process-intro .section-headline {
+  margin-bottom: 0.75rem !important;
+  color: var(--stark-secondary-magenta) !important;
+  font-size: clamp(1.9rem, 2.2vw, 2.3rem) !important;
+  line-height: 1.15 !important;
+}
+.process-intro .section-subhead {
+  margin-bottom: 1.25rem !important;
+}
+
+/* ================================
+   HOW WE WORK: Process rail grid
+   ================================ */
+.process-rail {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 28px !important;
+}
+@media (min-width: 900px) {
+  .process-rail::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 4% !important;
+    right: 4% !important;
+    top: 3.2rem !important;
+    height: 2px !important;
+    background: rgba(48,127,226,0.18) !important;
+    border-radius: 2px !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+  }
+}
+@media (max-width: 899px) {
+  .process-rail {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 599px) {
+  .process-rail {
+    grid-template-columns: 1fr !important;
+  }
+  .process-rail::before {
+    content: none !important;
+  }
+}
+.process-card {
+  position: relative !important;
+  z-index: 1 !important;
+  padding: 2rem !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  border-radius: 14px !important;
+  height: 100% !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+}
+.process-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(0,0,0,0.12) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06) !important;
+}
+.process-step {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 0.85rem !important;
+  background: rgba(0,0,0,0.04) !important;
+  color: #555 !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+}
+.process-card-title {
+  margin: 0 0 0.6rem 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.25 !important;
+  color: var(--stark-primary-dark-blue, #004C97) !important;
+}
+.process-card-text {
+  margin: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  color: rgba(0,0,0,0.78) !important;
+}
+
+/* ================================
+   WHY STARK: Kicker and body styles
+   ================================ */
+.why-stark-kicker {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(0,0,0,0.55) !important;
+  margin: 0 0 1.1rem 0 !important;
+  position: relative !important;
+  padding-left: 0 !important;
+}
+.why-stark-kicker::before {
+  content: none !important;
+}
+.why-stark-kicker::after {
+  content: "" !important;
+  display: inline-block !important;
+  height: 1px !important;
+  width: clamp(80px, 10vw, 140px) !important;
+  background: rgba(0,0,0,0.10) !important;
+  margin-left: 0rem !important;
+  transform: translateY(-0.25em) !important;
+}
+.why-stark-anchor {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: -0.015em !important;
+  max-width: 30rem !important;
+  color: rbga (17,17,17) !important;
+}
+.why-stark-body {
+  line-height: 1.85 !important;
+}
+.why-stark-body p {
+  margin: 0 0 1.35rem 0 !important;
+}
+.why-stark-body p:last-child {
+  margin-bottom: 0 !important;
+}
+@media (max-width: 899px) {
+  .why-stark-left {
+    padding-left: 0 !important;
+    border-left: 0 !important;
+  }
+}
