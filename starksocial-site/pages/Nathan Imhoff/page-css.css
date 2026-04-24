@@ -1,0 +1,433 @@
+/* =========================================================
+   PAGE CSS: Nathan Imhoff
+   Source: Cornerstone page settings → Custom CSS
+   ========================================================= */
+
+/* 
+
+
+/* =========================================================
+   BIO PAGE — SECTION 2 (Image + Background)
+   ========================================================= */
+
+.stark-bio-intro{
+  padding: clamp(3.5rem, 5vw, 5.5rem) 0 !important;
+}
+
+/* Grid */
+.stark-bio-grid{
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) !important;
+  gap: clamp(1.6rem, 3vw, 2.6rem) !important;
+  align-items: start !important;
+}
+
+@media (max-width: 899px){
+  .stark-bio-grid{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Left cell */
+.stark-bio-aside{
+  display: grid !important;
+  gap: 1rem !important;
+}
+
+/* Photo (editorial, not “team headshot”) */
+.stark-bio-photo{
+  position: relative !important;
+  width: 100% !important;
+  max-width: 320px !important;
+}
+
+@media (max-width: 899px){
+  .stark-bio-photo{
+    max-width: 260px !important;
+    margin: 0 auto !important;
+  }
+}
+
+.stark-bio-photo img{
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(17,17,17,0.08) !important;
+  box-shadow: 0 18px 46px rgba(17,17,17,0.10) !important;
+}
+
+/* Links (quiet chips) */
+.stark-bio-links{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: .6rem !important;
+}
+
+@media (max-width: 899px){
+  .stark-bio-links{
+    justify-content: center !important;
+  }
+}
+
+.stark-link-chip{
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: .55rem .8rem !important;
+  border-radius: 999px !important;
+  text-decoration: none !important;
+
+  background: rgba(255,255,255,0.72) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+
+  border: 1px solid rgba(17,17,17,0.10) !important;
+  color: rgba(17,17,17,0.86) !important;
+  font-weight: 650 !important;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease !important;
+}
+
+.stark-link-chip:hover{
+  transform: translateY(-1px) !important;
+  border-color: rgba(48,127,226,0.30) !important;
+  box-shadow: 0 14px 34px rgba(17,17,17,0.10), 0 0 18px rgba(48,127,226,0.22) !important;
+}
+
+/* Right cell */
+.stark-bio-h2{
+  margin: 0 0 .85rem 0 !important;
+  font-size: clamp(1.55rem, 1.9vw, 1.95rem) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.015em !important;
+  font-weight:700 !important;
+  color: rgba(17,17,17,0.88) !important;
+}
+
+.stark-bio-lead{
+  margin: 0 0 1rem 0 !important;
+  max-width: 66ch !important;
+  font-size: 1.06rem !important;
+  line-height: 1.65 !important;
+  color: rgba(17,17,17,0.72) !important;
+  font-weight: 520 !important;
+}
+
+.stark-bio-body {
+  margin: 0 0 1rem 0 !important;
+  max-width: 66ch !important;
+  font-size: .98rem !important;
+  line-height: 1.78 !important;
+  color: rgba(17,17,17,0.62) !important;
+}
+
+.stark-bio-body p:last-child{
+  margin-bottom: 0 !important;
+}
+
+.stark-bio-caption{
+  margin-top: .75rem !important;
+  text-align: left !important;
+}
+
+@media (max-width: 899px){
+  .stark-bio-caption{
+    text-align: center !important;
+  }
+}
+
+.stark-bio-name{
+  font-size: .95rem !important;
+  font-weight: 650 !important;
+  letter-spacing: -.01em !important;
+  color: rgba(17,17,17,.88) !important;
+  line-height: 1.3 !important;
+}
+
+.stark-bio-role{
+  font-size: .85rem !important;
+  font-weight: 500 !important;
+  color: rgba(17,17,17,.58) !important;
+  line-height: 1.4 !important;
+}
+
+.stark-bio-caption::before{
+  content:"";
+  display:block;
+  width: 28px;
+  height: 1px;
+  margin-bottom: .5rem;
+  background: rgba(48,127,226,.35);
+}
+
+/* =========================================================
+   BIO — SECTION 3
+   ========================================================= */
+
+/* =========================================================
+   BIO — SECTION 3 (Focus) — GRID VERSION (CLEAN)
+   Markup: right side uses .x-grid + .x-cell
+   ========================================================= */
+
+.stark-bio-focus{
+  padding: clamp(3.25rem, 5vw, 5rem) 0 !important;
+  background: rgba(48,127,226,0.035) !important;
+  border-top: 1px solid rgba(0,0,0,0.04) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.04) !important;
+}
+
+.stark-bio-focus-grid{
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) !important;
+  gap: clamp(1.6rem, 3vw, 2.6rem) !important;
+  align-items: start !important;
+}
+
+@media (max-width: 899px){
+  .stark-bio-focus-grid{ grid-template-columns: 1fr !important; }
+}
+
+/* Left column */
+.stark-bio-focus .x-text-headline h2{
+  margin: 0 0 0.85rem 0 !important;
+  font-size: clamp(1.6rem, 2.2vw, 2.05rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 750 !important;
+  color: rgba(17,17,17,0.88) !important;
+}
+
+.stark-bio-focus .stark-p{
+  margin: 0 !important;
+  max-width: 62ch !important;
+  font-size: 1.02rem !important;
+  line-height: 1.7 !important;
+  color: rgba(17,17,17,0.70) !important;
+}
+
+/* =========================================================
+   Right column cards grid (now a true grid)
+   ========================================================= */
+
+.stark-bio-focus-cards{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+  align-items: stretch !important; /* makes cells same height per row */
+}
+
+@media (max-width: 599px){
+  .stark-bio-focus-cards{ grid-template-columns: 1fr !important; }
+}
+
+/* Each card cell: fill height + stop weird flex stretching */
+.stark-bio-focus-cards > .x-cell.stark-card{
+  height: 100% !important;
+  min-height: 9rem !important;      /* dial: 8.5–10rem */
+  padding: 1.05rem 1.05rem !important;
+  border-radius: 14px !important;
+
+  /* override any global card layout behavior */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+
+/* Icon sizing (service-card-icon is tuned bigger elsewhere) */
+.stark-bio-focus-cards .service-card-icon{
+  font-size: 1.15rem !important;
+  margin: 0 0 0.55rem 0 !important;
+  opacity: 0.9 !important;
+}
+
+/* Title + body rhythm */
+.stark-bio-focus-cards .stark-bio-mini-title{
+  margin: 0 0 0.35rem 0 !important;
+  font-size: 1.02rem !important;
+  line-height: 1.25 !important;
+  font-weight: 750 !important;
+  color: rgba(17,17,17,0.88) !important;
+}
+
+.stark-bio-focus-cards .stark-bio-mini-text{
+  margin: 0 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.55 !important;
+  color: rgba(17,17,17,0.62) !important;
+
+  /* keeps row heights consistent even if one description runs longer */
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 599px){
+  .stark-bio-focus-cards > .x-cell.stark-card{
+    min-height: 0 !important; /* don’t force uniform height on mobile */
+  }
+}
+
+/* /* =========================================================
+   BIO — Articles by Author
+   ========================================================= */
+
+.stark-bio-writing{
+  padding: clamp(3.5rem, 6vw, 5.75rem) 0 !important;
+  background: #fff !important;
+}
+
+/* Intro block */
+.stark-bio-writing-intro{
+  max-width: 52ch !important;
+  margin-bottom: clamp(2rem, 4vw, 3rem) !important;
+}
+
+.stark-bio-writing .stark-section-h2 h2{
+  margin: 0 0 0.75rem 0 !important;
+  font-size: clamp(1.7rem, 2.4vw, 2.15rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 750 !important;
+  color: rgba(17,17,17,0.9) !important;
+}
+
+.stark-bio-writing .stark-p{
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.7 !important;
+  color: rgba(17,17,17,0.7) !important;
+}
+
+/* =========================================================
+   Article Card Grid
+   ========================================================= */
+
+.stark-bio-writing .x-row{
+  margin-top: 0 !important;
+}
+
+.stark-bio-writing .x-row-inner{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: clamp(1.25rem, 2.5vw, 2rem) !important;
+}
+
+/* Tablet */
+@media (max-width: 1024px){
+  .stark-bio-writing .x-row-inner{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 599px){
+  .stark-bio-writing .x-row-inner{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================================================
+   Article cards grid
+   ========================================================= */
+
+/* Convert X Row → real grid */
+.stark-bio-writing .x-row-inner{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+@media (max-width: 999px){
+  .stark-bio-writing .x-row-inner{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 599px){
+  .stark-bio-writing .x-row-inner{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Neutralize column flex behavior */
+.stark-bio-writing .x-col{
+  width: auto;
+  max-width: none;
+  flex: none;
+}
+
+/* =========================================================
+   Article card styling
+   ========================================================= */
+
+.stark-bio-writing a.x-col{
+  text-decoration: none;
+  color: inherit;
+}
+
+.stark-bio-writing article{
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+/* =========================================================
+   Article Cards
+   ========================================================= */
+
+.stark-bio-writing .x-col{
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.stark-bio-writing article{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.6rem !important;
+}
+
+/* Featured image */
+.stark-bio-writing figure{
+  margin: 0 0 0.65rem 0 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.stark-bio-writing img{
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  transition: transform 300ms ease !important;
+}
+
+.stark-bio-writing a:hover img{
+  transform: scale(1.03) !important;
+}
+
+/* Title */
+.stark-bio-writing article h2{
+  font-size: 1.05rem !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  margin: 0.25rem 0 0.25rem 0 !important;
+  color: rgba(17,17,17,0.9) !important;
+}
+
+/* Excerpt */
+.stark-bio-writing article .x-content{
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  color: rgba(17,17,17,0.65) !important;
+}
+
+/* Author */
+.stark-bio-writing article h4{
+  font-size: 0.7rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  margin-top: 0.5rem !important;
+  color: rgba(17,17,17,0.55) !important;
+}

@@ -1,7 +1,31 @@
 =========================================================
 PAGE: 404 Error
-URL: starksocial.com/404-error/
+URL: https://starksocial.com/stark-404/
 =========================================================
 
-PASTE PAGE CONTENT HERE
-(Copy from live site — text, headings, copy blocks)
+Hero
+We couldn’t find that page.
+But you’re not lost — let’s get you where you need to go.
+
+The link may be outdated, or the page may have moved. Try a search below, or jump to one of the popular destinations.
+
+Go To Homepage
+
+
+Search The Site
+Find articles, services, tools, or posts—fast.
+Knowledge Base
+Step-by-step guides, checklists, and answers to common questions.
+Learn more →
+Contact Support
+Still stuck? Send us a message and we’ll point you to the right place.
+Get Help →
+Password Generator
+Generate a strong password in seconds.
+Open Tool →
+Podcast
+Listen to strategy, systems, and growth conversations.
+Browse episodes →
+Blog
+Practical insights on SEO, social, and marketing that works.
+Read articles →

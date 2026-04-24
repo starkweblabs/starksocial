@@ -3,4 +3,83 @@
    Source: Cornerstone page settings → Custom CSS
    ========================================================= */
 
-/* PASTE PAGE-SPECIFIC CSS HERE */
+/* =========================================================
+   Stark 404 Page
+   Scoped + Cornerstone-safe
+========================================================= */
+
+.stark-404{
+  --stark-bg: rgba(255,255,255,.82);
+  --stark-brd: rgba(0,0,0,.08);
+  --stark-shadow: 0 18px 55px rgba(0,0,0,.10);
+  --stark-shadow-hover: 0 26px 74px rgba(0,0,0,.14);
+
+  --stark-text: rgba(17,17,17,.88);
+  --stark-muted: rgba(17,17,17,.60);
+  --stark-accent: rgb(0,76,151);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.stark-404 .stark-hero{
+  position: relative !important;
+  padding: clamp(4rem, 8vw, 6.5rem) 0 !important;
+}
+
+.stark-inner{
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+}
+
+/* =========================================================
+   GRID SECTION
+========================================================= */
+
+.stark-404-grid{
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  padding: clamp(3rem, 6vw, 4.5rem) 24px !important;
+}
+
+/* Cornerstone grid reset */
+.stark-404-grid .x-row-inner{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+
+
+/* Card title */
+.stark-card-title{
+  margin: 0 0 8px !important;
+  font-size: 1.3rem !important;
+  letter-spacing: -0.01em !important;
+  color: var(--stark-text) !important;
+  font-weight: 500 !important;
+}
+
+/* Card text */
+.stark-card-body{
+  margin: 0 0 14px !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: var(--stark-muted) !important;
+  max-width: 32ch !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px){
+  .stark-404 .stark-404-grid .x-row-inner{
+    grid-template-columns: 1fr !important;
+  }
+
+  .stark-404 .stark-hero-actions{
+    flex-direction: column !important;
+  }
+}

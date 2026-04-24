@@ -18,6 +18,25 @@
 
 ## Resolved
 
+### ERR-006 — Breeze 2.4.5 Fatal Error on Activation
+**Status:** ✅ Resolved — April 24 2026  
+**Error:** `Uncaught TypeError: array_merge(): Argument #2 must be of type array, string given in config-cache.php:507`  
+**Impact:** Live site starksocial.com went down completely  
+**Root Cause:** `breeze_advanced_settings` option had `breeze-exclude-urls` stored as a string `"Array\nblog/page/"` instead of an array. Breeze 2.4.5 update triggered `write_config_cache()` which called `array_merge()` on the corrupted value and crashed.  
+**Fix:**
+1. Renamed plugin folder to disable: `mv wp-content/plugins/breeze wp-content/plugins/breeze-disabled`
+2. Installed 2.4.4: `wp plugin install breeze --version=2.4.4 --force`
+3. Fixed corrupted option:
+```bash
+wp option update breeze_advanced_settings '{"breeze-exclude-urls":["blog/page/"],"cached-query-strings":["utm_source","utm_medium"],"breeze-wp-emoji":"1","breeze-store-googlefonts-locally":"1","breeze-store-googleanalytics-locally":"1","breeze-store-facebookpixel-locally":"1","breeze-store-gravatars-locally":"0","breeze-enable-api":"1","breeze-api-token":"iJZ8Tj60PvVjpBnLYGbrc1zgNRobfXai"}' --format=json
+```
+4. Activated Breeze: `wp plugin activate breeze`  
+**Do not update Breeze to 2.4.5** until Cloudways patches the array_merge bug.
+
+---
+
+## Resolved
+
 ### ERR-005 — Cornerstone Builder Export Failure
 **Status:** ✅ Resolved (by migration decision)  
 **Detected:** April 2026  
