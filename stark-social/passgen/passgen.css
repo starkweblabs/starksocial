@@ -1,0 +1,184 @@
+/* =========================================================
+   Password Generator
+========================================================= */
+/* Shared button feel */
+.copy-btn,
+.generate-button{
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 999px !important;
+  border: 1px solid rgba(0,0,0,.10) !important;
+  background: rgba(255,255,255,.72) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  color: rgba(17,17,17,.86) !important;
+  font-family: var(--stark-font, ui-sans-serif) !important;
+  font-weight: 750 !important;
+  letter-spacing: .10em !important;
+  text-transform: uppercase !important;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.08),
+    0 0 0 1px rgba(255,255,255,.22) inset !important;
+  transition:
+    transform 160ms cubic-bezier(.2,.8,.2,1),
+    box-shadow 160ms cubic-bezier(.2,.8,.2,1),
+    background 160ms cubic-bezier(.2,.8,.2,1),
+    border-color 160ms cubic-bezier(.2,.8,.2,1) !important;
+}
+/* Copy button specifics */
+.copy-btn{
+  font-size: 12px !important;
+  padding: 14px 16px !important;
+  line-height: 1 !important;
+}
+/* Generate button specifics */
+.generate-button{
+  font-size: 12px !important;
+  padding: 14px 18px !important;
+  line-height: 1 !important;
+  /* kill old gradient + thick border rules */
+  background-image: none !important;
+}
+/* Hover/active */
+.copy-btn:hover,
+.generate-button:hover{
+  transform: translateY(-1px) !important;
+  background: rgba(255,255,255,.84) !important;
+  border-color: rgba(0,0,0,.16) !important;
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.10),
+    0 0 0 1px rgba(255,255,255,.26) inset !important;
+}
+.copy-btn:active,
+.generate-button:active{
+  transform: translateY(0) !important;
+}
+/* Keyboard accessibility */
+.copy-btn:focus-visible,
+.generate-button:focus-visible{
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(48,127,226,.25),
+    0 10px 26px rgba(0,0,0,.08),
+    0 0 0 1px rgba(255,255,255,.22) inset !important;
+}
+/* Optional: subtle arrow on Generate */
+.generate-button::after{
+  content: " →" !important;
+  opacity: .7 !important;
+}
+.form-top-section{
+  background: rgba(255,255,255,.55) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.10) !important;
+}
+.passfield{
+  background: rgba(255,255,255,.70) !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  border-radius: 14px !important;
+}
+.checkbox-wrapper input[type="checkbox"]{
+  border-color: rgba(0,0,0,.18) !important;
+  background: rgba(255,255,255,.70) !important;
+}
+.checkbox-wrapper input[type="checkbox"]:checked{
+  background: rgba(17,17,17,.88) !important;
+  border-color: rgba(0,0,0,.22) !important;
+}
+
+.container .stark-btn:active{ transform: translateY(0) !important; }
+/* PRIMARY: Generate */
+.container .generate-button{
+  padding: 14px 20px !important;
+  font-size: 12px !important;
+  letter-spacing: .12em !important;
+  background: rgba(255,255,255,.92) !important;
+  border-color: rgba(0,0,0,.14) !important;
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.12),
+    0 0 0 1px rgba(255,255,255,.28) inset !important;
+}
+.container .generate-button:hover{
+  background: rgba(255,255,255,.98) !important;
+  box-shadow:
+    0 24px 66px rgba(0,0,0,.14),
+    0 0 0 1px rgba(255,255,255,.30) inset !important;
+}
+/* SECONDARY: Copy */
+.container .copy-btn{
+  padding: 12px 14px !important;
+  background: rgba(255,255,255,.62) !important;
+  border-color: rgba(0,0,0,.10) !important;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.06),
+    0 0 0 1px rgba(255,255,255,.18) inset !important;
+}
+.container .copy-btn::after{
+  content: " →" !important;
+  opacity: .65 !important;
+}
+.container .form-top-section{
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.65) !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.10),
+    0 0 0 1px rgba(255,255,255,.22) inset !important;
+}
+.container input.passfield{
+  flex: 1 !important;
+  min-width: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  outline: 0 !important;
+  font-size: 16px !important;
+  font-weight: 650 !important;
+  letter-spacing: .01em !important;
+}
+.container .checkbox-wrapper{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-weight: 600 !important;
+  color: rgba(17,17,17,.80) !important;
+}
+/* hide native checkbox */
+.container .checkbox-wrapper input[type="checkbox"]{
+  appearance: none !important;
+  width: 44px !important;
+  height: 26px !important;
+  border-radius: 999px !important;
+  position: relative !important;
+  background: rgba(0,0,0,.10) !important;
+  border: 1px solid rgba(0,0,0,.12) !important;
+  transition: background 160ms ease, border-color 160ms ease !important;
+}
+/* knob */
+.container .checkbox-wrapper input[type="checkbox"]::after{
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.95) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,.18) !important;
+  transition: transform 160ms ease !important;
+}
+.container .checkbox-wrapper input[type="checkbox"]:checked{
+  background: rgba(15, 85, 185, .85) !important;
+  border-color: rgba(15, 85, 185, .55) !important;
+}
+.container .checkbox-wrapper input[type="checkbox"]:checked::after{
+  transform: translateX(18px) !important;
+}

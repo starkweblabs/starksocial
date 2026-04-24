@@ -1,0 +1,269 @@
+/* =========================================================
+   STARK SOCIAL — Footer CSS
+   Source: Footer Only CSS
+   ========================================================= */
+
+//* =========================================================
+   STARK FOOTER — GLASS / PREMIUM
+   ========================================================= */
+
+.x-colophon{
+  position: relative !important;
+  animation: stark-footer-fade 600ms ease both;
+}
+
+@keyframes stark-footer-fade{
+  from{
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* ---------- FOOTER TOP BAR (the one with drk-background) ---------- */
+.x-colophon .x-bar.drk-background{
+  position: relative !important;
+  overflow: hidden !important;
+
+  /* Stark Blue base */
+  background: rgba(0, 34, 84, 0.94) !important;
+
+  /* premium depth */
+  background-image:
+    radial-gradient(900px 420px at 12% 0%, rgba(48,127,226,0.28) 0%, rgba(48,127,226,0.00) 58%),
+    radial-gradient(700px 420px at 95% 10%, rgba(48,127,226,0.18) 0%, rgba(48,127,226,0.00) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.00) 30%) !important;
+
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.18) !important;
+}
+
+/* optional: soft “glass haze” layer */
+.x-colophon .x-bar.drk-background::before{
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+
+  -webkit-backdrop-filter: blur(10px) saturate(120%) !important;
+  backdrop-filter: blur(10px) saturate(120%) !important;
+
+  opacity: 0.65 !important;
+}
+
+/* Keep content above haze */
+.x-colophon .x-bar.drk-background > .x-bar-content{
+  position: relative !important;
+  z-index: 1 !important;
+
+  /* align with your site max width system */
+  max-width: var(--stark-max-wide, 1180px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(18px, 3vw, 28px) !important;
+  padding-right: clamp(18px, 3vw, 28px) !important;
+}
+
+/* Logo: soften a touch so it sits in the dark */
+.x-colophon .x-bar.drk-background .x-image img{
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.20)) !important;
+}
+
+/* Footer blurb + meta: readable, premium */
+.x-colophon .footer-blurb{
+  color: rgba(255,255,255,0.78) !important;
+  line-height: 1.65 !important;
+}
+
+.x-colophon .footer-meta{
+  color: rgba(255,255,255,0.62) !important;
+  line-height: 1.6 !important;
+}
+
+/* Eyebrows (Company / Contact) — match menu label vibe */
+.x-colophon .footer-eyebrow h6{
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  color: rgba(255,255,255,0.68) !important;
+  margin: 0 0 0.85rem 0 !important;
+}
+
+.x-colophon .footer-eyebrow h6::after{
+  content: "";
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin-top: 6px;
+  background: rgba(48,127,226,0.65);
+  border-radius: 999px;
+}
+
+/* Footer link lists: clean reset */
+.x-colophon .x-menu-first-level{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Links: “quiet rows”, not loud buttons */
+.x-colophon .x-anchor-menu-item{
+  border-radius: 12px !important;
+  padding: 0.65rem 0.75rem !important;
+  margin: 0.12rem 0 !important;
+
+  color: rgba(255,255,255,0.82) !important;
+  text-decoration: none !important;
+
+  transition: background 160ms ease, transform 160ms ease, color 160ms ease !important;
+}
+
+.x-colophon .x-anchor-menu-item:hover{
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(255,255,255,0.96) !important;
+  transform: translateX(2px) !important;
+}
+
+/* Remove/soften the little dropdown indicator in footer menus */
+.x-colophon .x-anchor-sub-indicator{
+  opacity: 0.22 !important;
+  transform: translateY(1px) !important;
+}
+
+.x-colophon .x-anchor-menu-item:hover .x-anchor-sub-indicator{
+  opacity: 0.45 !important;
+  transform: translate(2px, 1px) !important;
+}
+
+/* ---------- FOOTER BOTTOM BAR (social + copyright) ---------- */
+.x-colophon .x-bar:not(.drk-background){
+  background: rgba(0, 22, 58, 0.98) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.x-colophon .x-bar:not(.drk-background) > .x-bar-content{
+  max-width: var(--stark-max-wide, 1180px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(18px, 3vw, 28px) !important;
+  padding-right: clamp(18px, 3vw, 28px) !important;
+}
+
+/* Social icons: premium glass pills */
+.x-colophon .footer-social{
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 14px !important;
+
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+
+  box-shadow: 0 12px 28px rgba(0,0,0,0.22) !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease !important;
+}
+
+.x-colophon .footer-social i{
+  color: rgba(255,255,255,0.88) !important;
+}
+
+.x-colophon .footer-social:hover{
+  transform: translateY(-2px) !important;
+  background: rgba(48,127,226,0.22) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,0.26),
+    0 0 0 1px rgba(48,127,226,0.35),
+    0 0 18px rgba(48,127,226,0.35) !important;
+}
+
+/* Copyright text: clean + readable */
+.x-colophon .e969-e20{
+  color: rgba(255,255,255,0.62) !important;
+  line-height: 1.6 !important;
+}
+
+/* Optional: link styling in the copyright area (if those become anchors) */
+.x-colophon .e969-e20 a{
+  color: rgba(255,255,255,0.72) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+.x-colophon .e969-e20 a:hover{
+  color: rgba(255,255,255,0.92) !important;
+  border-bottom-color: rgba(48,127,226,0.55) !important;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .x-colophon .x-anchor-menu-item,
+  .x-colophon .footer-social{
+    transition: none !important;
+  }
+} 
+
+.stark-copyright {
+  font-size: .85rem !important;
+}
+
+@media (max-width: 640px) {
+
+  /* Force footer bar to visually own its space */
+  .copyright-area {
+    height: auto !important;
+    padding-top: 100px !important;
+    padding-bottom: 24px !important;
+    background-color: inherit; /* ensure dark bg continues */
+  }
+
+  /* Stack footer content */
+  .copyright-area .x-bar-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 18px !important;
+    text-align: center !important;
+  }
+
+  /* SOCIAL ICON ROW — move fully into dark area */
+  .copyright-area .footer-left {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+
+    /* This is the key line */
+    margin-top: 16px !important;
+  }
+
+  .copyright-area .footer-left .footer-social {
+    flex: 0 0 auto !important;
+  }
+
+  /* COPYRIGHT — stacked below icons */
+  .copyright-area .footer-right {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 6px !important;
+  }
+
+  .copyright-area .stark-copyright,
+  .copyright-area .stark-copyright p {
+    text-align: center !important;
+    margin: 0 auto !important;
+    line-height: 1.45;
+  }
+
+}
+

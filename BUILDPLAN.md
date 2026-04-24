@@ -1,7 +1,7 @@
 # BUILDPLAN.md — Stark Social Media Agency
-**Project:** starksocial.com Phase 2 Rebuild  
-**Last Updated:** April 2026  
-**Status:** 🟡 In Planning — Migration Decision Made
+**Project:** starksocial.com Phase 2 Rebuild
+**Last Updated:** April 24 2026
+**Status:** 🟢 Phase 2.0 in progress
 
 ---
 
@@ -10,40 +10,40 @@
 **Migrating from Themeco Pro/X + Cornerstone → GeneratePress Premium + Gutenberg/GenerateBlocks**
 
 ### Why
-- Current mobile PageSpeed: **47** / LCP: **9.8s** (platform ceiling, not tunable)
-- Desktop: 79 — hardware masking builder bloat (149KB unused JS, 6,178KB total payload)
-- Cornerstone export broken — cannot extract content cleanly
-- All visual CSS is already written and fully portable (~2,000 lines in WPCode global CSS)
-- Phase 2 is a redesign anyway — staging move = natural migration window
+- Mobile PageSpeed 47, LCP 9.8s — platform ceiling, not tunable
+- Desktop 79, hardware masking builder bloat (149KB unused JS, 6,178KB total)
+- Cornerstone export broken
+- All visual CSS portable; redesign is already planned
 
 ### What Stays
-- All custom PHP in `functions.php` (Podcast CPT, Podlove, shortcodes, security headers)
-- All plugin logic: Gravity Forms → Perfex CRM webhook, SearchWP, BetterDocs, FacetWP
+- All custom PHP in `functions.php`
+- Plugin logic: Gravity Forms → Perfex CRM webhook, SearchWP, BetterDocs, FacetWP
 - Portfolio CPT structure + ACF Pro fields
-- Barlow font stack (self-hosted WOFF2 already in child theme)
+- Barlow font stack
 
 ### What Changes
 - Theme: Pro/X → GeneratePress Premium
-- Builder: Cornerstone → GenerateBlocks (or native Gutenberg + custom patterns)
-- SEO: AIOSEO (5 addons) → RankMath Pro (Phase 2, installed fresh on staging)
-- CSS delivery: WPCode global → child theme `style.css` + page-specific CSS via `wp_enqueue_scripts`
+- Builder: Cornerstone → GenerateBlocks + Gutenberg
+- SEO: AIOSEO → RankMath Pro (fresh on staging)
+- CSS: WPCode global → child theme `custom.css` + page-specific CSS
 
 ---
 
 ## Stack
 
-| Layer | Current | Phase 2 |
-|---|---|---|
-| Theme | Themeco Pro/X | GeneratePress Premium |
-| Builder | Cornerstone | GenerateBlocks + Gutenberg |
-| CSS | WPCode global + per-page | Child theme + enqueued page CSS |
-| SEO | AIOSEO + 5 addons | RankMath Pro (fresh install, AIOSEO data imported) |
-| Forms | Gravity Forms | Gravity Forms (keep) |
-| CRM | Perfex Hub (custom webhook) | Perfex Hub (keep) |
-| Caching | Breeze + Object Cache Pro | Breeze + Object Cache Pro (keep) |
-| Search | SearchWP + 3 addons | SearchWP (keep) |
-| Docs | BetterDocs Pro + SearchWP | BetterDocs Pro (keep) |
-| Hosting | Cloudways | Cloudways (keep) |
+| Layer | Phase 2 |
+|---|---|
+| Theme | GeneratePress Premium |
+| Builder | GenerateBlocks + Gutenberg |
+| CSS | `custom.css` in child theme |
+| SEO | RankMath Pro |
+| Forms | Gravity Forms |
+| CRM | Perfex Hub |
+| Chat | Perfex PRChat (replaces Olark at launch) |
+| Caching | Breeze + Object Cache Pro |
+| Search | SearchWP |
+| Docs | BetterDocs Pro |
+| Hosting | Cloudways |
 
 ---
 
@@ -56,38 +56,36 @@
 - [ ] Services Hub (`/services/`)
 
 ### Services (Priority 2)
-- [ ] Social Media Management (`/social-media-management/`)
-- [ ] Paid Social Advertising (`/paid-advertising/`)
-- [ ] Web Design (`/web-design/`)
-- [ ] SEO (`/seo/`)
-- [ ] Content Creation (`/content-creation/`)
-- [ ] Brand Strategy & Identity (`/brand-strategy-identity/`)
-- [ ] Digital Marketing Audit & Consulting (`/audit-consulting/`) — **NEW**
-- [ ] Fractional CMO (`/fractional-cmo/`) — **NEW**
+- [ ] Social Media Management
+- [ ] Paid Social Advertising
+- [ ] Web Design
+- [ ] SEO
+- [ ] Content Creation
+- [ ] Brand Strategy & Identity
+- [ ] Digital Marketing Audit & Consulting — NEW
+- [ ] Fractional CMO — NEW
 
-### Portfolio (Priority 2 — NEW in Phase 2)
+### Portfolio — NEW in Phase 2
 - [ ] Portfolio archive (`/portfolio/`)
-- [ ] Portfolio single (CPT template)
+- [ ] Portfolio single template
 - [ ] Portfolio CPT fields (ACF Pro — already defined)
 
 ### Blog & Podcast
-- [ ] Blog archive (`/blog/`)
-- [ ] Blog single post template
-- [ ] Podcast archive (`/podcast/`)
-- [ ] Podcast single template
+- [ ] Blog archive + single
+- [ ] Podcast archive + single (Podlove)
 
 ### Support
-- [ ] Support hub (`/support/`)
-- [ ] Knowledgebase (`/knowledgebase/`) — BetterDocs
+- [ ] Support hub
+- [ ] Knowledgebase (`/support/knowledgebase/`)
 
 ### Author Pages
-- [ ] Nathan Imhoff (`/author/nathan-imhoff/`)
-- [ ] Deanna L. Miller (`/author/deanna-l-miller/`)
+- [ ] Nathan Imhoff
+- [ ] Deanna L. Miller
 
 ### Utility
-- [ ] 404 (`/404-error/`)
+- [ ] 404
 - [ ] Search Results
-- [ ] Password Generator (`/password-generator/`)
+- [ ] Password Generator
 
 ### Legal (copy-forward)
 - [ ] Privacy Policy
@@ -100,135 +98,99 @@
 ## Phase 2 Build Phases
 
 ### Phase 2.0 — Environment Setup
-- [x] Set up GitHub repo for project docs
-- [x] Migration decision made (GeneratePress)
-- [ ] Fresh WordPress install on staging (`staging.starksocial.com`)
-- [ ] Install GeneratePress Premium + GenerateBlocks Pro
-- [ ] Install RankMath Pro (fresh — no AIOSEO import needed on staging)
-- [ ] Install Gravity Forms + existing license
-- [ ] Install ACF Pro
-- [ ] Port `functions.php` to new child theme
-- [ ] Port global CSS to child theme `style.css`
-- [ ] Port global + page JS to enqueued scripts
-- [ ] Disable Redis on staging (`WP_REDIS_DISABLED = true`)
-- [ ] Disable Gravity Forms → Perfex webhook on staging
-- [ ] Verify nav: transparent → frosted glass transition
-- [ ] Verify mega menu (desktop) + accordion (mobile)
+- [x] GitHub repo for project docs
+- [x] Migration decision (GeneratePress)
+- [x] Child theme v2.0.0 — full Phase 1 port — April 24 2026
+- [x] Fresh WordPress on staging (Cloudways app `wcrjhscubc`, server 676057)
+- [x] Plugin inventory confirmed active
+- [x] GeneratePress parent + child theme uploaded and activated
+- [x] `wp-config.php`: `STARK_ENV=staging`, `WP_REDIS_DISABLED=true`, debug flags set
+- [x] Bottom UI cluster v2.0.1 — A11y + back-to-top + Perfex chat embed + mobile scroll fix — April 24 2026
+- [ ] Paste Phase 1 design tokens + global CSS into `custom.css`
+- [ ] Port 13 keeper WPCode snippets into `functions.php`
+- [ ] Port Phase 1 scroll progress + velocity JS into `js/stark-global.js`
+- [ ] Port AIOSEO podcast breadcrumb filter to RankMath
+- [ ] Configure OpenAI API key in Perfex AI Chatbot
+- [ ] Verify transparent → frosted glass nav
+- [ ] Build mega menu (desktop) + accordion (mobile)
 
 ### Phase 2.1 — Core Pages
-- [ ] Home
-- [ ] About
-- [ ] Contact
-- [ ] Services hub
+- [ ] Home · About · Contact · Services hub
 
-### Phase 2.2 — Service Pages
+### Phase 2.2 — Service Pages (8)
 - [ ] All 8 service pages (shared template, unique content)
-- [ ] New: Digital Marketing Audit & Consulting page
-- [ ] New: Fractional CMO page
+- [ ] New: Audit & Consulting + Fractional CMO
 
 ### Phase 2.3 — Portfolio
-- [ ] Portfolio CPT + ACF fields audit
-- [ ] Portfolio archive page
-- [ ] Portfolio single template (case study layout: hero, carousel, 3-stat row, overview/challenge/solution/results, project details sidebar, prev/next)
+- [ ] CPT + ACF fields audit
+- [ ] Archive + single template
 - [ ] Migrate existing case studies
-- [ ] Mockup assets: supplied by Nathan, assembled in Build chat
-- [ ] Case study copy: Claude — Copy/Voice chat
-- [ ] Portfolio SEO + schema: Claude — SEO chat
 
 ### Phase 2.4 — Blog & Podcast
-- [ ] Blog archive template
-- [ ] Blog single post template (carry existing Stark blog CSS patterns)
-- [ ] Podcast archive
-- [ ] Podcast single (Podlove integration test)
+- [ ] Archive + single templates for both
 
 ### Phase 2.5 — Support & Utility
-- [ ] Support hub
-- [ ] Knowledgebase (BetterDocs re-integration)
-- [ ] 404, Search Results, Password Generator
-- [ ] Author page templates
+- [ ] Support hub, knowledgebase, 404, search, password generator, author pages
 
 ### Phase 2.6 — Legal
-- [ ] Copy-forward all 4 legal pages
-- [ ] Verify Complianz GDPR cookie banner placement
+- [ ] Copy-forward 4 legal pages
 
 ### Phase 2.7 — QA & Launch
-- [ ] PageSpeed audit (target: desktop 95+, mobile 85+)
-- [ ] Core Web Vitals — all green
-- [ ] Cross-browser + device testing
-- [ ] Accessibility audit (target: 98+)
-- [ ] RankMath SEO score 90+ per page
-- [ ] Schema validation — zero errors
+- [ ] PageSpeed (desktop 95+, mobile 85+)
+- [ ] Core Web Vitals green
+- [ ] Cross-browser + device
+- [ ] Accessibility 98+
+- [ ] RankMath 90+ per page
+- [ ] Schema validation zero errors
 - [ ] Local SEO landing pages verified
-- [ ] DNS cutover from staging to production
-- [ ] Post-launch monitoring
+- [ ] **Remove Olark embed from live before DNS cutover**
+- [ ] DNS cutover
+- [ ] Post-launch: verify Perfex chat, then cancel Olark subscription
 
 ---
 
 ## Workstream Ownership
 
-| Chat | Name | Scope |
-|---|---|---|
-| `Stark — Build` | Build | GeneratePress, templates, CSS, PHP, components, nav |
-| `Stark — SEO` | SEO & Local | RankMath, local landing pages, schema, keyword mapping |
-| `Stark — Copy` | Copy & Voice | Voice guide, page copy, service pages, local messaging |
-| `Stark — Blog` | Blog | Audit existing posts, cull, refresh, 2026 content calendar |
-| `Stark — QA` | QA | PageSpeed, accessibility, schema validation, cross-browser |
+| Chat | Scope |
+|---|---|
+| `Stark — Build` | GeneratePress, templates, CSS, PHP, components, nav |
+| `Stark — SEO` | RankMath, local landing pages, schema, keyword mapping |
+| `Stark — Copy` | Voice guide, page copy, service pages, local messaging |
+| `Stark — Blog` | Audit, cull, refresh, 2026 content calendar |
+| `Stark — QA` | PageSpeed, a11y, schema, cross-browser |
 
-**Portfolio ownership:** Template (Build) + Copy (Copy) + Schema (SEO) — coordinated via .md files  
-**Nathan's role:** Project Director — decisions, approvals, cross-chat coordination  
-Each chat starts with the standard START-PROMPT pulling all `.md` files from GitHub.  
-Each chat logs completed work to CHANGELOG.md, errors to ERRORLOG.md, and checks off BUILDPLAN.md at session end.
+Portfolio: Template (Build) + Copy (Copy) + Schema (SEO).
+Nathan: Project Director — decisions, approvals, cross-chat coordination.
 
 ---
 
 ## Phase 3 (Future)
 
 ### Phase 3.1 — Stark Social Ongoing
-- Drip campaigns via Perfex CRM for client services
+- Perfex drip campaigns for client services
 - MainWP full integration + client site reporting
-- Navigation/menu refinement based on analytics
-- Performance push (target: mobile 90+)
-- Wincher rank tracking review + content gap fill
+- Nav refinement based on analytics
+- Performance push (mobile 90+)
+- Wincher rank tracking review
 
-### Phase 3.2 — Stark Hosting (Separate Website)
-**Scope:** Standalone hosting brand built on Cloudways reseller (Cloudways Agency)
-
-**What it offers:**
-- Domain registration
-- Business email hosting
-- Managed WordPress hosting (white-labeled Cloudways)
-- Unmanaged hosting options
-
-**Structure:**
-- Separate brand and domain (TBD — not Stark Social)
-- Separate WordPress site, separate Cloudways app
-- Cross-promoted on `starksocial.com` as a partner service
-- Billing/client management: integrate with Perfex Hub or dedicated billing platform (WHMCS or Blesta)
-
-**Tech stack (planned):**
-- Cloudways Agency reseller account
-- WHMCS or Blesta for client billing + provisioning
-- Domain registration via OpenSRS or Enom reseller API
-- Email hosting via Zoho Mail reseller or similar
-
-**Advertising on Stark Social:**
-- Service card on homepage "stack" section
-- Dedicated page: `starksocial.com/hosting/`
-- Footer link
-- Blog content: "Why hosting matters for your business"
-
-**Do not start until Phase 2 is live.**
+### Phase 3.2 — Stark Hosting (Separate Site)
+- Standalone hosting brand on Cloudways reseller
+- Offerings: domain, email, managed + unmanaged WP hosting
+- Separate brand, domain, Cloudways app
+- Billing via WHMCS or Blesta
+- Cross-promoted on starksocial.com
+- **Do not start until Phase 2 is live**
 
 ---
 
 ## Navigation Structure (Locked)
 
-**Desktop:** Transparent on load → slim frosted glass on scroll  
+**Desktop:** Transparent on load → slim frosted glass on scroll
 **Mobile:** Same transition, burger → full screen dark glass overlay
 
 **Primary nav (5 items):**
 - Work (portfolio)
-- Services (mega menu, 2x4 grid)
+- Services (mega menu, 2×4 grid)
 - Blog
 - Podcast
 - Contact
@@ -242,31 +204,29 @@ Audit & Consulting    Fractional CMO
 [View All Services →]
 ```
 
-**Utility (top right):** Support · Client Portal  
-**Mobile services:** Accordion expand inline (no separate screen, no Back button)
+**Utility (top right):** Support · Client Portal
+**Mobile services:** Accordion expand inline, no Back button
 
 ---
 
 ## Key URLs & Infrastructure
 
-- **Live site:** `starksocial.com`
-- **Staging:** `staging.starksocial.com`
-- **Perfex Hub:** `hub.starksocial.com`
-- **MainWP:** `cpanel.starksocial.com`
-- **Cloudways Server:** 676057
-- **Perfex App ID:** `knaqmwdvju`
-- **Staging App ID:** `rctcpyewsk`
-- **Gravity Forms → Perfex webhook:** `hub.starksocial.com/webhooks/lead.php`
-- **Webhook secret:** stored in `wp-config.php`
-- **GitHub:** `github.com/starkweblabs/starksocial`
+- Live: `starksocial.com` (app `rvqkxhngas`)
+- Staging: `staging.starksocial.com` (app `wcrjhscubc`)
+- Perfex Hub: `hub.starksocial.com` (app `knaqmwdvju`)
+- MainWP: `cpanel.starksocial.com`
+- Cloudways server: 676057
+- GF → Perfex webhook: `hub.starksocial.com/webhooks/lead.php`
+- Perfex chat widget ID: `67d3563318b5547bfab53fa6366ace82`
+- GitHub: `github.com/starkweblabs/starksocial`
 
 ---
 
 ## Notes
 
-- `wp_49z880xoig_mainwp_stream` tables missing in WP DB — MainWP stream plugin tables not yet created; non-blocking warning
-- BetterDocs: all default styles are dequeued in `functions.php`; custom styling in global CSS
-- Gravity Forms: all default styles dequeued; custom styling in global CSS
-- Podcast scripts conditionally loaded only on podcast pages (already optimized)
-- Blog rewrites: `/blog/` and `/blog/page/N/` handled via `add_rewrite_rule` in `functions.php`
-- Podlove DB tables: `wp_podlove_episode` — queried directly in `starkpodmeta` shortcode
+- BetterDocs default styles dequeued in `functions.php`; styling in `custom.css`
+- Gravity Forms default styles dequeued
+- Podcast scripts conditionally loaded only on podcast pages
+- Blog rewrites: `/blog/` + `/blog/page/N/` via `add_rewrite_rule`
+- Podlove DB tables: `wp_podlove_episode` queried directly in `starkpodmeta`
+- Mobile smooth scroll: kill CSS `scroll-behavior: smooth`; JS does programmatic scroll with touch interrupts

@@ -1,3 +1,7 @@
-starksocial-site/pages/*.html
-starksocial-site/pages/**/*.html
-starksocial-site/**/*.zip
+.DS_Store
+**/.DS_Store
+*.log
+*.zip
+node_modules/
+.vscode/
+.idea/

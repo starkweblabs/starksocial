@@ -627,3 +627,57 @@ All forms, inputs, and search fields across the site use this style:
 - `box-shadow: 0 0.75rem 1.75rem rgba(0,0,0,0.08)`
 - Focus: `border-color: rgba(48,127,226,0.55)`, `box-shadow: 0 0 0 0.25rem rgba(48,127,226,0.18)`
 - Applies to: contact form, password generator inputs, sidebar search, all Gravity Forms inputs, knowledgebase search
+
+---
+
+## Bottom UI Cluster — Locked Behavior (v2.0.1, April 24 2026)
+
+Three bottom-fixed elements. Two form a pair on the left, one stands alone on the right.
+
+### A11y button (bottom-left, always visible)
+- Rounded-square glass pill, 44×44, radius 14
+- Rest: `left: 10px`, bottom `clamp(14px, 2vw, 22px)`
+- Active (past 50% scroll): `left: 64px`
+- Transition: 360ms cubic-bezier(.2, .8, .2, 1)
+- Links to `/support/accessibility-statement/`
+- Label: "A11y" in 11px/600/letter-spacing 0.06em
+
+### Back-to-top button (bottom-left, appears at 50% scroll)
+- Identical glass pill to A11y (same size, radius, glass)
+- Hidden at rest: `opacity: 0`, `translateY(18px)`, `pointer-events: none`
+- Active: slides up from below into `left: 10px`
+- Shows when scroll ≥ 50%; hides below 40% (10% hysteresis)
+- CSS-drawn chevron-up glyph (no SVG asset)
+- Click: interrupt-safe scroll to top
+  - Reduced motion: instant
+  - Desktop: native smooth
+  - Touch: custom RAF ease-out, aborts on touchstart or wheel
+
+### Chat bot (Perfex PRChat, bottom-right, always visible)
+- **Squircle** (asymmetric border-radius: `42% 58% 52% 48% / 45% 45% 55% 55%`) — intentionally distinct from A11y/back-to-top's rounded squares
+- 58×58 desktop, 52×52 mobile ≤480px
+- Accent blue fill (`#307FE2`), white icon
+- Entrance: slide from right 400ms after page load, 620ms duration
+- Attention: single pulse ring (2px accent-blue border, scale 1→1.8, opacity fade) at 3020ms. Never repeats.
+- Pulse suppressed when `.prchat-widget-open` or `[aria-expanded="true"]` set
+- Position: `right: 16px`
+
+### State coordination
+- JS file: `js/stark-bottom-ui.js`
+- Sets `data-stark-cluster="rest|active"` on `<html>` based on scroll
+- Writes `--stark-progress` (0..1) as CSS custom property for any other consumer
+- Reduced motion: all transitions and animations suppressed; state changes instant
+
+### Mobile scroll guidance (site-wide)
+- `html { scroll-behavior: auto; }` — no CSS smooth scroll anywhere
+- Any programmatic scroll (back-to-top, anchor jumps, etc.) must go through JS that:
+  1. Instant-jumps if `prefers-reduced-motion`
+  2. Uses native `scrollTo({behavior: 'smooth'})` on non-touch devices
+  3. Uses RAF ease-out scroll on touch devices, aborting on `touchstart` or `wheel`
+- This policy prevents the iOS momentum-vs-programmatic-smooth fight that causes jank
+- Touch detection: `matchMedia('(hover: none) and (pointer: coarse)')`
+
+### What this replaces from Phase 1
+- Themeco Pro's `.x-scroll-top.left` → `.stark-back-to-top`
+- Olark's `.olark-launch-button` → Perfex PRChat injected via embed
+- A11y's inline `style="left: 64px"` written by legacy JS → CSS-driven via `data-stark-cluster`

@@ -1,0 +1,332 @@
+/*
+ * custom.css — Stark Social design system
+ * Phase 2 child theme. Loaded after GeneratePress + child style.css.
+ *
+ * The ~2,000 lines of global CSS currently in the WPCode "Stark Global CSS"
+ * snippet on the live site belong in the marked section below.
+ *
+ * Order (source of truth: STYLEGUIDE.md):
+ *   1. :root custom properties + seasonal overrides
+ *   2. Base / reset / typography
+ *   3. Layout (.stark-section, .stark-inner, breakpoints)
+ *   4. Components — buttons, cards, nav, CTA, FAQ, forms
+ *   5. Navigation — transparent → frosted, mega menu, mobile accordion
+ *   6. Signature features — scroll progress bar, A11y + back-to-top
+ *   7. Seasonal accents
+ *   8. Utilities
+ *   9. Reduced-motion overrides
+ *
+ * Phase 2 guidance: remove !important from ported Phase 1 rules where possible.
+ * Themeco Pro specificity is gone — most overrides should no longer need it.
+ */
+
+/* ---------------------------------------------------------------------------
+   1. Custom properties
+   --------------------------------------------------------------------------- */
+
+:root {
+	/* Brand — primary */
+	--stark-dark-blue:          #004C97;
+	--stark-primary-red:        #F93822;
+	--stark-primary-light-blue: #307FE2;
+
+	/* Brand — secondary */
+	--stark-secondary-orange:   #FF8200;
+	--stark-secondary-yellow:   #FEDD00;
+	--stark-secondary-green:    #00B140;
+	--stark-secondary-purple:   #87189D;
+	--stark-secondary-magenta:  #E31C79;
+
+	/* Surface */
+	--stark-bg:                 #0b0f1a;
+	--stark-surface:            #fff;
+	--stark-rule:               rgba(17,17,17,.14);
+	--stark-rule-soft:          rgba(17,17,17,.08);
+
+	/* Text */
+	--stark-text:               #111;
+	--stark-muted:              rgba(17,17,17,.62);
+	--stark-muted-2:            rgba(17,17,17,.48);
+
+	/* Accent (overridden by data-stark-season) */
+	--stark-accent:             rgba(48,127,226,0.85);
+	--stark-accent-soft:        rgba(48,127,226,0.14);
+	--stark-accent-glow:        rgba(48,127,226,0.35);
+
+	/* Radii */
+	--stark-radius-card:        14px;
+	--stark-radius-ui:          16px;
+	--stark-radius-field:       14px;
+	--stark-radius-btn:         12px;
+
+	/* Layout widths */
+	--stark-max-wide:           1400px;
+	--stark-max-search:         1040px;
+	--stark-max-article:        960px;
+
+	/* Runtime JS-driven */
+	--stark-scroll:             0;
+	--stark-vel:                0;
+}
+
+/* Seasonal accents — set via <html data-stark-season=""> (see functions.php) */
+html[data-stark-season="spring"] { --stark-accent: rgba(68,149,255,.90); }
+html[data-stark-season="summer"] { --stark-accent: rgba(33,165,255,.88); }
+html[data-stark-season="fall"]   { --stark-accent: rgba(30,92,195,.88); }
+html[data-stark-season="winter"] { --stark-accent: rgba(92,178,255,.82); }
+
+
+/* ---------------------------------------------------------------------------
+   2–8. PASTE WPCode "Stark Global CSS" HERE
+   --------------------------------------------------------------------------- */
+
+/* Paste the ~2,000 lines of WPCode global CSS below this line.
+   Section order per the list at the top of this file.
+   Remove !important where Themeco specificity is no longer competing. */
+
+
+/* ---------------------------------------------------------------------------
+   9. Reduced motion — site-wide kill switch
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+/* =========================================================================
+   Bottom UI cluster — A11y + back-to-top (left) + chat bot (right)
+   Appended to custom.css by apply.sh
+   ========================================================================= */
+
+/* Kill native smooth-scroll site-wide. Our RAF scroll replaces it.
+   Eliminates iOS momentum vs smooth-scroll conflicts. */
+html {
+  scroll-behavior: auto !important;
+}
+
+/* Shared glass pill for A11y + back-to-top. */
+.stark-a11y-btn,
+.stark-back-to-top {
+  position: fixed;
+  bottom: clamp(14px, 2vw, 22px);
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+          backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.10),
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+  color: rgba(17, 17, 17, 0.78);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99998;
+  transition:
+    left 360ms cubic-bezier(.2, .8, .2, 1),
+    transform 360ms cubic-bezier(.2, .8, .2, 1),
+    opacity 240ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.stark-a11y-btn:hover,
+.stark-back-to-top:hover {
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset;
+}
+
+.stark-a11y-btn:focus-visible,
+.stark-back-to-top:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(48, 127, 226, 0.25),
+    0 10px 26px rgba(0, 0, 0, 0.10),
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+}
+
+.stark-a11y-btn {
+  left: 10px;
+  right: auto;
+}
+
+html[data-stark-cluster="active"] .stark-a11y-btn {
+  left: 64px;
+}
+
+.stark-a11y-icon {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: inherit;
+}
+
+.stark-back-to-top {
+  left: 10px;
+  right: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+}
+
+html[data-stark-cluster="active"] .stark-back-to-top {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.stark-back-to-top::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(-45deg) translate(-1px, 1px);
+  border-radius: 1px;
+}
+
+.screen-reader-text {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  word-wrap: normal !important;
+}
+
+/* Perfex PRChat — bottom-right, squircle, accent blue */
+#prchat-widget-container,
+.prchat-widget-container,
+.prchat-widget {
+  position: fixed;
+  bottom: clamp(14px, 2vw, 22px);
+  right: 16px;
+  z-index: 99997;
+}
+
+#prchat-widget-button,
+.prchat-widget-button,
+.prchat-launcher {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 42% 58% 52% 48% / 45% 45% 55% 55% !important;
+  background: var(--stark-primary-light-blue, #307FE2) !important;
+  border: 1px solid rgba(48, 127, 226, 0.35) !important;
+  box-shadow:
+    0 14px 34px rgba(48, 127, 226, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.18) inset !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0;
+  transform: translateX(120%);
+  animation: stark-chat-slide-in 620ms cubic-bezier(.2, .8, .2, 1) 400ms forwards;
+  transition:
+    transform 180ms cubic-bezier(.2, .8, .2, 1),
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+#prchat-widget-button:hover,
+.prchat-widget-button:hover,
+.prchat-launcher:hover {
+  background: #1e6fd0 !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow:
+    0 20px 44px rgba(48, 127, 226, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset !important;
+}
+
+#prchat-widget-button:focus-visible,
+.prchat-widget-button:focus-visible,
+.prchat-launcher:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 0 0 4px rgba(48, 127, 226, 0.30),
+    0 14px 34px rgba(48, 127, 226, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset !important;
+}
+
+@keyframes stark-chat-slide-in {
+  0%   { opacity: 0; transform: translateX(120%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+#prchat-widget-button::after,
+.prchat-widget-button::after,
+.prchat-launcher::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid rgba(48, 127, 226, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  animation: stark-chat-pulse 1600ms cubic-bezier(.2, .8, .2, 1) 3020ms 1 forwards;
+}
+
+@keyframes stark-chat-pulse {
+  0%   { opacity: 0;   transform: scale(1);   }
+  20%  { opacity: 0.9; transform: scale(1);   }
+  100% { opacity: 0;   transform: scale(1.8); }
+}
+
+.prchat-widget-open #prchat-widget-button::after,
+#prchat-widget-button[aria-expanded="true"]::after,
+.prchat-widget-button[aria-expanded="true"]::after {
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stark-a11y-btn,
+  .stark-back-to-top,
+  #prchat-widget-button,
+  .prchat-widget-button,
+  .prchat-launcher {
+    transition: none !important;
+    animation: none !important;
+  }
+  #prchat-widget-button,
+  .prchat-widget-button,
+  .prchat-launcher {
+    opacity: 1;
+    transform: none;
+  }
+  .stark-back-to-top {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  #prchat-widget-button,
+  .prchat-widget-button,
+  .prchat-launcher {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
