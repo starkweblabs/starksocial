@@ -1,1 +1,3 @@
 starksocial-site/pages/*.html
+starksocial-site/pages/**/*.html
+starksocial-site/**/*.zip
