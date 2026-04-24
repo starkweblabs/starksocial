@@ -391,6 +391,25 @@ Audit & Consulting    Fractional CMO
 
 ## Resolved
 
+### ERR-006 — Breeze 2.4.5 Fatal Error on Activation
+**Status:** ✅ Resolved — April 24 2026  
+**Error:** `Uncaught TypeError: array_merge(): Argument #2 must be of type array, string given in config-cache.php:507`  
+**Impact:** Live site starksocial.com went down completely  
+**Root Cause:** `breeze_advanced_settings` option had `breeze-exclude-urls` stored as a string `"Array\nblog/page/"` instead of an array. Breeze 2.4.5 update triggered `write_config_cache()` which called `array_merge()` on the corrupted value and crashed.  
+**Fix:**
+1. Renamed plugin folder to disable: `mv wp-content/plugins/breeze wp-content/plugins/breeze-disabled`
+2. Installed 2.4.4: `wp plugin install breeze --version=2.4.4 --force`
+3. Fixed corrupted option:
+```bash
+wp option update breeze_advanced_settings '{"breeze-exclude-urls":["blog/page/"],"cached-query-strings":["utm_source","utm_medium"],"breeze-wp-emoji":"1","breeze-store-googlefonts-locally":"1","breeze-store-googleanalytics-locally":"1","breeze-store-facebookpixel-locally":"1","breeze-store-gravatars-locally":"0","breeze-enable-api":"1","breeze-api-token":"iJZ8Tj60PvVjpBnLYGbrc1zgNRobfXai"}' --format=json
+```
+4. Activated Breeze: `wp plugin activate breeze`  
+**Do not update Breeze to 2.4.5** until Cloudways patches the array_merge bug.
+
+---
+
+## Resolved
+
 ### ERR-005 — Cornerstone Builder Export Failure
 **Status:** ✅ Resolved (by migration decision)  
 **Detected:** April 2026  
@@ -650,6 +669,45 @@ Dot animates on hover: `rgba(48,127,226,0.7)` fill.
 
 ---
 
+## Signature Features — DO NOT REMOVE
+
+These are defining UI moments that must survive the Phase 2 migration exactly as they work today. They are non-negotiable design decisions.
+
+### 1. Scroll Progress Bar
+A thin blue line that runs edge-to-edge along the bottom of the sticky nav, growing from left to right as the user scrolls down the page.
+
+- Only visible when the sticky nav is in frosted glass state (scrolled)
+- Color: `color-mix(in srgb, var(--stark-accent) 78%, white 0%)`
+- Height: `2px` desktop / `3px` at `≥ 900px`
+- Driven by `--stark-scroll` CSS variable (0 to 1) set via scroll event listener
+- Velocity glow: as scroll speed increases, the bar glows via `--stark-vel` variable
+- Transition: `120ms linear` — feels live, not laggy
+- Implementation: CSS `scaleX(var(--stark-scroll))` on `::after` pseudo-element of `.x-bar-content`
+- Reduced motion: transition disabled, bar still shows statically
+
+### 2. A11y Button + Back-to-Top Choreography
+Two fixed-position utility buttons that perform a coordinated entrance as the user scrolls.
+
+**A11y button (`.stark-a11y-btn`):**
+- Labeled "A11y" — accessibility settings shortcut
+- Fixed to bottom-left, starts at `left: 10px`
+- As user scrolls to 50% of page, it smoothly slides right to `left: 64px` — making room for the back-to-top button to appear beside it
+- Movement eased with `cubic-bezier(.22,.61,.36,1)`
+- Icon: accessibility symbol
+
+**Back-to-top button (`.x-scroll-top`):**
+- Fixed bottom-right
+- Hidden off-screen (`translateX(-18px)`, `opacity: 0`) until user scrolls
+- Slides in from the left with `opacity: 1` when triggered
+- Pure CSS chevron pointing up (no icon font dependency)
+- Subtle `starkChevronNudge` animation pulses every 4.2s to hint at the action
+- Hover: chevron turns accent blue, button lifts `translateY(-2px)`
+- Both buttons share the same glass morphism style: `rgba(255,255,255,.62)`, `backdrop-filter: blur(10px)`, `border-radius: 14px`
+
+**The choreography:** A11y slides left → gap opens → back-to-top slides into the gap. Feels intentional, not accidental.
+
+---
+
 ## Interaction Patterns
 
 - **Hover lift:** `translateY(-2px)` — universal for cards, buttons
@@ -767,11 +825,291 @@ starksocial/
 │   ├── stark-reveal.js ← IntersectionObserver reveal + tilt
 │   └── author-box.js   ← Author login attribute
 ├── img/                ← Theme-specific SVGs
-├── passgen/            ← Password generator (keep as-is)
+├── passgen/            ← Password generator (rebuild in Phase 2)
 └── framework/          ← Custom template views
     └── views/custom/
         └── wp-404.php
 ```
+
+---
+
+## Feature Decisions & Scope
+
+### 1. Password Generator (Rebuild in Phase 2)
+**Current:** Pill-shaped form, doesn't match site design  
+**Decision:** Rebuild to match Stark design system — `stark-card` container, `--stark-radius-field` inputs, Barlow font, brand colors. Remove pill shapes. Should feel like a native part of the site, not a widget drop-in.  
+**Location:** `/password-generator/` — keep as shortcode `[password_generator]`, just rebuild the CSS  
+**Owner:** Claude — Build
+
+---
+
+### 2. Live Chat (Olark → Evaluate)
+**Current:** Olark free tier — button style is good, service is adequate. Also integrated with Perfex Hub.  
+**Decision:** Evaluate before committing to Olark Pro.
+
+**Options to consider:**
+| Service | Pro | Con |
+|---|---|---|
+| **Olark Pro** | Already integrated with Hub, familiar | Older product, limited AI features |
+| **Crisp** | Modern, free tier generous, good design | No native Perfex integration |
+| **Tidio** | AI features, clean UI | Can get expensive |
+| **Tawk.to** | Free forever | Design less polished |
+
+**Recommendation:** If Hub integration is important, pay for Olark Pro. If Hub integration isn't critical for chat, Crisp is the better modern product.  
+**Keep current Olark styling** from global CSS regardless of which service is chosen — the button style is already on-brand.  
+**Decision needed by:** Before Phase 2 launch
+
+---
+
+### 3. Podcast (Podlove → Evaluate)
+**Current:** Podlove Podcasting Plugin — hasn't been updated recently. Audio files on AWS S3.  
+**Status:** Podcast on pause, considering relaunch.
+
+**Options:**
+| Option | Pro | Con |
+|---|---|---|
+| **Keep Podlove** | Already set up, AWS connected, CPT working | Plugin aging, less active development |
+| **Seriously Simple Podcasting** | Active development, clean UI, good RSS | Migration work |
+| **Castos** | Hosted platform, great analytics, WordPress plugin | Monthly cost, moves files off AWS |
+| **Buzzsprout embed** | Simple, reliable | Loses on-site player control |
+
+**Recommendation:** Keep Podlove for now since podcast is on pause. When relaunching evaluate Seriously Simple Podcasting — active development, better WordPress integration. Audio stays on AWS either way.  
+**AWS S3 bucket:** Already configured, keep regardless of plugin choice.
+
+---
+
+### 4. Blog Audio Player — ElevenLabs AI Voice (Phase 2 Feature)
+**Current:** Audio files manually created in Speechify, hosted on AWS S3, embedded in blog posts. Labor intensive.  
+**Decision:** Replace manual Speechify workflow with ElevenLabs API — auto-generate audio from blog post content using Nathan or Deanna's cloned voice.
+
+**Proposed workflow:**
+1. Blog post published/updated in WordPress
+2. WordPress hook triggers ElevenLabs API call with post content
+3. ElevenLabs generates MP3 using cloned voice
+4. MP3 uploaded to existing AWS S3 bucket automatically
+5. Player on blog post pulls from S3 URL (same as today)
+
+**Voice cloning:** ElevenLabs Professional Voice Clone — requires ~30 min of clean audio. Podcast episodes are ideal source material for both Nathan and Deanna.  
+**ElevenLabs plan needed:** Creator ($22/mo) minimum for voice cloning  
+**AWS:** Keep existing bucket and structure  
+**Owner:** Claude — Build (WordPress hook + API integration)  
+**Priority:** Phase 2 — high value, replaces manual labor entirely
+
+---
+
+### 5. Unified Audio Player (Blog + Podcast)
+**Decision:** Both blog and podcast use the same base player component with different feature sets.
+
+**Blog player (simple):**
+- Play/pause, progress bar, speed control, volume
+- "Listen to this post" label
+- Matches `.stark-card` glass morphism style
+
+**Podcast player (full):**
+- All blog player features PLUS
+- Chapter markers
+- Transcript toggle (collapsible below player)
+- Episode number + duration display
+- Download button
+- Subscribe links (Spotify, Apple, etc.)
+
+**Design:** Same visual language — dark glass `rgba(10,16,28,.92)`, accent blue progress bar, Barlow font, `border-radius: 18px`. Feels like one product at two feature levels.  
+**Owner:** Claude — Build  
+**Note:** If switching from Podlove, verify chapter + transcript support in new plugin before committing.
+
+---
+
+### 6. Support Ticket Button → Perfex Hub
+**Decision:** Add "Open a Support Ticket" as a utility action that redirects to `hub.starksocial.com/clients/open_ticket`
+
+**Behavior:**
+- Clicking opens `https://hub.starksocial.com/clients/open_ticket` in a new tab
+- Perfex Hub handles authentication — existing clients log in, non-clients see login/register
+- No custom auth needed on the WordPress side
+
+**Placement:**
+- Support page (`/support/`) — primary CTA
+- Knowledgebase pages — sidebar or footer of articles
+- Utility nav (top right alongside Client Portal)
+- Mobile menu — utility section at bottom
+
+**Button style:** `.stark-btn.blue-btn` — matches Client Portal button treatment  
+**Label:** "Open a Support Ticket"  
+**Icon:** ticket or message icon  
+**Owner:** Claude — Build
+
+---
+
+## Page-by-Page Visual Reference (From Live Site Screenshots — April 2026)
+
+### Homepage Hero
+- Full-bleed cloud photo background
+- All-caps white headline (keep weight and drama)
+- Yellow all-caps subtitle — **Phase 2: replace with white/muted subtitle, sentence case** — yellow all-caps conflicts with Apple-minimal direction
+- Single magenta CTA button — keep color, **replace pill shape with `--stark-radius-btn` (12px)**
+- Transparent nav state on load, logo top-left, burger top-right
+
+### Homepage — Who We're For Section
+- Two-column: copy + H2 left, halo bullet points right
+- Halo dots: `rgba(48,127,226,0.55)` with ring — keep exactly
+- Service cards: 2×2 grid, icon + title + description — this is the reference layout for Phase 2 service card pattern
+
+### Scroll Progress Bar (Confirmed Live)
+- Thin blue line visible under sticky nav when scrolled
+- Runs full width edge to edge ✅
+- Must be pixel-perfect match in Phase 2
+
+### Blog Single — Audio Player
+**Current state:**
+- White card container, subtle border
+- Label: "Listen to this article"
+- Timestamps left (current) and right (total, negative format e.g. -5:53)
+- Large play button center
+- ±15 second skip buttons
+- Speed control pill (1x dropdown)
+- Download audio link with download icon
+
+**Phase 2 upgrade:**
+- Replace white card with dark glass: `rgba(10,16,28,.92)`, `backdrop-filter: blur(22px)`
+- Accent blue progress bar
+- Keep same controls, same layout
+- Remove pill shape from speed control — use `--stark-radius-btn`
+- "Listen to this article" label in eyebrow style (small caps, muted)
+- ElevenLabs AI voice integration replaces manual Speechify workflow
+
+### Podcast Single — Podlove Player
+**Current state:**
+- Episode art square left
+- Episode title + podcast name
+- Blue pill "Play Podcast" button
+- Progress bar with timestamps
+- Chapters button, download button, share button (icon row)
+- Chapters panel: numbered list, chapter name, timestamp, X to close
+
+**Phase 2 upgrade:**
+- Same feature set, unified visual language with blog player
+- Dark glass container matching blog player
+- **Replace blue pill Play button** with `stark-btn blue-btn` style
+- Keep chapters panel — it's a strong feature, just restyle to dark glass
+- Transcript toggle to be added alongside chapters button
+
+### Password Generator
+**Current state (keep layout, fix styles):**
+- Two-column: copy/tips left, widget right — **keep this layout**
+- Widget: COPY PASSWORD button (top-right), password output area, length slider, toggle switches, GENERATE PASSWORD button
+
+**What's wrong:**
+- Pill-shaped iOS-style toggle switches — replace with Stark-styled checkboxes or squared toggles with `--stark-radius-ui`
+- COPY PASSWORD and GENERATE PASSWORD buttons are pill-shaped — replace with `stark-btn` style
+- Widget background too plain — upgrade to `stark-card` glass morphism
+
+**Phase 2 target:**
+- `stark-card` container for the widget
+- Slider: accent blue `--stark-accent` thumb and fill
+- Toggles: replace pill iOS style — use styled checkboxes or small `--stark-radius-btn` toggles in brand blue
+- Buttons: `.stark-btn.blue-btn` for Generate, ghost/secondary for Copy
+- Generated password output: monospace font, red (`--stark-primary-red`) to match existing `code` element style
+
+### Footer Structure (Current → Phase 2)
+**Current columns:** Logo+tagline | SERVICES | COMPANY | RESOURCES
+
+**Phase 2 columns:** Logo+tagline | SERVICES (all 8) | COMPANY | RESOURCES + Support Ticket
+
+**SERVICES column update (add new services):**
+- Social Media Management
+- Paid Advertising
+- Web Design
+- SEO
+- Content Creation
+- Brand Strategy & Identity
+- Audit & Consulting ← NEW
+- Fractional CMO ← NEW
+
+**RESOURCES column update:**
+- Knowledgebase
+- Password Generator
+- Client Portal
+- Blog
+- Podcast
+- Open a Support Ticket ← NEW (links to `hub.starksocial.com/clients/open_ticket`)
+
+**Social icons:** Facebook, Instagram, LinkedIn, YouTube, Apple Podcasts — keep all five
+
+### CTA Section (Global)
+- Dark blue gradient background — keep
+- "Start a conversation" headline — good, keep
+- Subtext: "Tell us what you're working on and we'll help you think it through. No pressure. If we're not a fit, we'll tell you." — keep this copy, it's very on-brand
+- Magenta Contact Us button — keep color, fix pill shape to `--stark-radius-btn`
+
+---
+
+## Annotated Feature Notes (From Nathan — April 2026)
+*These notes come directly from annotated screenshots and override any earlier general descriptions.*
+
+### Password Generator — Exact Notes
+- **Bigger widget** — the right-column widget needs to be larger and fill more space
+- **More spacing, more intentional** — generous padding inside the widget, don't crowd the controls
+- **Copy button + form = one unified thing** — COPY PASSWORD button should be integrated into the password output field, not floating above it separately. Think: output field with copy icon/button embedded on the right end — one component
+- **No pill shapes anywhere** — toggles, buttons, all of it. Glass feel throughout
+- **Glass buttons** — `.stark-btn` glass morphism style for Generate and Copy. Not flat, not pill — frosted glass with subtle border and depth
+- **Toggles** — replace iOS pill toggles with Stark-styled checkbox buttons or small glass toggle chips using `--stark-radius-btn`
+
+### Blog Audio Player — Exact Notes  
+- **Love this look** — use the current blog player visual as the reference for the unified player design across the site
+- **AI voice via ElevenLabs** — no more manual Speechify. Auto-generate on publish
+- **Voice selection logic: based on post author**
+  - Nathan wrote the post → Nathan's cloned voice
+  - Deanna wrote the post → Deanna's cloned voice
+  - Override field in post meta for edge cases
+- **Avatar for each voice** — small circular avatar appears in the player next to "Listen to this article"
+  - Nathan's avatar: his photo/headshot cropped to circle
+  - Deanna's avatar: her photo/headshot cropped to circle
+  - Sits left of the label, gives the player a human, personal feel
+- **Label update:** "Listen to this article · Nathan" or "Listen to this article · Deanna" — identifies whose voice is reading
+
+### Podcast Player — Exact Notes
+- **Chapters: collapsible, not auto-open** — chapters panel should be closed by default, opened on tap/click. Currently opens automatically which takes up too much space on load
+- **Play button: consistent site-wide button style** — the dark blue pill "Play Podcast" button needs to become `.stark-btn.blue-btn` to match every other button on the site. This is the site-wide button standardization note — applies everywhere
+- **Sidebar search = site-wide form standard** — the sidebar search box style (white glass, rounded, focus ring) is the reference style for ALL forms: password generator, contact form, gravity forms, any input anywhere on the site
+- **Categories sidebar widget** — should adopt the blog player's visual language: darker background treatment, cleaner typography. Currently too plain with grey counts
+
+### Scroll Progress Bar — Exact Behavior (Confirmed)
+- Grows from left edge → right edge as user scrolls
+- **Touches both edges** — full viewport width, edge to edge, no padding/margin
+- Moves in real time as user scrolls
+- At 100% scroll = fully touches right edge
+
+### A11y + Back-to-Top Choreography — Exact Behavior (Confirmed)
+**Starting state (page load):**
+- A11y button: far bottom-left corner
+- Back-to-top: hidden
+
+**As user scrolls:**
+- A11y button slowly slides right
+- Scroll progress bar grows left to right
+
+**Arriving state (mid-to-bottom of page):**
+- Back-to-top button slides IN from the right into position
+- Back-to-top button looks identical to A11y button — same glass style, same size, same border radius
+- Both buttons sit bottom-left together: [↑] [A11y]
+- Back-to-top is leftmost, A11y is to its right
+
+**Both buttons share identical styling:**
+- `background: rgba(255,255,255,.62)`
+- `backdrop-filter: blur(10px) saturate(140%)`
+- `border: 1px solid rgba(17,17,17,.10)`
+- `border-radius: 14px`
+- `width: 44px` / `height: 44px`
+- `box-shadow: 0 16px 34px rgba(17,17,17,.14)`
+
+### Site-Wide Form Standard (From Sidebar Search Reference)
+All forms, inputs, and search fields across the site use this style:
+- `background: rgba(255,255,255,0.92)`
+- `border: 1px solid rgba(0,0,0,0.10)`
+- `border-radius: var(--stark-radius-field)` (14px)
+- `box-shadow: 0 0.75rem 1.75rem rgba(0,0,0,0.08)`
+- Focus: `border-color: rgba(48,127,226,0.55)`, `box-shadow: 0 0 0 0.25rem rgba(48,127,226,0.18)`
+- Applies to: contact form, password generator inputs, sidebar search, all Gravity Forms inputs, knowledgebase search
 # SEO-STRATEGY.md — Stark Social Media Agency
 **Project:** starksocial.com Phase 2  
 **Owner:** Claude — SEO Chat  
