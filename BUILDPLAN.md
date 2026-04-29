@@ -183,6 +183,107 @@ Nathan: Project Director — decisions, approvals, cross-chat coordination.
 
 ---
 
+### Phase 3.3 — Stark Brand Sheet (Care Pro Feature)
+
+**Status:** Concept / parked
+**Owner:** TBD when work starts (likely new chat: `Stark — Brand Sheet`)
+**Priority:** Post-launch — do NOT start until Phase 2 + first Henry Mayo Fitness site are both shipped
+**Last reviewed:** April 29, 2026
+
+---
+
+#### What It Is
+
+A shareable brand asset page — one URL per client. The modern replacement for the brand-PDF every brand-conscious org maintains. Client forwards the URL to printers, media outlets, ad agencies, and any vendor who needs brand assets. No login required for public assets.
+
+Positioned as a **Stark Care Pro yearly retainer feature.** Clients on Care Pro tier get a custom branded sheet hosted by Stark. Cancel Care Pro → sheet deactivates via Perfex webhook.
+
+#### Why It's Valuable
+
+- **For clients:** Send one URL to a printer instead of emailing logos, hex codes, and font files separately. Looks professional. Reduces back-and-forth.
+- **For vendors:** Printers, media outlets, designers get a single source. Downloadable files, copy-paste color values, no accounts.
+- **For Stark:** Build once per client (~4-8 hours of client-asset prep + minor config). Strong differentiator against agencies that don't offer ongoing brand stewardship. Sticky upsell.
+
+#### Sections (per sheet)
+
+1. Header — client logo, last-updated date, agency contact line
+2. **Logos** — each variant downloadable in SVG, PNG (transparent), JPG (white bg), EPS. Clearspace/min-size guidance shown visually.
+3. **Colors** — large swatches with hex, RGB, CMYK, Pantone (where applicable). Click any value to copy to clipboard. Usage notes.
+4. **Typography** — font names, downloadable .woff2/.otf, sample text in each weight, fallback guidance.
+5. **Templates & graphics** — business cards, letterhead, social templates, email signature generator (ports existing Hub code).
+6. **Usage guidelines** — visual do's and don'ts.
+7. **Print/PDF version** — single button generates a self-contained PDF of the entire sheet for offline reference or attaching to emails. Killer feature for vendor handoff.
+
+#### Architecture (Direction, Not Final)
+
+**Stack:** Plain PHP. No framework, no WordPress, no DAM (ResourceSpace/Pimcore evaluated and rejected as overkill for asset volume per client).
+
+**Per-client folder structure:**
+```
+brand-sheet/
+├── index.php            ← renders entire page
+├── config.php           ← client-specific data arrays
+├── pdf.php              ← generates downloadable PDF on demand
+├── signature.php        ← email signature generator (adapted from Hub)
+├── assets/
+│   ├── logos/
+│   ├── fonts/
+│   ├── templates/
+│   └── images/
+├── css/sheet.css
+└── js/sheet.js
+```
+
+**Onboarding a new client:** Copy the folder, drop in their assets, edit `config.php`. That's the work.
+
+**Hosting:** Each client gets their own subdomain (`brand.{client-domain}.com`) or path on Stark infrastructure (`{client-slug}.starkbrand.com`). Each install is independent — no shared infrastructure between clients, no multi-tenant database to manage.
+
+**Perfex integration (cancellation flow):**
+- Client cancels Care Pro in Perfex
+- Perfex webhook fires (same mechanism as existing GF→Perfex lead webhook)
+- Custom PHP endpoint flips `'active' => false` in client's `config.php`
+- Page returns "Brand sheet for [Client] is currently inactive — contact agency"
+
+#### Why Not Alternatives
+
+- **WordPress:** Heavier than needed, Nathan prefers not to build new product surface in WordPress, no value-add for a static asset page.
+- **ResourceSpace / Pimcore:** Built for thousands of assets and complex permissions. Overkill for 30-50 brand assets per client. Generic UI undermines premium positioning. Maintenance burden of running enterprise DAM per client.
+- **SaaS like Brandfolder/Frontify:** Wrong economics — paying per-seat for clients defeats the productization play.
+
+#### Definition of Done — v1 (Stark's own sheet)
+
+- [ ] Sheet live at chosen URL (TBD — possibly `brand.starksocial.com` or `starksocial.com/brand/`)
+- [ ] All 7 sections built and populated with Stark's actual assets
+- [ ] Logos downloadable in SVG, PNG, JPG, EPS
+- [ ] Colors with click-to-copy (hex, RGB, CMYK, Pantone)
+- [ ] Email signature generator working (adapted from Hub code)
+- [ ] PDF export working
+- [ ] Mobile responsive
+- [ ] WCAG 2.1 AA pass
+
+#### Definition of Done — v2 (productized for clients)
+
+- [ ] Onboarding documented: hand-off process from Stark team to client
+- [ ] Perfex webhook → deactivation flow tested end-to-end
+- [ ] First paying Care Pro client onboarded (likely Henry Mayo Fitness if they take Care Pro)
+- [ ] Pricing locked in for Care Pro tier (Nathan decision)
+- [ ] Marketing page on starksocial.com explaining the Care Pro brand sheet feature
+
+#### Out of Scope (Forever or for Later)
+
+- Client-editable interface (clients send updates to Stark, Stark updates the sheet)
+- Asset versioning UI (Git history is sufficient)
+- Analytics dashboard for clients (could be added later if requested)
+- Multi-tenant single install (intentionally rejected — independent installs are simpler)
+- AI-powered metadata or search (not needed at this asset volume)
+
+#### Decisions Log
+
+- **April 29, 2026 — Use case clarified:** Primary value is vendor handoff (printers, media outlets) not internal brand documentation. Drives the "shareable URL + PDF export" framing.
+- **April 29, 2026 — Stack decision:** Plain PHP. WordPress and DAM platforms (ResourceSpace, Pimcore) evaluated and rejected.
+- **April 29, 2026 — Productization model:** Care Pro yearly retainer feature, not a standalone SaaS. Cancellation = deactivation via Perfex webhook.
+- **April 29, 2026 — Timing:** Parked. Do not start until Phase 2 + first Henry Mayo Fitness site are shipped.
+
 ## Navigation Structure (Locked)
 
 **Desktop:** Transparent on load → slim frosted glass on scroll

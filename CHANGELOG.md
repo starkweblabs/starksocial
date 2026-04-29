@@ -2,6 +2,27 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+## [2.0.4] — April 29 2026
+
+### Decided — Stark Brand Sheet (Phase 3.3)
+
+- **Concept defined.** Stark Care Pro yearly retainer feature: shareable brand asset page, one URL per client, designed for vendor handoff (printers, media outlets, freelancers). Replaces the brand-PDF and reduces back-and-forth on logo/color/font requests.
+- **Stack:** Plain PHP. WordPress, ResourceSpace, Pimcore, and SaaS platforms (Brandfolder/Frontify) all evaluated and rejected. Plain PHP fits the asset volume (~30-50 per client), Nathan's skill set, and the premium positioning best.
+- **Architecture:** Per-client folder, `config.php` for all client-specific data, independent installs (no multi-tenant single install). Onboarding a new client = copy folder + drop in assets + edit config.
+- **Perfex integration:** Uses same webhook pattern as existing GF→Perfex lead flow. Care Pro cancellation flips `'active' => false` in client config, sheet returns inactive notice. Reactivation reverses.
+- **Sales positioning:** Justifies Care Pro retainer through ongoing brand stewardship — most agencies hand off a brand PDF at launch and disappear, Stark keeps the brand sheet current.
+- **Timeline:** Parked. Do NOT start until Phase 2 and first Henry Mayo Fitness site are both shipped.
+
+### Added
+
+- **BUILDPLAN.md Phase 3.3 section** — full spec for the Stark Brand Sheet, sections, Definition of Done, decisions log
+- **brand-sheet/README.md** — standalone product README capturing architecture, onboarding workflow, Perfex integration, and rejected alternatives. Lives at `~/Projects/stark-phase-2/brand-sheet/README.md` as a placeholder folder for the future product.
+
+### Strategic context
+
+- Original conversation reframed multiple times: design system documentation page → live brand demo → Brandfolder-style portal → DAM productized tier → final framing as "shareable brand sheet for vendor handoff." The vendor-handoff framing is the one that aligns with what clients actually need and what Stark can deliver without building an enterprise platform.
+- Henry Mayo Fitness pitch is already submitted, so the brand sheet is no longer gated on that pitch — it's a future Care Pro feature, not a pitch artifact.
+- Phase 2 launch is now gated on shipping at least one Henry Mayo Fitness site first. Phase 2 launches with Henry Mayo as the inaugural case study, not before.
 
 ## [2.0.3] — April 29 2026
 
