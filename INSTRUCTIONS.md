@@ -1,6 +1,6 @@
 # INSTRUCTIONS.md — Stark Social Project System
 **Project:** starksocial.com Phase 2  
-**Last Updated:** April 2026  
+**Last Updated:** April 29, 2026  
 **Read this first — every chat, every session.**
 
 ---
@@ -32,8 +32,8 @@ A full rebuild of starksocial.com from Themeco Pro/X + Cornerstone to GeneratePr
 ### Starting a session
 1. Regenerate STARK-CONTEXT.md on your Mac:
 ```bash
-cd ~/Desktop/starksocial
-cat BUILDPLAN.md CHANGELOG.md ERRORLOG.md STYLEGUIDE.md SEO-STRATEGY.md VOICE-GUIDE.md > STARK-CONTEXT.md
+cd ~/Projects/stark-phase-2
+cat BUILDPLAN.md CHANGELOG.md ERRORLOG.md STYLEGUIDE.md SEO-STRATEGY.md VOICE-GUIDE.md NAMING-CONVENTION.md > STARK-CONTEXT.md
 ```
 2. Open a new Claude chat (or continue existing one)
 3. Name it correctly (e.g. `Stark — Build`)
@@ -49,7 +49,7 @@ Claude will provide exact markdown to update the relevant `.md` files. You:
 3. Save
 4. Push to GitHub:
 ```bash
-cd ~/Desktop/starksocial
+cd ~/Projects/stark-phase-2
 git add .
 git commit -m "Brief description of what changed"
 git push
@@ -76,9 +76,10 @@ Every chat must log at session end. Claude provides exact text to add to:
 ## File Structure
 
 ```
-starksocial/                          ← GitHub repo root
+stark-phase-2/                        ← GitHub repo root (lives at ~/Projects/stark-phase-2/)
 │
 ├── INSTRUCTIONS.md                   ← Read this first (you are here)
+├── NAMING-CONVENTION.md              ← Where files live + how to name them
 ├── BUILDPLAN.md                      ← Master build plan + checklist
 ├── CHANGELOG.md                      ← Everything completed, newest first
 ├── ERRORLOG.md                       ← Errors, fixes, warnings
@@ -88,34 +89,74 @@ starksocial/                          ← GitHub repo root
 ├── STARK-CONTEXT.md                  ← Combined context (regenerate before each chat)
 │
 ├── START-PROMPT-BUILD.md             ← Paste to start Stark — Build
-├── START-PROMPT-SEO.md              ← Paste to start Stark — SEO
-├── START-PROMPT-COPY.md             ← Paste to start Stark — Copy
-├── START-PROMPT-BLOG.md             ← Paste to start Stark — Blog
-├── START-PROMPT-QA.md               ← Paste to start Stark — QA
+├── START-PROMPT-SEO.md               ← Paste to start Stark — SEO
+├── START-PROMPT-COPY.md              ← Paste to start Stark — Copy
+├── START-PROMPT-BLOG.md              ← Paste to start Stark — Blog
+├── START-PROMPT-QA.md                ← Paste to start Stark — QA
 │
-├── starksocial-site/                 ← Site asset files
-│   ├── global/
-│   │   ├── global-css.css            ← Full global CSS from WPCode
-│   │   ├── global-js.js              ← Full global JS from WPCode
-│   │   └── functions.php             ← Child theme functions.php
-│   │
-│   └── pages/
-│       ├── home/
-│       │   ├── content.txt           ← Page copy
-│       │   ├── page-css.css          ← Page-specific CSS
-│       │   ├── page-js.js            ← Page-specific JS (delete if none)
-│       │   ├── Homepage-Desktop.png  ← Desktop screenshot
-│       │   └── Homepage-Mobile.png   ← Mobile screenshot
-│       ├── about/
-│       ├── contact/
-│       └── [other pages as completed]
+├── stark-social/                     ← Active GeneratePress child theme code
+│   ├── functions.php
+│   ├── style.css
+│   ├── custom.css
+│   ├── fonts/                        ← Barlow + Barlow Condensed woff2
+│   ├── img/
+│   ├── js/                           ← Global JS (stark-global, stark-bottom-ui, etc.)
+│   ├── framework/views/
+│   └── passgen/                      ← Password generator
 │
-└── research/                         ← Voice of customer + competitive intel
-    ├── 01_-_Stark_Data_Dump.docx
-    ├── 02_-_Voice_Of_Customer_Research.docx
-    ├── 03_-_Competitive_Intelligence_Research_-_Overall.docx
-    └── 04_-_Competitive_Intelligence_Research_-_Santa_Clarita_Focused.docx
+└── site-content/                     ← Page documentation, content, screenshots
+    ├── README.md
+    ├── global/
+    │   ├── functions.php
+    │   ├── global-css.css
+    │   ├── global-js.js
+    │   ├── Header/
+    │   └── Footer/
+    │
+    ├── pages/
+    │   ├── 404/
+    │   ├── about/
+    │   ├── accessibility-statement/
+    │   ├── audit-consulting/
+    │   ├── blog/
+    │   ├── brand-strategy/
+    │   ├── contact/
+    │   ├── content-creation/
+    │   ├── cookie-policy/
+    │   ├── fractional-cmo/
+    │   ├── home/
+    │   ├── knowledgebase/
+    │   ├── paid-advertising/
+    │   ├── password-generator/
+    │   ├── podcast/
+    │   ├── portfolio/
+    │   ├── privacy-policy/
+    │   ├── search-results/
+    │   ├── seo/
+    │   ├── services/
+    │   ├── social-media-management/
+    │   ├── support/
+    │   ├── team/
+    │   │   ├── deanna-miller/
+    │   │   └── nathan-imhoff/
+    │   ├── terms-of-service/
+    │   └── web-design/
+    │
+    ├── templates/
+    │   ├── author/
+    │   ├── blog-archive/
+    │   ├── blog-single/
+    │   ├── podcast-archive/
+    │   ├── podcast-single/
+    │   └── portfolio-single/
+    │
+    └── Site Features/                ← Signature feature reference screenshots
 ```
+
+**Research files** (Voice of Customer, Stark Data Dump, Competitive Intelligence x2) live in Drive at:
+**Stark Social Media Agency → Tech → Phase 2 (2026) → Research/**
+
+They are not committed to the repo by design — `.docx` files don't belong in Git.
 
 ---
 
@@ -127,15 +168,16 @@ starksocial/                          ← GitHub repo root
 - `.js` files
 - `.txt` files
 - `.php` files
-- `.png` / `.jpg` screenshots and mockups
-- `.docx` research files
-- `.zip` of child theme (no credentials inside)
+- `.png` / `.jpg` screenshots and mockups (small)
+- `.svg` icons and graphics
 
 ❌ Never add:
 - `.html` exports from the live site (contain embedded credentials and OAuth tokens)
 - `wp-config.php` or any file with passwords, API keys, or secrets
 - Database exports
 - Any file containing tokens, OAuth credentials, or private keys
+- `.docx` research files (these go in Drive)
+- `.zip` archives — if you need to send Claude a bundle, attach it directly to the chat instead of committing
 
 ---
 
@@ -151,6 +193,7 @@ starksocial/                          ← GitHub repo root
 - Audio player (blog + podcast unified player)
 - ElevenLabs API integration
 - Password generator rebuild
+- Style guide page (`/style-guide/`) build and maintenance
 
 **SEO chat handles:**
 - RankMath Pro configuration
@@ -166,6 +209,7 @@ starksocial/                          ← GitHub repo root
 - Brand voice decisions
 - Email/form copy
 - Blog content briefs
+- Style guide written sections (voice summary, code standards intros)
 
 **Blog chat handles:**
 - Audit of existing posts (keep/refresh/delete)
@@ -199,6 +243,7 @@ starksocial/                          ← GitHub repo root
 | MainWP | `cpanel.starksocial.com` |
 | GF → Perfex webhook | `hub.starksocial.com/webhooks/lead.php` |
 | GitHub repo | `github.com/starkweblabs/starksocial` |
+| Local repo path | `~/Projects/stark-phase-2/` |
 
 **Important:** All build work happens on staging. Never modify the live site during Phase 2.
 
@@ -230,8 +275,8 @@ These are non-negotiable. Every chat must protect them:
 
 ## Quick Reference — Start Any Chat
 
-1. `cd ~/Desktop/starksocial`
-2. `cat BUILDPLAN.md CHANGELOG.md ERRORLOG.md STYLEGUIDE.md SEO-STRATEGY.md VOICE-GUIDE.md > STARK-CONTEXT.md`
+1. `cd ~/Projects/stark-phase-2`
+2. `cat BUILDPLAN.md CHANGELOG.md ERRORLOG.md STYLEGUIDE.md SEO-STRATEGY.md VOICE-GUIDE.md NAMING-CONVENTION.md > STARK-CONTEXT.md`
 3. Open new Claude chat
 4. Paste role prompt from `START-PROMPT-[CHAT].md`
 5. Paste `STARK-CONTEXT.md` contents

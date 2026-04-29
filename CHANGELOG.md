@@ -2,6 +2,30 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+
+## [2.0.3] — April 29 2026
+
+### Repo cleanup
+- Archived `Current Child Folder/` (old Phase 1 child theme snapshot) to Drive at `Stark Social Media Agency → Tech → Phase 2 (2026) → Reference/`
+- Deleted redundant zip uploads from `starksocial-site/`: `First Pages.zip`, `global.zip`, `Site Features.zip`, `global/Header and Footer Only.zip` — unzipped versions remain, Git history preserves originals
+- Deleted generic `START-PROMPT.md` (the five role-specific prompts remain)
+
+### Renamed
+- `starksocial-site/` → `site-content/` — disambiguates from `stark-social/` (the active GeneratePress child theme code)
+- `pages/Deanna L Miller/` → `pages/team/deanna-miller/`
+- `pages/Nathan Imhoff/` → `pages/team/nathan-imhoff/`
+
+### Added
+- `NAMING-CONVENTION.md` — locks down where files live (GitHub vs Drive vs Perfex), naming rules for both repo and Drive, folder structures, onboarding checklist for new team members
+- INSTRUCTIONS.md updated to reflect new repo structure, new file paths, and to include `NAMING-CONVENTION.md` in `STARK-CONTEXT.md` regeneration command
+
+### Decided
+- **Style guide page added to Phase 2 scope.** Single page at `starksocial.com/style-guide`, scoped to Stark's own brand system, components rendered live from production CSS. Dual-purpose — internal design tool during build and sales artifact for Henry Mayo Fitness pitch. Full spec coming to BUILDPLAN.md in next pass.
+- Research files (`.docx`) live in Drive at `Stark Social Media Agency` shared drive, not committed to repo by design
+
+### Environment
+- Repo location moving from `~/Desktop/starksocial` → `~/Projects/stark-phase-2` (final step of cleanup, executed after this commit)
+
 ---
 
 ## [2.0.2] — April 24 2026
