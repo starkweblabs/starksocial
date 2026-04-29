@@ -1,0 +1,707 @@
+/* ============================================================
+ * Stark Brand Sheet — base styles
+ * Plain PHP, no framework. Apple-minimal, hairlines, glass.
+ * ============================================================ */
+
+/* -------- Self-hosted fonts -------- */
+@font-face {
+  font-family: 'Barlow';
+  src: url('../fonts/barlow-v13-latin-regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow';
+  src: url('../fonts/barlow-v13-latin-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow';
+  src: url('../fonts/barlow-v13-latin-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow';
+  src: url('../fonts/barlow-v13-latin-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow';
+  src: url('../fonts/barlow-v13-latin-800.woff2') format('woff2');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../fonts/barlow-condensed-v13-latin-regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../fonts/barlow-condensed-v13-latin-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../fonts/barlow-condensed-v13-latin-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../fonts/barlow-condensed-v13-latin-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* -------- Page setup (PDF / print) -------- */
+@page {
+  size: letter landscape;
+  margin: 0.5in 0.55in 0.6in 0.55in;
+
+  @top-left {
+    content: "Stark Social Media Agency · Brand Sheet";
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  @top-right {
+    content: counter(page);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8pt;
+    color: #888;
+  }
+  @bottom-right {
+    content: "starksocial.com";
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8pt;
+    color: #888;
+  }
+}
+
+/* Cover page (first page / Identity) — suppress running headers */
+@page :first {
+  margin: 0.6in;
+  @top-left { content: ""; }
+  @top-right { content: ""; }
+  @bottom-right { content: ""; }
+}
+
+/* -------- Tokens -------- */
+:root {
+  --bs-text:        #111;
+  --bs-muted:       rgba(17, 17, 17, 0.62);
+  --bs-muted-2:     rgba(17, 17, 17, 0.42);
+  --bs-rule:        rgba(17, 17, 17, 0.10);
+  --bs-rule-soft:   rgba(17, 17, 17, 0.06);
+  --bs-surface:     #fff;
+  --bs-bg:          #fafafa;
+  --bs-dark:        #0b0f1a;
+  --bs-accent:      #307FE2;
+  --bs-success:     #008035;
+
+  --bs-radius-card: 14px;
+  --bs-radius-btn:  12px;
+
+  --bs-max:         1200px;
+  --bs-pad-x:       clamp(20px, 4vw, 56px);
+
+  --bs-font:        'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bs-font-cond:   'Barlow Condensed', 'Barlow', sans-serif;
+  --bs-font-mono:   ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bs-bg);
+  color: var(--bs-text);
+  font-family: var(--bs-font);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--bs-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+a:hover { color: #1a5fc4; }
+a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius: 2px; }
+
+/* -------- Top bar -------- */
+.bs-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid var(--bs-rule);
+}
+.bs-bar__inner {
+  max-width: var(--bs-max);
+  margin: 0 auto;
+  padding: 14px var(--bs-pad-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.bs-brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.bs-brand__name { font-weight: 800; letter-spacing: -0.01em; }
+.bs-brand__label {
+  font-family: var(--bs-font-cond);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  color: var(--bs-muted);
+}
+.bs-meta { display: flex; align-items: center; gap: 16px; }
+.bs-meta__updated { font-size: 0.85rem; color: var(--bs-muted); }
+
+/* -------- Generic button -------- */
+.bs-btn {
+  appearance: none;
+  font: inherit;
+  font-weight: 600;
+  background: var(--bs-text);
+  color: #fff;
+  border: 0;
+  padding: 10px 18px;
+  border-radius: var(--bs-radius-btn);
+  cursor: pointer;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.bs-btn:hover { transform: translateY(-1px); opacity: 0.92; }
+.bs-btn:active { transform: translateY(0) scale(0.99); }
+.bs-btn:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; }
+
+/* -------- Sections -------- */
+.bs-main { padding-bottom: 96px; }
+.bs-section { padding: clamp(48px, 8vh, 96px) 0; border-bottom: 1px solid var(--bs-rule-soft); }
+.bs-section:last-child { border-bottom: 0; }
+.bs-section__inner { max-width: var(--bs-max); margin: 0 auto; padding: 0 var(--bs-pad-x); }
+.bs-section__lede { max-width: 70ch; color: var(--bs-muted); margin: 12px 0 32px; }
+
+.bs-eyebrow {
+  font-family: var(--bs-font-cond);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  color: var(--bs-accent);
+  margin: 0 0 12px;
+}
+.bs-h2 {
+  font-size: clamp(1.85rem, 2.4vw, 2.45rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+.bs-h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--bs-font-cond);
+  color: var(--bs-muted);
+  margin: 40px 0 16px;
+}
+.bs-h3:first-of-type { margin-top: 0; }
+
+.bs-tagline {
+  font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+  font-weight: 600;
+  margin: 0 0 16px;
+  max-width: 50ch;
+  color: var(--bs-text);
+}
+.bs-lede { font-size: 1.1rem; max-width: 65ch; margin: 0 0 16px; }
+.bs-body { max-width: 70ch; color: var(--bs-muted); margin: 0 0 16px; }
+
+.bs-meta-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 24px;
+  max-width: 480px;
+  margin: 32px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--bs-rule-soft);
+  font-size: 0.92rem;
+}
+.bs-meta-list dt { color: var(--bs-muted); font-size: 0.85rem; }
+.bs-meta-list dd { margin: 0; }
+
+/* -------- Color swatches -------- */
+.bs-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.bs-color {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.bs-color__chip { height: 140px; border-bottom: 1px solid var(--bs-rule-soft); }
+.bs-color__body { padding: 18px 20px 20px; }
+.bs-color__name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+.bs-color__data {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 12px;
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+}
+.bs-color__data dt {
+  font-family: var(--bs-font-cond);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--bs-muted);
+  font-size: 0.72rem;
+  align-self: center;
+}
+.bs-color__data dd { margin: 0; }
+.bs-color__usage {
+  font-size: 0.85rem;
+  color: var(--bs-muted);
+  margin: 12px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--bs-rule-soft);
+}
+
+/* -------- Family chips -------- */
+.bs-family {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bs-rule-soft);
+}
+.bs-family__label {
+  font-family: var(--bs-font-cond);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: var(--bs-muted-2);
+  margin: 0 0 10px;
+}
+.bs-family__row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  align-items: end;
+}
+.bs-family__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+.bs-family__chip {
+  appearance: none;
+  padding: 0;
+  width: 100%;
+  height: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+}
+.bs-family__chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+}
+.bs-family__chip.is-true { border: 2px solid rgba(17, 17, 17, 0.55); }
+.bs-family__chip.is-copied { outline: 2px solid var(--bs-success); outline-offset: 2px; }
+.bs-family__chip:focus-visible { outline: 2px solid #FEDD00; outline-offset: 2px; }
+.bs-family__var {
+  font-family: var(--bs-font-cond);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--bs-muted-2);
+  font-weight: 600;
+  text-align: center;
+}
+.bs-family__cell--true .bs-family__var { color: var(--bs-text); font-weight: 700; }
+
+/* -------- Gradient swatches -------- */
+.bs-gradient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.bs-gradient {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  overflow: hidden;
+}
+.bs-gradient__chip { height: 160px; }
+.bs-gradient__body { padding: 18px 20px 20px; }
+.bs-gradient__name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+.bs-gradient__usage {
+  font-size: 0.85rem;
+  color: var(--bs-muted);
+  margin: 12px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--bs-rule-soft);
+}
+
+/* -------- Click-to-copy text buttons -------- */
+.bs-copy {
+  appearance: none;
+  background: transparent;
+  border: 1px dashed transparent;
+  font: inherit;
+  font-family: var(--bs-font-mono);
+  font-size: 0.82rem;
+  color: var(--bs-text);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: -6px;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+  text-align: left;
+}
+.bs-copy:hover {
+  background: rgba(48, 127, 226, 0.08);
+  border-color: rgba(48, 127, 226, 0.25);
+}
+.bs-copy.is-copied {
+  background: rgba(0, 177, 64, 0.10);
+  border-color: rgba(0, 177, 64, 0.30);
+  color: var(--bs-success);
+}
+.bs-copy:focus-visible { outline: 2px solid #FEDD00; outline-offset: 2px; }
+.bs-copy--block {
+  display: block;
+  width: 100%;
+  margin-left: 0;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--bs-rule-soft);
+  border-radius: 6px;
+  word-break: break-all;
+  white-space: normal;
+  line-height: 1.4;
+}
+.bs-copy--block:hover {
+  background: rgba(48, 127, 226, 0.06);
+  border-color: rgba(48, 127, 226, 0.30);
+}
+
+.bs-static { font-family: var(--bs-font-mono); font-size: 0.82rem; }
+
+/* -------- Typography section -------- */
+.bs-font {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  padding: 28px clamp(20px, 3vw, 32px);
+  margin-bottom: 24px;
+}
+.bs-font__head { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--bs-rule-soft); }
+.bs-font__name { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 6px; }
+.bs-font__role { margin: 0 0 6px; color: var(--bs-muted); font-weight: 500; }
+.bs-font__meta { margin: 0; color: var(--bs-muted-2); font-size: 0.85rem; }
+
+.bs-weights {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+.bs-weight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 14px;
+  border: 1px solid var(--bs-rule-soft);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.015);
+}
+.bs-weight__sample {
+  font-size: 2.4rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  color: var(--bs-text);
+}
+.bs-weight__num {
+  font-family: var(--bs-font-cond);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bs-accent);
+}
+.bs-weight__name { font-size: 0.85rem; color: var(--bs-muted); }
+
+.bs-scale {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  overflow: hidden;
+}
+.bs-scale__row {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 24px;
+  align-items: center;
+  padding: 20px clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid var(--bs-rule-soft);
+}
+.bs-scale__row:last-child { border-bottom: 0; }
+.bs-scale__sample { color: var(--bs-text); line-height: 1.15; overflow-wrap: anywhere; }
+.bs-scale__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+  color: var(--bs-muted);
+  text-align: right;
+}
+.bs-scale__meta strong { color: var(--bs-text); font-weight: 700; font-size: 0.95rem; }
+@media (max-width: 700px) {
+  .bs-scale__row { grid-template-columns: 1fr; gap: 12px; }
+  .bs-scale__meta { text-align: left; flex-direction: row; flex-wrap: wrap; gap: 12px; }
+}
+
+/* -------- Logos -------- */
+.bs-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.bs-logo {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.bs-logo__display { height: 200px; display: grid; place-items: center; padding: 24px; }
+.bs-logo--light .bs-logo__display { background: #fff; }
+.bs-logo--dark  .bs-logo__display { background: var(--bs-dark); }
+.bs-logo__display img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.bs-logo__placeholder {
+  font-family: var(--bs-font-cond);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.78rem;
+}
+.bs-logo--light .bs-logo__placeholder { color: var(--bs-muted-2); }
+.bs-logo__body { padding: 20px 22px 22px; }
+.bs-logo__name { font-size: 1.05rem; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em; }
+.bs-logo__desc { margin: 0 0 16px; color: var(--bs-muted); font-size: 0.9rem; }
+
+.bs-downloads {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  list-style: none; margin: 0; padding: 0;
+}
+.bs-download {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--bs-rule-soft);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--bs-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--bs-rule-soft);
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.bs-download:hover {
+  background: rgba(48, 127, 226, 0.08);
+  border-color: rgba(48, 127, 226, 0.25);
+  color: var(--bs-accent);
+}
+
+/* -------- Footer -------- */
+.bs-footer { border-top: 1px solid var(--bs-rule); background: var(--bs-surface); padding: 32px 0; }
+.bs-footer__inner {
+  max-width: var(--bs-max); margin: 0 auto; padding: 0 var(--bs-pad-x);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.bs-footer p { margin: 0; font-size: 0.85rem; color: var(--bs-muted); }
+.bs-footer__steward { color: var(--bs-muted-2); }
+
+/* -------- Inactive page -------- */
+.bs-inactive {
+  display: grid; place-items: center; min-height: 100vh;
+  background: var(--bs-bg); padding: 24px;
+}
+.bs-inactive__card {
+  max-width: 520px;
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  padding: 40px;
+  text-align: center;
+}
+.bs-inactive__card h1 { font-size: 1.6rem; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.02em; }
+.bs-inactive__card p { color: var(--bs-muted); margin: 0 0 12px; }
+
+/* ============================================================
+ * Print / PDF — landscape brand book
+ * ============================================================ */
+@media print {
+
+  /* Force browsers to print backgrounds and colors. */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide screen affordances */
+  .bs-bar, .bs-meta, .bs-btn, .bs-footer, .bs-footer__steward { display: none; }
+
+  body { background: #fff; font-size: 9.5pt; line-height: 1.45; }
+
+  .bs-main { padding-bottom: 0; }
+
+  .bs-section {
+    padding: 14pt 0;
+    border-bottom: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+  .bs-section:first-of-type { page-break-before: avoid; }
+  .bs-section__inner { padding: 0; max-width: none; }
+  .bs-section__lede { margin-bottom: 10pt; max-width: none; }
+
+  .bs-h2 { font-size: 16pt; margin-bottom: 4pt; page-break-after: avoid; }
+  .bs-h3 { margin: 10pt 0 6pt; page-break-after: avoid; font-size: 8.5pt; }
+  .bs-eyebrow { margin-bottom: 4pt; font-size: 7.5pt; }
+
+  /* ---------- Identity / Cover page ---------- */
+  #identity {
+    padding: 80pt 0 0;
+    page-break-after: always;
+    border-bottom: 0;
+    min-height: 7in;
+  }
+  #identity .bs-eyebrow { margin-bottom: 16pt; font-size: 9pt; }
+  #identity .bs-h2 {
+    font-size: 36pt;
+    line-height: 1.04;
+    margin-bottom: 18pt;
+    max-width: 7in;
+  }
+  #identity .bs-tagline {
+    font-size: 16pt;
+    font-weight: 500;
+    color: #004C97;
+    max-width: 6.5in;
+    margin-bottom: 28pt;
+    page-break-after: avoid;
+  }
+  #identity .bs-lede {
+    font-size: 11pt;
+    line-height: 1.5;
+    max-width: 6.5in;
+    margin-bottom: 14pt;
+    color: #222;
+  }
+  #identity .bs-body {
+    font-size: 9.5pt;
+    line-height: 1.5;
+    max-width: 6.5in;
+    color: #444;
+  }
+  #identity .bs-meta-list {
+    margin-top: 32pt;
+    padding-top: 14pt;
+    border-top: 1px solid #ddd;
+    max-width: 4.5in;
+    font-size: 8.5pt;
+  }
+  #identity .bs-meta-list dt {
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 7pt;
+    color: #888;
+  }
+
+  /* ---------- Color + Gradient + Logo grids: 3 across in landscape ---------- */
+  .bs-color-grid    { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
+  .bs-gradient-grid { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
+  .bs-logo-grid     { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
+
+  .bs-color, .bs-gradient, .bs-font, .bs-logo, .bs-scale__row {
+    page-break-inside: avoid;
+    border-color: #ccc;
+  }
+
+  /* Color cards */
+  .bs-color__chip { height: 56pt; }
+  .bs-color__body { padding: 8pt 10pt 10pt; }
+  .bs-color__name { font-size: 10pt; margin-bottom: 5pt; }
+  .bs-color__data { font-size: 7.5pt; gap: 2pt 6pt; margin-bottom: 5pt; }
+  .bs-color__data dt { font-size: 6pt; }
+  .bs-color__usage { font-size: 7pt; padding-top: 5pt; margin-top: 5pt; line-height: 1.35; }
+  .bs-family { display: none; }
+
+  /* Gradient cards */
+  .bs-gradient__chip { height: 56pt; }
+  .bs-gradient__body { padding: 8pt 10pt 10pt; }
+  .bs-gradient__name { font-size: 10pt; margin-bottom: 5pt; }
+  .bs-gradient__usage { font-size: 7pt; padding-top: 5pt; margin-top: 5pt; line-height: 1.35; }
+
+  /* Click-to-copy → plain in print */
+  .bs-copy, .bs-copy--block, .bs-family__chip {
+    border: 0 !important;
+    padding: 0 !important;
+    cursor: default;
+    background: transparent !important;
+  }
+  .bs-copy--block {
+    padding: 4pt 6pt !important;
+    background: #f5f5f5 !important;
+    font-size: 7.5pt !important;
+    border: 1px solid #e8e8e8 !important;
+  }
+
+  /* Typography section */
+  .bs-font { padding: 10pt 12pt; margin-bottom: 10pt; }
+  .bs-font__head { margin-bottom: 8pt; padding-bottom: 6pt; }
+  .bs-font__name { font-size: 12pt; margin-bottom: 4pt; }
+  .bs-font__role { font-size: 9pt; }
+  .bs-font__meta { font-size: 7.5pt; }
+
+  .bs-weights { grid-template-columns: repeat(5, 1fr); gap: 6pt; }
+  .bs-weight { padding: 6pt; }
+  .bs-weight__sample { font-size: 22pt; margin-bottom: 3pt; }
+  .bs-weight__num { font-size: 7pt; }
+  .bs-weight__name { font-size: 8pt; }
+
+  .bs-scale__row { padding: 8pt 12pt; grid-template-columns: 1fr 160pt; gap: 16pt; }
+  .bs-scale__meta { font-size: 7.5pt; }
+  .bs-scale__meta strong { font-size: 8.5pt; }
+}
+
+/* -------- Reduced motion -------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
