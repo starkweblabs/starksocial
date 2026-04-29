@@ -230,3 +230,146 @@ Audit & Consulting    Fractional CMO
 - Blog rewrites: `/blog/` + `/blog/page/N/` via `add_rewrite_rule`
 - Podlove DB tables: `wp_podlove_episode` queried directly in `starkpodmeta`
 - Mobile smooth scroll: kill CSS `scroll-behavior: smooth`; JS does programmatic scroll with touch interrupts
+
+
+## Style Guide Page
+
+**Status:** Not started
+**Owner:** `Stark — Style Guide` chat (page rendering, sections), `Stark — Copy` chat (written sections)
+**Priority:** Build alongside Phase 2 — used as live design reference during development; pitched to prospects (Henry Mayo Fitness) ASAP
+**Scope:** Single page, Stark's own brand system, components rendered from production CSS, deployed in two phases
+
+---
+
+### Purpose
+
+Dual-purpose deliverable:
+
+1. **Internal tool** — single source of truth for design tokens and components. Build chat references it when porting CSS. Copy chat references it for voice/tone consistency.
+2. **Sales artifact** — public-facing demonstration of brand rigor. Primary use case: Henry Mayo Fitness pitch. Secondary: linked from portfolio case studies, used in all future pitches. Long-term: prototype for productized client style guide offering (post-Phase 2).
+
+---
+
+### Build Sequence (Two Phases)
+
+This page is built **twice** by design: once on the current site, then ported when Phase 2 launches.
+
+#### Phase A — Current site (Themeco Pro/X + Cornerstone)
+
+- **Live URL:** `starksocial.com/style-guide`
+- **Built using:** Cornerstone elements + custom CSS via WPCode + PHP where needed
+- **Why first:** Henry Mayo Fitness pitch is imminent. Need a polished live URL to send prospects faster than waiting for Phase 2 launch.
+- **Tokens:** Pull from current site's CSS variables wherever possible
+
+#### Phase B — Phase 2 site (GeneratePress + GenerateBlocks)
+
+- **Live URL:** `staging.starksocial.com/style-guide` during dev; replaces Phase A at `starksocial.com/style-guide` at Phase 2 launch
+- **Built using:** GenerateBlocks page template (or `page-style-guide.php` in `stark-social/` child theme), pulling from Phase 2's `:root` token system
+- **Components:** Embedded as-is from production `stark-social/` theme — no reimplementation
+- **Goal:** Feature parity with Phase A, but cleaner architecture using Phase 2 tokens
+
+---
+
+### Lockdown Mechanism
+
+- **STYLEGUIDE.md** in repo = written canonical source (rationale, rules, decisions)
+- **`/style-guide/` page** = visual rendering, pulls from live CSS variables via JS at render time
+- **Components on the page** = production components, not copies
+- **Drift = structurally impossible** because there's one source of CSS
+
+---
+
+### Page Sections (in order, both phases)
+
+1. **Brand foundation**
+   - Logo (primary, secondary, monogram if exists)
+   - Clearspace and minimum sizing
+   - Voice summary (3–4 sentences, links to VOICE-GUIDE.md)
+
+2. **Color system**
+   - Swatches rendered from CSS custom properties
+   - Each swatch shows: hex, RGB, CSS variable name, usage notes
+   - Includes: primary, secondary, neutrals, semantic (success/warning/error), surface tokens
+
+3. **Typography**
+   - Live type scale rendered in production font stack (Barlow + Barlow Condensed)
+   - Display, H1–H6, body, small, caption
+   - Each shows: font family, weight, size, line-height, letter-spacing, CSS variable name
+   - Pairing examples (heading + body together)
+
+4. **Spacing & layout**
+   - Spacing scale (rendered as visual blocks)
+   - Grid system
+   - Breakpoints with annotations
+   - Container max-widths
+
+5. **Components**
+   - Buttons (all variants × all states: default, hover, active, focus, disabled)
+   - Form fields (input, textarea, select, checkbox, radio, with all states)
+   - Cards (variants used across the site)
+   - Navigation states (transparent, frosted, mobile accordion — live demo)
+   - Scroll progress bar (live demo in contained section)
+   - A11y + back-to-top choreography (live demo)
+
+6. **Motion principles**
+   - Easing curves used
+   - Duration tokens
+   - When to animate, when not to
+
+7. **Code standards**
+   - CSS naming conventions
+   - File organization
+   - Comments and documentation expectations
+
+---
+
+### Definition of Done — Phase A (Current Site)
+
+- [ ] Page live at `starksocial.com/style-guide`
+- [ ] All seven sections built and populated
+- [ ] All color tokens rendered from CSS custom properties
+- [ ] All typography rendered in production Barlow stack with correct tokens
+- [ ] All component states represented and interactive where applicable
+- [ ] Scroll progress bar and nav transformation working as live demos
+- [ ] Page passes WCAG 2.1 AA
+- [ ] Page indexed in RankMath/AIOSEO with appropriate schema (coordinate with SEO chat)
+- [ ] Linked from portfolio + footer (Nathan decides placement)
+- [ ] STYLEGUIDE.md updated to reference page as visual companion
+- [ ] Pitch-ready: linkable in proposals to Henry Mayo Fitness and other prospects
+
+### Definition of Done — Phase B (Phase 2 Port)
+
+- [ ] Page rebuilt on staging at `staging.starksocial.com/style-guide`
+- [ ] Built using Phase 2 `:root` token system from `stark-social/` child theme
+- [ ] All components are production Phase 2 components, not copies
+- [ ] Feature parity with Phase A version (or improved)
+- [ ] Phase 2 PageSpeed targets met (85+ mobile, 95+ desktop)
+- [ ] WCAG 2.1 AA passes on Phase 2 build
+- [ ] Replaces Phase A version at `starksocial.com/style-guide` at Phase 2 launch
+- [ ] Old Phase A code removed cleanly
+
+---
+
+### Working Workflow
+
+- As `Stark — Build` chat creates each component for Phase 2, the `Stark — Style Guide` chat adds it to the Phase 2 style guide page (Phase B build)
+- Style guide page becomes the integration test — if a component looks wrong on the guide, it's wrong on the site
+- `Stark — Copy` chat reviews written sections (voice, brand foundation, code standards intros) once components are in place
+- `Stark — QA` chat audits the guide page during the Phase 2 QA pass (accessibility, schema, PageSpeed)
+
+---
+
+### Out of Scope for v1 (both phases)
+
+- Client-editable version
+- Multi-tenant / per-client style guides (productized offering — separate scope, after Phase 2)
+- Downloadable assets (logo zip, font files) — can be added in v1.1 if Henry Mayo conversation requires it
+- Versioning UI (v1.0, v1.1 history) — handled in Git commits
+
+---
+
+### Decisions Log
+
+- **April 29, 2026 — Build sequence:** Phase A on current Themeco/Cornerstone site first, Phase B port to GeneratePress before Phase 2 launch. Decided in favor of speed-to-pitch over single-build efficiency.
+- **April 29, 2026 — Ownership:** Dedicated `Stark — Style Guide` chat owns this deliverable across both phases. Build chat focuses on Phase 2 site overall.
+- **April 29, 2026 — Sales context:** Primary prospect = Henry Mayo Fitness. Style guide is the wedge against an expensive, unresponsive incumbent vertical marketing company.

@@ -1,6 +1,6 @@
 # INSTRUCTIONS.md — Stark Social Project System
-**Project:** starksocial.com Phase 2  
-**Last Updated:** April 29, 2026  
+**Project:** starksocial.com Phase 2
+**Last Updated:** April 29, 2026
 **Read this first — every chat, every session.**
 
 ---
@@ -13,11 +13,12 @@ A full rebuild of starksocial.com from Themeco Pro/X + Cornerstone to GeneratePr
 
 ---
 
-## The Five Chats
+## The Six Chats
 
 | Chat Name | Role | Start Prompt File |
 |---|---|---|
-| `Stark — Build` | GeneratePress, CSS, PHP, templates, components | `START-PROMPT-BUILD.md` |
+| `Stark — Build` | GeneratePress, CSS, PHP, templates, components (Phase 2 site rebuild) | `START-PROMPT-BUILD.md` |
+| `Stark — Style Guide` | Style guide page on current site + Phase 2 port | `START-PROMPT-STYLEGUIDE.md` |
 | `Stark — SEO` | RankMath, schema, local pages, keyword mapping | `START-PROMPT-SEO.md` |
 | `Stark — Copy` | Page copy, voice, service pages, case studies | `START-PROMPT-COPY.md` |
 | `Stark — Blog` | Blog audit, refresh, 2026 content calendar | `START-PROMPT-BLOG.md` |
@@ -36,7 +37,7 @@ cd ~/Projects/stark-phase-2
 cat BUILDPLAN.md CHANGELOG.md ERRORLOG.md STYLEGUIDE.md SEO-STRATEGY.md VOICE-GUIDE.md NAMING-CONVENTION.md > STARK-CONTEXT.md
 ```
 2. Open a new Claude chat (or continue existing one)
-3. Name it correctly (e.g. `Stark — Build`)
+3. Name it correctly (e.g. `Stark — Build`, `Stark — Style Guide`)
 4. Paste the role prompt from the relevant `START-PROMPT-*.md` file
 5. Paste the full contents of `STARK-CONTEXT.md` after the role prompt
 6. Attach any relevant asset files (CSS, content, screenshots)
@@ -63,13 +64,14 @@ That's it. Every other chat will have the latest context next time.
 
 Every chat must log at session end. Claude provides exact text to add to:
 
-- **CHANGELOG.md** — what was completed this session (newest first)
+- **CHANGELOG.md** — what was completed this session (newest first, follows `## [version] — date` format with subsections like `### Added`, `### Decided`, `### Fixed`, `### Environment`)
 - **ERRORLOG.md** — any errors encountered and how they were fixed
 - **BUILDPLAN.md** — check off completed items, update status
 - **SEO-STRATEGY.md** — SEO decisions and keyword assignments (SEO chat only)
 - **VOICE-GUIDE.md** — voice/copy decisions (Copy chat only)
+- **STYLEGUIDE.md** — design decisions, token additions (Style Guide chat primary; others secondary)
 
-**Never skip this step.** It's what keeps all five chats in sync.
+**Never skip this step.** It's what keeps all six chats in sync.
 
 ---
 
@@ -89,6 +91,7 @@ stark-phase-2/                        ← GitHub repo root (lives at ~/Projects/
 ├── STARK-CONTEXT.md                  ← Combined context (regenerate before each chat)
 │
 ├── START-PROMPT-BUILD.md             ← Paste to start Stark — Build
+├── START-PROMPT-STYLEGUIDE.md        ← Paste to start Stark — Style Guide
 ├── START-PROMPT-SEO.md               ← Paste to start Stark — SEO
 ├── START-PROMPT-COPY.md              ← Paste to start Stark — Copy
 ├── START-PROMPT-BLOG.md              ← Paste to start Stark — Blog
@@ -185,7 +188,7 @@ They are not committed to the repo by design — `.docx` files don't belong in G
 
 **Build chat handles:**
 - GeneratePress child theme setup
-- All CSS porting and writing
+- All CSS porting and writing for Phase 2 site pages
 - All PHP (functions.php, CPTs, shortcodes)
 - Page templates in GenerateBlocks
 - Navigation (header, footer, mega menu, mobile menu)
@@ -193,11 +196,17 @@ They are not committed to the repo by design — `.docx` files don't belong in G
 - Audio player (blog + podcast unified player)
 - ElevenLabs API integration
 - Password generator rebuild
-- Style guide page (`/style-guide/`) build and maintenance
+
+**Style Guide chat handles:**
+- Style guide page on current site (`starksocial.com/style-guide`)
+- Style guide page port to Phase 2 (`staging.starksocial.com/style-guide` → live at launch)
+- Page sections, layout, component demos, token rendering
+- Coordinates with Build chat to receive Phase 2 components for porting
+- Coordinates with Copy chat for written sections (voice, code standards intros)
 
 **SEO chat handles:**
 - RankMath Pro configuration
-- Schema markup per page type
+- Schema markup per page type (including style guide page once it's ready to index)
 - Local landing page URL structure and schema
 - Keyword mapping from Wincher
 - Redirect mapping (AIOSEO → RankMath)
@@ -219,7 +228,7 @@ They are not committed to the repo by design — `.docx` files don't belong in G
 
 **QA chat handles:**
 - PageSpeed audits (staging only — never live)
-- Accessibility checks
+- Accessibility checks (including style guide page)
 - Schema validation
 - Cross-browser testing
 - Pre-launch checklist
@@ -236,16 +245,16 @@ They are not committed to the repo by design — `.docx` files don't belong in G
 | Staging | `staging.starksocial.com` |
 | Live SSH user | `rvqkxhngas` |
 | Live app ID | `rvqkxhngas` |
-| Staging app ID | `rctcpyewsk` |
+| Staging app ID | `wcrjhscubc` |
 | Cloudways server | `676057` |
 | Perfex Hub | `hub.starksocial.com` |
 | Perfex app ID | `knaqmwdvju` |
 | MainWP | `cpanel.starksocial.com` |
 | GF → Perfex webhook | `hub.starksocial.com/webhooks/lead.php` |
-| GitHub repo | `github.com/starkweblabs/starksocial` |
+| GitHub repo | `github.com/starksocialmedia/starksocial` |
 | Local repo path | `~/Projects/stark-phase-2/` |
 
-**Important:** All build work happens on staging. Never modify the live site during Phase 2.
+**Important:** All Phase 2 build work happens on staging. Never modify the live site during Phase 2 — except for the Style Guide chat's Phase A work, which deliberately deploys to the current live site at `starksocial.com/style-guide`.
 
 ---
 
