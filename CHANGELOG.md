@@ -2,6 +2,57 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+## [2.0.5] — April 29 2026
+
+### Added — Brand Sheet stark/ scaffold + full data layer (Phase 3.3)
+- Initial scaffold at `brand-sheet/stark/` per CHANGELOG 2.0.4 architecture: per-client folder, plain PHP, no DB, `config.php` as single source of truth, `cp -r stark/ {client-slug}/` to onboard a new client
+- `index.php` orchestrator, `lib/active-check.php` (Perfex hook stub), `inactive.php` fallback for cancelled Care Pro
+- Section files: `identity.php`, `colors.php`, `gradients.php`, `typography.php`, `logos.php` (auto-skips when empty)
+- 9 self-hosted Barlow + Barlow Condensed woff2 files in `assets/fonts/`, wired via `@font-face`
+- `assets/js/brand-sheet.js` — vanilla click-to-copy on any `[data-copy]` element with Clipboard API + textarea fallback
+
+### Added — Canonical brand data from Stark's official standards PDF
+- Pantone (PMS) values for every primary + secondary color
+- CMYK replaced with brand-calibrated press values (RGB-converted approximations dropped)
+- Tint/shade families: each color now has Tint +1, Tint +2, Shade +1, Shade +2 with full PMS/RGB/CMYK/hex
+- Tint/shade family chip rows render beneath each True swatch — hover for full spec, click to copy hex, True chip distinguished by thicker border
+- Logo composition gradients (Logo Background, Logo Stark) added as a separate subsection from UI/CSS gradients
+
+### Added — PDF / print polish (landscape brand book)
+- `@page { size: letter landscape; margin: 0.5in 0.55in 0.6in 0.55in; }` — PDFs default to landscape
+- Running headers/footers via CSS Paged Media: "Stark Social Media Agency · Brand Sheet" top-left, page number top-right, "starksocial.com" bottom-right (Chrome-supported; Safari falls back gracefully)
+- `@page :first` suppresses running headers on the cover page
+- Cover-page treatment for `#identity` in print: 36pt headline, accent-blue tagline, body copy sized for page, `page-break-after: always`
+- `print-color-adjust: exact` forces browsers to render color backgrounds (default behavior strips them)
+- 3-column color/gradient/logo grids in print
+- Family chips hidden in print (don't compress usefully at small sizes)
+
+### Removed
+- Purple and Orange from active secondary palette per Nathan (rarely used). Reinstate by adding entries back to `config.php`.
+
+### Decided
+- Stark's brand sheet is built first as the master template; client onboarding = `cp -r stark/ {client-slug}/` + edit `config.php`. No multi-tenancy.
+- Hosting architecture: `brand.starksocial.com/` = marketing landing; `brand.starksocial.com/{slug}` = each client's sheet (path-based, simpler SSL story than subdomain-based)
+- Custom client domains via CNAME → `brand.starksocial.com`, server reads Host header, looks up slug, serves their sheet without redirect (branded URL stays in address bar)
+- Implementation deferred — restructure into `clients/` folder with top-level dispatcher, build apex landing page, configure Cloudways for the subdomain + custom-domain routing
+- PDF export v1 = browser print stylesheet (no library). Revisit Dompdf only if fidelity demands it.
+- Self-hosted fonts: each brand sheet instance carries its own `assets/fonts/`. Clients bring their own fonts when onboarding.
+
+### Fixed
+- Cleaned up two transcription typos in source brand PDF: Dark Blue True hex (Page 2 said `0C4E97`, RGB matches `004C97`); Light Blue Shade +2 hex (PDF said `004C97`, RGB matches `004976`)
+
+### Modified
+- Identity copy authored by Nathan directly in `config.php`: tagline "Marketing that earns its keep", mission listing services and ending in "The work over the words", description with founder reference and Care Pro stewardship line
+
+### Open for next session
+- Cover headline letter-spacing fix (Barlow "a A" glyph collision at 36pt on the cover page)
+- Type scale `.bs-scale` page-break-inside to fix dead space on page 5
+- Hosting buildout (apex landing + dispatcher + custom domain support)
+- Logos drop-in (SVG + PNG variants → `assets/logos/`, entries to config)
+- Voice section content from STYLEGUIDE
+- Perfex sync direction + auth model
+- Email signature generator (port from Hub when ready)
+
 ## [2.0.4] — April 29 2026
 
 ### Decided — Stark Brand Sheet (Phase 3.3)
