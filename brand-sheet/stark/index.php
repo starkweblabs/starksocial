@@ -1,67 +1,69 @@
 <?php
 /**
- * Stark Brand Sheet — entry point.
- *
- * Reads config.php, checks active status, renders sections.
- * No database, no framework. config.php is the data store.
+ * Stark Brand Guide — orchestrator
+ * v8.1: Footer "Stewarded" → "Crafted".
  */
 
 declare(strict_types=1);
 
-$config = require __DIR__ . '/config.php';
-
 require_once __DIR__ . '/lib/active-check.php';
 
-if (!stark_brand_sheet_is_active($config)) {
+$config = require __DIR__ . '/config.php';
+
+if (empty($config['client']['active'])) {
     require __DIR__ . '/inactive.php';
     exit;
 }
 
-$client = $config['client'];
+$client_name = $config['client']['name']      ?? 'Brand Guide';
+$short_name  = $config['client']['short_name'] ?? $client_name;
+$updated     = $config['client']['updated']    ?? '';
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title><?= htmlspecialchars($client['name']) ?> — Brand Sheet</title>
-<meta name="description" content="Brand sheet for <?= htmlspecialchars($client['name']) ?>. Logos, colors, typography, voice — for vendors, media, and partners.">
-<link rel="stylesheet" href="assets/css/brand-sheet.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="<?= htmlspecialchars($client_name) ?> Brand Guide — colors, typography, logos, voice, and design tokens.">
+  <title><?= htmlspecialchars($client_name) ?> — Brand Guide</title>
+  <link rel="stylesheet" href="assets/css/brand-sheet.css">
 </head>
 <body>
 
-<header class="bs-bar">
-  <div class="bs-bar__inner">
-    <div class="bs-brand">
-      <span class="bs-brand__name"><?= htmlspecialchars($client['name']) ?></span>
-      <span class="bs-brand__label">Brand Sheet</span>
+  <header class="bs-bar">
+    <div class="bs-bar__inner">
+      <div class="bs-brand">
+        <span class="bs-brand__name"><?= htmlspecialchars($short_name) ?></span>
+        <span class="bs-brand__label">Brand Guide</span>
+      </div>
+      <div class="bs-meta">
+        <?php if ($updated): ?>
+          <span class="bs-meta__updated">Updated <?= htmlspecialchars($updated) ?></span>
+        <?php endif; ?>
+        <button class="bs-btn" onclick="window.print()">Print / Save PDF</button>
+      </div>
     </div>
-    <div class="bs-meta">
-      <span class="bs-meta__updated">Updated <?= htmlspecialchars($client['updated']) ?></span>
-      <button type="button" class="bs-btn" onclick="window.print()">Print / Save PDF</button>
+  </header>
+
+  <main class="bs-main">
+    <?php
+      $sections = $config['sections'] ?? [];
+      foreach ($sections as $section_name) {
+          $section_file = __DIR__ . '/sections/' . $section_name . '.php';
+          if (file_exists($section_file)) {
+              include $section_file;
+          }
+      }
+    ?>
+  </main>
+
+  <footer class="bs-footer">
+    <div class="bs-footer__inner">
+      <p>Brand questions: <a href="mailto:<?= htmlspecialchars($config['contact']['brand_questions'] ?? 'hello@starksocial.com') ?>"><?= htmlspecialchars($config['contact']['brand_questions'] ?? 'hello@starksocial.com') ?></a></p>
+      <p class="bs-footer__steward">Crafted as part of Stark Care Pro. © <?= date('Y') ?> Stark Social Media Agency.</p>
     </div>
-  </div>
-</header>
+  </footer>
 
-<main class="bs-main">
-<?php foreach ($config['sections'] as $section): ?>
-  <?php
-    $section_path = __DIR__ . "/sections/{$section}.php";
-    if (file_exists($section_path)) {
-        require $section_path;
-    }
-  ?>
-<?php endforeach; ?>
-</main>
-
-<footer class="bs-footer">
-  <div class="bs-footer__inner">
-    <p>Brand questions: <a href="mailto:<?= htmlspecialchars($config['contact']['brand_questions']) ?>"><?= htmlspecialchars($config['contact']['brand_questions']) ?></a></p>
-    <p class="bs-footer__steward">Stewarded as part of Stark Care Pro. © <?= date('Y') ?> <?= htmlspecialchars($client['name']) ?>.</p>
-  </div>
-</footer>
-
-<script src="assets/js/brand-sheet.js" defer></script>
+  <script src="assets/js/brand-sheet.js"></script>
 </body>
 </html>
