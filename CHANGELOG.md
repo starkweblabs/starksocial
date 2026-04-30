@@ -2,6 +2,30 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+## [2.0.8] — April 30 2026
+
+### Added — Brand Guide functional product
+- **Logo lockups populated.** Four SVG variants exported from a new `stark-logo-master-EDITABLE.ai` Illustrator file: `stark-wordmark-dark.svg`, `stark-wordmark-light.svg`, `stark-icon.svg`, `stark-web-icon.svg`. All live in `brand-sheet/stark/assets/logos/`. Logos section now renders real artwork, each on a background appropriate to its variant (light cards for the dark wordmark, icon, and web icon; dark blue gradient card for the light wordmark).
+- **Cover page redesigned.** Logo is the hero element. Red bar at top of page (was bottom). "BRAND GUIDE" yellow label sits above the logo. Tagline "Marketing that earns its keep" in quiet supporting role beneath. Strict left-aligned column. Top bar transparent over the cover, transitions to frosted glass when scrolled past.
+- **Closing page** rendered for PDF only — hidden in web view to avoid dead blue space. Footer copyright text moved inside the closing section so it sits on the gradient, not on a separate white block.
+- **Site footer restored** for web view: brand questions email link + "Crafted as part of Stark Care Pro" line.
+- **Content max-width** bumped to 1400px throughout.
+
+### Decided
+- **"Brand Sheet" → "Brand Guide"** throughout. Matches industry vocabulary, scales for clients of any size, avoids confusion with internal `STYLEGUIDE.md`.
+- **"Stewarded" → "Crafted"** for the work, "Maintained by" for the ongoing service. ("Stewarded" felt too clergy. "Crafted" matches the Vance brand book pattern and the agency's tone.)
+- **Sophistication tiers.** Stark gets the full 9-section guide (cover, identity, colors, gradients, tokens, typography, logos, voice, closing) — engineering-flavored. Standard clients get a simpler 7-section version (no tokens, no gradients, no Phase 1/Phase 2 mapping). Configurable per-client via the `sections` array in `config.php`.
+
+### Fixed
+- PDF print layout properly wired: cover full-bleed page 1, content sections flowing pages 2+, closing full-bleed last page.
+- Top bar transparency state machine — over-cover and frosted classes swap on scroll, with 240ms transition.
+
+### Parked for next session
+- Logo section needs real polish: bigger displays, clear-space diagrams (.5x rule), minimum-size guidance, do/don't usage examples grid (Vance-style).
+- `stark-wordmark-light.svg` is currently the colored wordmark, not actually white. Needs proper white variant.
+- `stark-icon.svg` and `stark-web-icon.svg` are 760+ KB each because they have embedded raster inside the SVG. Need to be redrawn as proper vector paths.
+- The `stark-logo-master-EDITABLE.ai` file was created in Illustrator but not located on disk for moving into the repo. Find it next session.
+
 ## [2.0.6] — April 29 2026
 
 ### Decided — Color naming convention (Phase 2)
