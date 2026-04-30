@@ -78,7 +78,6 @@
   }
 }
 
-/* Cover page (first page / Identity) — suppress running headers */
 @page :first {
   margin: 0.6in;
   @top-left { content: ""; }
@@ -86,7 +85,7 @@
   @bottom-right { content: ""; }
 }
 
-/* -------- Tokens -------- */
+/* -------- Tokens (the brand sheet's own tokens) -------- */
 :root {
   --bs-text:        #111;
   --bs-muted:       rgba(17, 17, 17, 0.62);
@@ -131,6 +130,14 @@ a {
 }
 a:hover { color: #1a5fc4; }
 a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius: 2px; }
+
+code {
+  font-family: var(--bs-font-mono);
+  font-size: 0.88em;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
 
 /* -------- Top bar -------- */
 .bs-bar {
@@ -253,12 +260,32 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
 }
 .bs-color__chip { height: 140px; border-bottom: 1px solid var(--bs-rule-soft); }
 .bs-color__body { padding: 18px 20px 20px; }
+
+/* New: head with dual name + role */
+.bs-color__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  flex-wrap: wrap;
+}
 .bs-color__name {
   font-size: 1.05rem;
   font-weight: 700;
-  margin: 0 0 12px;
+  margin: 0;
   letter-spacing: -0.01em;
 }
+.bs-color__role {
+  font-family: var(--bs-font-cond);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-muted-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .bs-color__data {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -282,61 +309,6 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
   padding: 12px 0 0;
   border-top: 1px solid var(--bs-rule-soft);
 }
-
-/* -------- Family chips -------- */
-.bs-family {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--bs-rule-soft);
-}
-.bs-family__label {
-  font-family: var(--bs-font-cond);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.7rem;
-  color: var(--bs-muted-2);
-  margin: 0 0 10px;
-}
-.bs-family__row {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-  align-items: end;
-}
-.bs-family__cell {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-}
-.bs-family__chip {
-  appearance: none;
-  padding: 0;
-  width: 100%;
-  height: 32px;
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
-}
-.bs-family__chip:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
-}
-.bs-family__chip.is-true { border: 2px solid rgba(17, 17, 17, 0.55); }
-.bs-family__chip.is-copied { outline: 2px solid var(--bs-success); outline-offset: 2px; }
-.bs-family__chip:focus-visible { outline: 2px solid #FEDD00; outline-offset: 2px; }
-.bs-family__var {
-  font-family: var(--bs-font-cond);
-  font-size: 0.62rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--bs-muted-2);
-  font-weight: 600;
-  text-align: center;
-}
-.bs-family__cell--true .bs-family__var { color: var(--bs-text); font-weight: 700; }
 
 /* -------- Gradient swatches -------- */
 .bs-gradient-grid {
@@ -365,6 +337,130 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
   padding: 12px 0 0;
   border-top: 1px solid var(--bs-rule-soft);
 }
+
+/* -------- Tokens section -------- */
+.bs-token-group__lede {
+  max-width: 70ch;
+  color: var(--bs-muted);
+  margin: -8px 0 16px;
+  font-size: 0.92rem;
+}
+
+.bs-token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.bs-token {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 14px;
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.bs-token__chip {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.bs-token__chip--size {
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.025);
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+}
+.bs-token__chip-label {
+  font-family: var(--bs-font-mono);
+  font-size: 0.7rem;
+  color: var(--bs-muted);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 4px;
+  word-break: break-all;
+}
+.bs-token__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.bs-token__var {
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  margin-left: 0;
+  padding: 1px 4px;
+  font-family: var(--bs-font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--bs-text);
+  word-break: break-all;
+  background: transparent;
+  border: 1px dashed transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+}
+.bs-token__var:hover {
+  background: rgba(48, 127, 226, 0.08);
+  border-color: rgba(48, 127, 226, 0.25);
+}
+.bs-token__var.is-copied {
+  background: rgba(0, 177, 64, 0.10);
+  border-color: rgba(0, 177, 64, 0.30);
+  color: var(--bs-success);
+}
+.bs-token__value {
+  font-family: var(--bs-font-mono);
+  font-size: 0.78rem;
+  color: var(--bs-muted-2);
+  word-break: break-all;
+}
+.bs-token__usage {
+  font-size: 0.82rem;
+  color: var(--bs-muted);
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+
+/* -------- Legacy mapping table -------- */
+.bs-legacy-table-wrap {
+  background: var(--bs-surface);
+  border: 1px solid var(--bs-rule);
+  border-radius: var(--bs-radius-card);
+  overflow: auto;
+}
+.bs-legacy-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.bs-legacy-table thead th {
+  font-family: var(--bs-font-cond);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bs-muted);
+  text-align: left;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--bs-rule);
+}
+.bs-legacy-table tbody td {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--bs-rule-soft);
+}
+.bs-legacy-table tbody tr:last-child td { border-bottom: 0; }
+.bs-legacy-table code {
+  font-size: 0.85rem;
+  padding: 2px 6px;
+}
+.bs-legacy-na { color: var(--bs-muted-2); font-style: italic; }
 
 /* -------- Click-to-copy text buttons -------- */
 .bs-copy {
@@ -568,13 +664,11 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
  * ============================================================ */
 @media print {
 
-  /* Force browsers to print backgrounds and colors. */
   *, *::before, *::after {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Hide screen affordances */
   .bs-bar, .bs-meta, .bs-btn, .bs-footer, .bs-footer__steward { display: none; }
 
   body { background: #fff; font-size: 9.5pt; line-height: 1.45; }
@@ -607,6 +701,7 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
     line-height: 1.04;
     margin-bottom: 18pt;
     max-width: 7in;
+    letter-spacing: -0.01em;
   }
   #identity .bs-tagline {
     font-size: 16pt;
@@ -644,12 +739,12 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
     color: #888;
   }
 
-  /* ---------- Color + Gradient + Logo grids: 3 across in landscape ---------- */
+  /* ---------- Color/Gradient/Logo grids ---------- */
   .bs-color-grid    { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
   .bs-gradient-grid { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
   .bs-logo-grid     { grid-template-columns: repeat(3, 1fr); gap: 8pt; }
 
-  .bs-color, .bs-gradient, .bs-font, .bs-logo, .bs-scale__row {
+  .bs-color, .bs-gradient, .bs-font, .bs-logo, .bs-scale__row, .bs-token, .bs-legacy-table-wrap {
     page-break-inside: avoid;
     border-color: #ccc;
   }
@@ -657,11 +752,12 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
   /* Color cards */
   .bs-color__chip { height: 56pt; }
   .bs-color__body { padding: 8pt 10pt 10pt; }
-  .bs-color__name { font-size: 10pt; margin-bottom: 5pt; }
+  .bs-color__head { margin-bottom: 5pt; }
+  .bs-color__name { font-size: 10pt; }
+  .bs-color__role { font-size: 6.5pt; }
   .bs-color__data { font-size: 7.5pt; gap: 2pt 6pt; margin-bottom: 5pt; }
   .bs-color__data dt { font-size: 6pt; }
   .bs-color__usage { font-size: 7pt; padding-top: 5pt; margin-top: 5pt; line-height: 1.35; }
-  .bs-family { display: none; }
 
   /* Gradient cards */
   .bs-gradient__chip { height: 56pt; }
@@ -669,8 +765,24 @@ a:focus-visible { outline: 3px solid #FEDD00; outline-offset: 2px; border-radius
   .bs-gradient__name { font-size: 10pt; margin-bottom: 5pt; }
   .bs-gradient__usage { font-size: 7pt; padding-top: 5pt; margin-top: 5pt; line-height: 1.35; }
 
+  /* Tokens */
+  .bs-token-grid { grid-template-columns: repeat(2, 1fr); gap: 6pt; margin-bottom: 12pt; }
+  .bs-token { padding: 6pt 8pt; grid-template-columns: 36pt 1fr; gap: 8pt; }
+  .bs-token__chip { width: 36pt; height: 36pt; border-radius: 4pt; }
+  .bs-token__chip-label { font-size: 6pt; }
+  .bs-token__var { font-size: 7.5pt; padding: 0 !important; }
+  .bs-token__value { font-size: 6.5pt; }
+  .bs-token__usage { font-size: 7pt; line-height: 1.35; margin-top: 3pt; }
+  .bs-token-group__lede { font-size: 7.5pt; margin-bottom: 6pt; }
+
+  /* Legacy table */
+  .bs-legacy-table { font-size: 7.5pt; }
+  .bs-legacy-table thead th { padding: 6pt 8pt; font-size: 6pt; }
+  .bs-legacy-table tbody td { padding: 5pt 8pt; }
+  .bs-legacy-table code { font-size: 7pt; padding: 1pt 3pt; }
+
   /* Click-to-copy → plain in print */
-  .bs-copy, .bs-copy--block, .bs-family__chip {
+  .bs-copy, .bs-copy--block, .bs-token__var {
     border: 0 !important;
     padding: 0 !important;
     cursor: default;

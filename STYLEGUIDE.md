@@ -1,42 +1,103 @@
 # STYLEGUIDE.md — Stark Social Media Agency
-**Project:** starksocial.com  
-**Last Updated:** April 2026  
+**Project:** starksocial.com
+**Last Updated:** April 29, 2026
 **Scope:** Brand, visual design, CSS conventions, code standards, copy voice
 
 ---
 
 ## Brand Colors
 
+Stark's palette is six colors. Every one earns its place — there's nothing here that doesn't get used. Each color carries a dual name: an evocative half (the personality) and a functional half (the role).
+
+### Phase 2 naming convention (canonical, adopted April 29 2026)
+
+| Hex | Name | Variable | Role |
+|---|---|---|---|
+| `#004C97` | **Midnight Anchor** | `--stark-anchor` | Foundation. Headlines, navigation, CTA backgrounds. |
+| `#F93822` | **Ember Pulse** | `--stark-pulse` | Heat. Inline accents, error states, signature CTAs. Forms the Stark logo gradient. |
+| `#307FE2` | **Sky Signal** | `--stark-signal` | Current. Interactive elements, links, scroll progress, seasonal accent base. |
+| `#FEDD00` | **Caution Beacon** | `--stark-beacon` | Attention. Focus rings (WCAG-compliant), accents on dark surfaces. |
+| `#00B140` | **Moss Affirm** | `--stark-affirm` | Yes. Success states, positive metrics, confirmations. |
+| `#E31C79` | **Pop Spark** | `--stark-spark` | Conversion. Hero CTAs, contact buttons. |
+
+### Why dual names
+
+The evocative half ("Midnight," "Ember," "Sky") gives the brand sheet personality and helps marketing communicate. The functional half ("Anchor," "Pulse," "Signal") tells developers what a color is *for* — the variable name reflects the role, not the appearance. A color named only "Midnight" might end up as an accent and the name would lie. A variable named `--stark-anchor` makes the role explicit and stays accurate as usage evolves.
+
+Use the full name ("Midnight Anchor") in client-facing brand documents and the variable (`--stark-anchor`) in code.
+
+### CSS variables (Phase 2)
+
 ```css
-/* Primary */
---stark-dark-blue:         #004C97;
---stark-primary-red:       #F93822;
---stark-primary-light-blue:#307FE2;
+:root {
+  /* Primary */
+  --stark-anchor:   #004C97;  /* Midnight Anchor */
+  --stark-pulse:    #F93822;  /* Ember Pulse */
+  --stark-signal:   #307FE2;  /* Sky Signal */
 
-/* Secondary */
---stark-secondary-orange:  #FF8200;
---stark-secondary-yellow:  #FEDD00;
---stark-secondary-green:   #00B140;
---stark-secondary-purple:  #87189D;
---stark-secondary-magenta: #E31C79;
-
-/* Dark background */
---stark-bg:                #0b0f1a;
-
-/* Gradients */
---gradient-dark-blue:      linear-gradient(135deg, #0C4E97 0%, #1D65B8 100%);
---gradient-red:            linear-gradient(135deg, #F93822 0%, #DA291C 100%);
---gradient-light-blue:     linear-gradient(135deg, #307FE2 0%, #539AEF 100%);
+  /* Secondary */
+  --stark-beacon:   #FEDD00;  /* Caution Beacon */
+  --stark-affirm:   #00B140;  /* Moss Affirm */
+  --stark-spark:    #E31C79;  /* Pop Spark */
+}
 ```
 
-Hover variants of each gradient reverse direction (`hover` suffix).
+### Pantone, RGB, CMYK
+
+Canonical print values per Stark's brand standards:
+
+| Color | Pantone | RGB | CMYK |
+|---|---|---|---|
+| Midnight Anchor | 2945 C | 0, 76, 151 | 100, 53, 2, 16 |
+| Ember Pulse | Bright Red C | 249, 56, 34 | 0, 78, 74, 0 |
+| Sky Signal | 2727 C | 48, 127, 226 | 70, 47, 0, 0 |
+| Caution Beacon | Yellow C | 254, 221, 0 | 0, 1, 100, 0 |
+| Moss Affirm | 354 C | 0, 177, 64 | 81, 0, 92, 0 |
+| Pop Spark | 213 C | 227, 28, 121 | 0, 92, 18, 0 |
+
+### Phase 1 → Phase 2 rename mapping
+
+Phase 1 (current production) uses different variable names on the marketing site versus the Hub. Phase 2 unifies under the new namespace at cutover. Until then, both production systems keep their existing names — see mapping below.
+
+| Phase 2 (canonical) | Phase 1 — starksocial.com | Phase 1 — hub.starksocial.com |
+|---|---|---|
+| `--stark-anchor` | `--stark-dark-blue` | `--ss-blue-dark` |
+| `--stark-pulse` | `--stark-primary-red` | `--ss-red` |
+| `--stark-signal` | `--stark-primary-light-blue` | `--ss-blue-light` |
+| `--stark-beacon` | `--stark-secondary-yellow` | `--ss-yellow` |
+| `--stark-affirm` | `--stark-secondary-green` | `--ss-green` |
+| `--stark-spark` | `--stark-secondary-magenta` | *(not used in Hub)* |
+
+**Cutover policy:** New work in Phase 2 child theme uses the canonical names from day one. Phase 1 marketing site and the Hub keep their existing names until Phase 2 launches. The brand sheet (`brand-sheet/stark/`) reflects Phase 2 conventions because it's the forward-looking authority.
+
+### Tints and shades
+
+Modern design tools generate tints and shades algorithmically from canonical color values. The brand sheet doesn't pre-compute them — print designers and devs both work from the canonical Pantone/CMYK/hex above. Stark's older brand standards PDF documents two tints and two shades per color for press reference if needed; that document remains the source of truth for print families and lives in Drive at `Stark Social Media Agency → Tech → Reference/`.
+
+---
+
+## Gradients
+
+```css
+/* UI / CSS gradients — components, buttons, sections */
+--gradient-anchor: linear-gradient(135deg, #0C4E97 0%, #1D65B8 100%);
+--gradient-pulse:  linear-gradient(135deg, #F93822 0%, #DA291C 100%);
+--gradient-signal: linear-gradient(135deg, #307FE2 0%, #539AEF 100%);
+
+/* Hover variants reverse direction (suffix --hover) */
+```
+
+Logo composition gradients live separately — they're print specs for the Stark mark, not UI primitives:
+
+- **Logo Background Gradient**: `linear-gradient(135deg, #418FDE 0%, #FFFFFF 100%)` — PMS 279 C → white
+- **Logo Stark Gradient**: `linear-gradient(135deg, #F93822 0%, #DA291C 100%)` — Bright Red C → PMS 485 C (same hex stops as the UI Pulse gradient; keep names distinct in handoff specs)
 
 ---
 
 ## Typography
 
-**Font:** Barlow + Barlow Condensed (self-hosted WOFF2 in child theme `/fonts/`)  
-**Base:** `18px` / `line-height: 1.65`  
+**Font:** Barlow + Barlow Condensed (self-hosted WOFF2 in child theme `/fonts/`)
+**Base:** `18px` / `line-height: 1.65`
 **Smoothing:** `-webkit-font-smoothing: antialiased`
 
 ### Type Scale
@@ -57,6 +118,8 @@ Hover variants of each gradient reverse direction (`hover` suffix).
 
 ## UI Tokens
 
+**Source of truth.** When token values change, edit this section first, then update `brand-sheet/stark/config.php` to match. They should never drift.
+
 ```css
 /* Text */
 --stark-text:       #111;
@@ -65,10 +128,11 @@ Hover variants of each gradient reverse direction (`hover` suffix).
 
 /* Surfaces */
 --stark-surface:    #fff;
+--stark-bg:         #0b0f1a;        /* Reserved for dark surfaces — photo overlays, future dark mode */
 --stark-rule:       rgba(17,17,17,.14);
 --stark-rule-soft:  rgba(17,17,17,.08);
 
-/* Accent (dynamic, seasonal) */
+/* Accent (dynamic, seasonal — defaults to Sky Signal at 0.85 alpha) */
 --stark-accent:          rgba(48,127,226,0.85);
 --stark-accent-soft:     rgba(48,127,226,0.14);
 --stark-accent-glow:     rgba(48,127,226,0.35);
@@ -84,6 +148,10 @@ Hover variants of each gradient reverse direction (`hover` suffix).
 --stark-max-search:  1040px;
 --stark-max-article: 960px;
 ```
+
+### Naming policy
+
+Functional UI tokens (`--stark-text`, `--stark-muted`, `--stark-rule`) keep their plain descriptive names. The dual-name pattern earns its keep on brand colors that marketing people see. Tokens devs touch a hundred times a day stay functional. Don't rename `--stark-text` to `--stark-ink` or similar — the cuteness has diminishing returns at this layer.
 
 ---
 
@@ -105,13 +173,13 @@ Set inline in `<head>` via inline JS snippet to prevent flash.
 ## Layout System
 
 ### Sections
-`.stark-section` — base padding: `clamp(5rem, 12vh, 9rem) 0`  
-`.stark-section-tight` — `clamp(3.75rem, 9vh, 6.5rem) 0`  
+`.stark-section` — base padding: `clamp(5rem, 12vh, 9rem) 0`
+`.stark-section-tight` — `clamp(3.75rem, 9vh, 6.5rem) 0`
 `.stark-section-loose` — `clamp(6.5rem, 14vh, 11rem) 0`
 
 ### Containers
-`.stark-inner` — max-width `1400px`, horizontal padding `clamp(20px, 3vw, 56px)`  
-`.stark-inner-narrow` — max-width `960px`  
+`.stark-inner` — max-width `1400px`, horizontal padding `clamp(20px, 3vw, 56px)`
+`.stark-inner-narrow` — max-width `960px`
 `.stark-inner-medium` — max-width `1040px`
 
 ### Breakpoints
@@ -125,64 +193,64 @@ Set inline in `<head>` via inline JS snippet to prevent flash.
 
 ### Buttons
 
-**Base class:** `.x-anchor-button.stark-btn`  
+**Base class:** `.x-anchor-button.stark-btn`
 All buttons use glass morphism base: `backdrop-filter: blur(10px)`, `border: 1px solid rgba(...)`, lift on hover (`translateY(-2px)`).
 
 | Class | Description |
 |---|---|
 | `.stark-btn` | Default glass/white button |
-| `.blue-btn` | Dark blue gradient, white text |
-| `.magenta-btn` | Magenta gradient, white text |
-| `.stark-glass-magenta` | Glass magenta, semi-transparent |
+| `.blue-btn` | Anchor gradient, white text |
+| `.magenta-btn` | Spark gradient, white text |
+| `.stark-glass-magenta` | Glass spark, semi-transparent |
 | `.white-trns-btn` | Transparent white glass (for dark backgrounds) |
 | `.ghost-btn` | No background, no border, text-only |
 | `.stark-glass-accent` | Accent-tinted glass |
 | `.spotify-btn` | Spotify green glass (podcast use only) |
 
-All buttons: `min-height: 52px`, `border-radius: var(--stark-radius-btn)`, `font-weight: 750`.  
-Mobile: `min-height: 46px`, `border-radius: 14px`.  
-Focus: `outline: 3px solid rgba(254,221,0,0.9)` (yellow — accessibility compliant).
+All buttons: `min-height: 52px`, `border-radius: var(--stark-radius-btn)`, `font-weight: 750`.
+Mobile: `min-height: 46px`, `border-radius: 14px`.
+Focus: `outline: 3px solid var(--stark-beacon)` (Caution Beacon — accessibility compliant).
 
 ### Cards
 
-**`.stark-card`** — Glass morphism card with radial gradient overlay:  
-- `background: rgba(255,255,255,0.78)`, `backdrop-filter: blur(14px)`  
-- `border: 1px solid rgba(0,0,0,0.06)`, `border-radius: 14px`  
+**`.stark-card`** — Glass morphism card with radial gradient overlay:
+- `background: rgba(255,255,255,0.78)`, `backdrop-filter: blur(14px)`
+- `border: 1px solid rgba(0,0,0,0.06)`, `border-radius: 14px`
 - Hover: `translateY(-2px)`, deeper shadow
 
-**`.stark-halo-card`** — Editorial signal rows (not interactive):  
-- No background, no border, no box-shadow  
-- Left dot: `5px` circle, `rgba(48,127,226,0.55)` with halo ring  
-- Hairline divider between items  
+**`.stark-halo-card`** — Editorial signal rows (not interactive):
+- No background, no border, no box-shadow
+- Left dot: `5px` circle, Sky Signal at `0.55` alpha with halo ring
+- Hairline divider between items
 - `cursor: default` — explicitly non-interactive
 
-**`.stark-process-card`** — Process/steps:  
+**`.stark-process-card`** — Process/steps:
 - White background, subtle border, numbered step badge
 
-**`.stark-outcome`** — Results/outcomes:  
-- White, hover border accent `rgba(0,76,151,0.18)`
+**`.stark-outcome`** — Results/outcomes:
+- White, hover border accent (Anchor at `0.18` alpha)
 
 ### Navigation
 
-**`.stark-nav`** — Hero overlay nav (white text)  
-**`.stark-sticky-nav`** — Sticky nav, appears on scroll:  
-- `background: rgba(255,255,255,.90)`, `backdrop-filter: blur(10px)`  
-- Scroll progress bar via `--stark-scroll` CSS variable  
+**`.stark-nav`** — Hero overlay nav (white text)
+**`.stark-sticky-nav`** — Sticky nav, appears on scroll:
+- `background: rgba(255,255,255,.90)`, `backdrop-filter: blur(10px)`
+- Scroll progress bar via `--stark-scroll` CSS variable
 - Velocity glow effect via `--stark-vel`
 
-**Off-canvas menu** (mobile): Dark glass, `rgba(10,56,120,0.58)` → `rgba(5,34,84,0.78)` gradient, `blur(14px)`.  
+**Off-canvas menu** (mobile): Dark glass, `rgba(10,56,120,0.58)` → `rgba(5,34,84,0.78)` gradient, `blur(14px)`.
 Menu items: `border-radius: 14px`, hover shifts `translateX(2px)`.
 
 ### CTA Section
 
-`.stark-cta` — Dark blue gradient background (`--gradient-dark-blue`)  
-Two-column grid: copy left, actions right (stacks on mobile).  
-Primary button: red gradient. Secondary: transparent with white border.
+`.stark-cta` — Anchor gradient background
+Two-column grid: copy left, actions right (stacks on mobile).
+Primary button: Pulse gradient. Secondary: transparent with white border.
 
 ### FAQ
 
-`.stark-faq-item` — List items with left dot, hover background tint.  
-Dot animates on hover: `rgba(48,127,226,0.7)` fill.
+`.stark-faq-item` — List items with left dot, hover background tint.
+Dot animates on hover: Sky Signal at `0.7` alpha fill.
 
 ---
 
@@ -218,7 +286,7 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 - Slides in from the left with `opacity: 1` when triggered
 - Pure CSS chevron pointing up (no icon font dependency)
 - Subtle `starkChevronNudge` animation pulses every 4.2s to hint at the action
-- Hover: chevron turns accent blue, button lifts `translateY(-2px)`
+- Hover: chevron turns Sky Signal, button lifts `translateY(-2px)`
 - Both buttons share the same glass morphism style: `rgba(255,255,255,.62)`, `backdrop-filter: blur(10px)`, `border-radius: 14px`
 
 **The choreography:** A11y slides left → gap opens → back-to-top slides into the gap. Feels intentional, not accidental.
@@ -228,11 +296,11 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 ## Interaction Patterns
 
 - **Hover lift:** `translateY(-2px)` — universal for cards, buttons
-- **Hover press:** `translateY(0) scale(0.99)` — button active state  
-- **Transition timing:** `180ms cubic-bezier(.2,.8,.2,1)` — standard  
+- **Hover press:** `translateY(0) scale(0.99)` — button active state
+- **Transition timing:** `180ms cubic-bezier(.2,.8,.2,1)` — standard
 - **Fast transitions:** `160ms ease` — buttons, menu items
-- **Reveal animation:** `.stark-reveal` + IntersectionObserver, `threshold: 0.15`  
-- **Tilt effect:** `.stark-tilt` — `rotateX/Y(±3deg)` on mousemove, clamped  
+- **Reveal animation:** `.stark-reveal` + IntersectionObserver, `threshold: 0.15`
+- **Tilt effect:** `.stark-tilt` — `rotateX/Y(±3deg)` on mousemove, clamped
 - **Always:** `@media (prefers-reduced-motion: reduce)` — disable all motion, `transition: none`
 
 ---
@@ -245,7 +313,7 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 - Radial gradient overlays on cards create material quality without complexity
 - Typography does the work: tight letter-spacing, large weight contrast (400 body / 800 headings)
 - Seasonal accents: subtle shifts, never jarring, always within the blue family
-- CTA sections are the exception: full dark blue, this is intentional contrast
+- CTA sections are the exception: full Anchor gradient, this is intentional contrast
 
 ---
 
@@ -265,6 +333,7 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 - Prefix all component classes with `stark-`
 - BEM-lite: `.stark-component__element` for sub-elements when needed
 - Never override WordPress core admin styles from frontend CSS
+- **Phase 2 variable names** are canonical: `--stark-anchor`, `--stark-pulse`, `--stark-signal`, etc. Phase 1 names remain in production WPCode CSS until cutover.
 
 ### JavaScript
 - All JS wrapped in IIFE `(function(){})()` or arrow IIFE
@@ -287,7 +356,7 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 - **Spark:** Tested — no background-color conflicts
 - **Logo path:** `hub.starksocial.com/media/public/custom/emails/stark-logo-light.png`
 - **Footer bar:** `hub.starksocial.com/media/public/custom/emails/email-footer-bar.png`
-- Match Perfex Hub template styling: Dark Blue header, white body, footer bar
+- Match Perfex Hub template styling: Anchor header, white body, footer bar
 
 ---
 
@@ -311,7 +380,7 @@ Two fixed-position utility buttons that perform a coordinated entrance as the us
 ## Accessibility
 
 - WCAG 2.1 AA target (currently scoring 95 on PageSpeed)
-- Focus ring: `3px solid rgba(254,221,0,0.9)` (yellow) — consistent site-wide
+- Focus ring: `3px solid var(--stark-beacon)` (Caution Beacon) — consistent site-wide
 - All interactive elements: `min-height: 44px`, `min-width: 44px` on mobile
 - All images: descriptive `alt` text
 - Heading hierarchy: never skip levels
@@ -353,15 +422,15 @@ starksocial/
 ## Feature Decisions & Scope
 
 ### 1. Password Generator (Rebuild in Phase 2)
-**Current:** Pill-shaped form, doesn't match site design  
-**Decision:** Rebuild to match Stark design system — `stark-card` container, `--stark-radius-field` inputs, Barlow font, brand colors. Remove pill shapes. Should feel like a native part of the site, not a widget drop-in.  
-**Location:** `/password-generator/` — keep as shortcode `[password_generator]`, just rebuild the CSS  
+**Current:** Pill-shaped form, doesn't match site design
+**Decision:** Rebuild to match Stark design system — `stark-card` container, `--stark-radius-field` inputs, Barlow font, brand colors. Remove pill shapes. Should feel like a native part of the site, not a widget drop-in.
+**Location:** `/password-generator/` — keep as shortcode `[password_generator]`, just rebuild the CSS
 **Owner:** Claude — Build
 
 ---
 
 ### 2. Live Chat (Olark → Evaluate)
-**Current:** Olark free tier — button style is good, service is adequate. Also integrated with Perfex Hub.  
+**Current:** Olark free tier — button style is good, service is adequate. Also integrated with Perfex Hub.
 **Decision:** Evaluate before committing to Olark Pro.
 
 **Options to consider:**
@@ -372,14 +441,14 @@ starksocial/
 | **Tidio** | AI features, clean UI | Can get expensive |
 | **Tawk.to** | Free forever | Design less polished |
 
-**Recommendation:** If Hub integration is important, pay for Olark Pro. If Hub integration isn't critical for chat, Crisp is the better modern product.  
-**Keep current Olark styling** from global CSS regardless of which service is chosen — the button style is already on-brand.  
+**Recommendation:** If Hub integration is important, pay for Olark Pro. If Hub integration isn't critical for chat, Crisp is the better modern product.
+**Keep current Olark styling** from global CSS regardless of which service is chosen — the button style is already on-brand.
 **Decision needed by:** Before Phase 2 launch
 
 ---
 
 ### 3. Podcast (Podlove → Evaluate)
-**Current:** Podlove Podcasting Plugin — hasn't been updated recently. Audio files on AWS S3.  
+**Current:** Podlove Podcasting Plugin — hasn't been updated recently. Audio files on AWS S3.
 **Status:** Podcast on pause, considering relaunch.
 
 **Options:**
@@ -390,13 +459,13 @@ starksocial/
 | **Castos** | Hosted platform, great analytics, WordPress plugin | Monthly cost, moves files off AWS |
 | **Buzzsprout embed** | Simple, reliable | Loses on-site player control |
 
-**Recommendation:** Keep Podlove for now since podcast is on pause. When relaunching evaluate Seriously Simple Podcasting — active development, better WordPress integration. Audio stays on AWS either way.  
+**Recommendation:** Keep Podlove for now since podcast is on pause. When relaunching evaluate Seriously Simple Podcasting — active development, better WordPress integration. Audio stays on AWS either way.
 **AWS S3 bucket:** Already configured, keep regardless of plugin choice.
 
 ---
 
 ### 4. Blog Audio Player — ElevenLabs AI Voice (Phase 2 Feature)
-**Current:** Audio files manually created in Speechify, hosted on AWS S3, embedded in blog posts. Labor intensive.  
+**Current:** Audio files manually created in Speechify, hosted on AWS S3, embedded in blog posts. Labor intensive.
 **Decision:** Replace manual Speechify workflow with ElevenLabs API — auto-generate audio from blog post content using Nathan or Deanna's cloned voice.
 
 **Proposed workflow:**
@@ -406,10 +475,10 @@ starksocial/
 4. MP3 uploaded to existing AWS S3 bucket automatically
 5. Player on blog post pulls from S3 URL (same as today)
 
-**Voice cloning:** ElevenLabs Professional Voice Clone — requires ~30 min of clean audio. Podcast episodes are ideal source material for both Nathan and Deanna.  
-**ElevenLabs plan needed:** Creator ($22/mo) minimum for voice cloning  
-**AWS:** Keep existing bucket and structure  
-**Owner:** Claude — Build (WordPress hook + API integration)  
+**Voice cloning:** ElevenLabs Professional Voice Clone — requires ~30 min of clean audio. Podcast episodes are ideal source material for both Nathan and Deanna.
+**ElevenLabs plan needed:** Creator ($22/mo) minimum for voice cloning
+**AWS:** Keep existing bucket and structure
+**Owner:** Claude — Build (WordPress hook + API integration)
 **Priority:** Phase 2 — high value, replaces manual labor entirely
 
 ---
@@ -430,8 +499,8 @@ starksocial/
 - Download button
 - Subscribe links (Spotify, Apple, etc.)
 
-**Design:** Same visual language — dark glass `rgba(10,16,28,.92)`, accent blue progress bar, Barlow font, `border-radius: 18px`. Feels like one product at two feature levels.  
-**Owner:** Claude — Build  
+**Design:** Same visual language — dark glass `rgba(10,16,28,.92)`, Sky Signal progress bar, Barlow font, `border-radius: 18px`. Feels like one product at two feature levels.
+**Owner:** Claude — Build
 **Note:** If switching from Podlove, verify chapter + transcript support in new plugin before committing.
 
 ---
@@ -450,9 +519,9 @@ starksocial/
 - Utility nav (top right alongside Client Portal)
 - Mobile menu — utility section at bottom
 
-**Button style:** `.stark-btn.blue-btn` — matches Client Portal button treatment  
-**Label:** "Open a Support Ticket"  
-**Icon:** ticket or message icon  
+**Button style:** `.stark-btn.blue-btn` — matches Client Portal button treatment
+**Label:** "Open a Support Ticket"
+**Icon:** ticket or message icon
 **Owner:** Claude — Build
 
 ---
@@ -463,12 +532,12 @@ starksocial/
 - Full-bleed cloud photo background
 - All-caps white headline (keep weight and drama)
 - Yellow all-caps subtitle — **Phase 2: replace with white/muted subtitle, sentence case** — yellow all-caps conflicts with Apple-minimal direction
-- Single magenta CTA button — keep color, **replace pill shape with `--stark-radius-btn` (12px)**
+- Single Spark CTA button — keep color, **replace pill shape with `--stark-radius-btn` (12px)**
 - Transparent nav state on load, logo top-left, burger top-right
 
 ### Homepage — Who We're For Section
 - Two-column: copy + H2 left, halo bullet points right
-- Halo dots: `rgba(48,127,226,0.55)` with ring — keep exactly
+- Halo dots: Sky Signal at `0.55` alpha with ring — keep exactly
 - Service cards: 2×2 grid, icon + title + description — this is the reference layout for Phase 2 service card pattern
 
 ### Scroll Progress Bar (Confirmed Live)
@@ -488,7 +557,7 @@ starksocial/
 
 **Phase 2 upgrade:**
 - Replace white card with dark glass: `rgba(10,16,28,.92)`, `backdrop-filter: blur(22px)`
-- Accent blue progress bar
+- Sky Signal progress bar
 - Keep same controls, same layout
 - Remove pill shape from speed control — use `--stark-radius-btn`
 - "Listen to this article" label in eyebrow style (small caps, muted)
@@ -522,10 +591,10 @@ starksocial/
 
 **Phase 2 target:**
 - `stark-card` container for the widget
-- Slider: accent blue `--stark-accent` thumb and fill
-- Toggles: replace pill iOS style — use styled checkboxes or small `--stark-radius-btn` toggles in brand blue
+- Slider: Sky Signal `--stark-accent` thumb and fill
+- Toggles: replace pill iOS style — use styled checkboxes or small `--stark-radius-btn` toggles in Anchor
 - Buttons: `.stark-btn.blue-btn` for Generate, ghost/secondary for Copy
-- Generated password output: monospace font, red (`--stark-primary-red`) to match existing `code` element style
+- Generated password output: monospace font, Pulse to match existing `code` element style
 
 ### Footer Structure (Current → Phase 2)
 **Current columns:** Logo+tagline | SERVICES | COMPANY | RESOURCES
@@ -553,10 +622,10 @@ starksocial/
 **Social icons:** Facebook, Instagram, LinkedIn, YouTube, Apple Podcasts — keep all five
 
 ### CTA Section (Global)
-- Dark blue gradient background — keep
+- Anchor gradient background — keep
 - "Start a conversation" headline — good, keep
 - Subtext: "Tell us what you're working on and we'll help you think it through. No pressure. If we're not a fit, we'll tell you." — keep this copy, it's very on-brand
-- Magenta Contact Us button — keep color, fix pill shape to `--stark-radius-btn`
+- Spark Contact Us button — keep color, fix pill shape to `--stark-radius-btn`
 
 ---
 
@@ -571,7 +640,7 @@ starksocial/
 - **Glass buttons** — `.stark-btn` glass morphism style for Generate and Copy. Not flat, not pill — frosted glass with subtle border and depth
 - **Toggles** — replace iOS pill toggles with Stark-styled checkbox buttons or small glass toggle chips using `--stark-radius-btn`
 
-### Blog Audio Player — Exact Notes  
+### Blog Audio Player — Exact Notes
 - **Love this look** — use the current blog player visual as the reference for the unified player design across the site
 - **AI voice via ElevenLabs** — no more manual Speechify. Auto-generate on publish
 - **Voice selection logic: based on post author**
@@ -586,7 +655,7 @@ starksocial/
 
 ### Podcast Player — Exact Notes
 - **Chapters: collapsible, not auto-open** — chapters panel should be closed by default, opened on tap/click. Currently opens automatically which takes up too much space on load
-- **Play button: consistent site-wide button style** — the dark blue pill "Play Podcast" button needs to become `.stark-btn.blue-btn` to match every other button on the site. This is the site-wide button standardization note — applies everywhere
+- **Play button: consistent site-wide button style** — the Anchor pill "Play Podcast" button needs to become `.stark-btn.blue-btn` to match every other button on the site. This is the site-wide button standardization note — applies everywhere
 - **Sidebar search = site-wide form standard** — the sidebar search box style (white glass, rounded, focus ring) is the reference style for ALL forms: password generator, contact form, gravity forms, any input anywhere on the site
 - **Categories sidebar widget** — should adopt the blog player's visual language: darker background treatment, cleaner typography. Currently too plain with grey counts
 
@@ -656,9 +725,9 @@ Three bottom-fixed elements. Two form a pair on the left, one stands alone on th
 ### Chat bot (Perfex PRChat, bottom-right, always visible)
 - **Squircle** (asymmetric border-radius: `42% 58% 52% 48% / 45% 45% 55% 55%`) — intentionally distinct from A11y/back-to-top's rounded squares
 - 58×58 desktop, 52×52 mobile ≤480px
-- Accent blue fill (`#307FE2`), white icon
+- Sky Signal fill (`#307FE2`), white icon
 - Entrance: slide from right 400ms after page load, 620ms duration
-- Attention: single pulse ring (2px accent-blue border, scale 1→1.8, opacity fade) at 3020ms. Never repeats.
+- Attention: single pulse ring (2px Sky Signal border, scale 1→1.8, opacity fade) at 3020ms. Never repeats.
 - Pulse suppressed when `.prchat-widget-open` or `[aria-expanded="true"]` set
 - Position: `right: 16px`
 
