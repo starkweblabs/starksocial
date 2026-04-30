@@ -1,7 +1,8 @@
 <?php
 /**
  * Stark Brand Guide — orchestrator
- * v8.1: Footer "Stewarded" → "Crafted".
+ * v8.3: Top bar gets dynamic class for transparency over cover.
+ *       Site footer removed (now lives inside closing page on blue).
  */
 
 declare(strict_types=1);
@@ -30,7 +31,7 @@ $updated     = $config['client']['updated']    ?? '';
 </head>
 <body>
 
-  <header class="bs-bar">
+  <header class="bs-bar bs-bar--over-cover" id="bs-bar">
     <div class="bs-bar__inner">
       <div class="bs-brand">
         <span class="bs-brand__name"><?= htmlspecialchars($short_name) ?></span>
@@ -57,13 +58,30 @@ $updated     = $config['client']['updated']    ?? '';
     ?>
   </main>
 
-  <footer class="bs-footer">
-    <div class="bs-footer__inner">
-      <p>Brand questions: <a href="mailto:<?= htmlspecialchars($config['contact']['brand_questions'] ?? 'hello@starksocial.com') ?>"><?= htmlspecialchars($config['contact']['brand_questions'] ?? 'hello@starksocial.com') ?></a></p>
-      <p class="bs-footer__steward">Crafted as part of Stark Care Pro. © <?= date('Y') ?> Stark Social Media Agency.</p>
-    </div>
-  </footer>
-
   <script src="assets/js/brand-sheet.js"></script>
+  <script>
+    // Top bar transparency over cover, frosted glass on scroll
+    (function() {
+      const bar = document.getElementById('bs-bar');
+      const cover = document.getElementById('cover');
+      if (!bar || !cover) return;
+
+      function updateBar() {
+        const coverBottom = cover.getBoundingClientRect().bottom;
+        // Switch to frosted state once we've scrolled past the cover
+        if (coverBottom <= 60) {
+          bar.classList.remove('bs-bar--over-cover');
+          bar.classList.add('bs-bar--frosted');
+        } else {
+          bar.classList.add('bs-bar--over-cover');
+          bar.classList.remove('bs-bar--frosted');
+        }
+      }
+
+      updateBar();
+      window.addEventListener('scroll', updateBar, { passive: true });
+      window.addEventListener('resize', updateBar, { passive: true });
+    })();
+  </script>
 </body>
 </html>

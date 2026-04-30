@@ -1,15 +1,16 @@
 <?php
 /**
  * Section: Closing Page
- *
- * Final page of the brand guide. JSON-driven via $config['closing'].
- * v8.1: "Stewarded by Stark Social" → "Crafted by Stark Social".
+ * v8.3: Hidden on web (display: none), only shows in print/PDF.
+ *       Footer text now lives inside the closing section so it's
+ *       on the blue, not on a separate white block.
  */
 
 declare(strict_types=1);
 
 $closing = $config['closing'] ?? null;
 $client  = $config['client']  ?? [];
+$contact = $config['contact'] ?? [];
 
 if (empty($closing)) return;
 
@@ -18,19 +19,11 @@ $bg_value = $closing['background']['value'] ?? '#FFFFFF';
 
 $bg_style = '';
 switch ($bg_type) {
-    case 'gradient':
-        $bg_style = 'background: ' . $bg_value . ';';
-        break;
-    case 'solid':
-        $bg_style = 'background-color: ' . $bg_value . ';';
-        break;
-    case 'image':
-        $bg_style = 'background: url(\'assets/logos/' . $bg_value . '\') center/cover no-repeat;';
-        break;
+    case 'gradient': $bg_style = 'background: ' . $bg_value . ';'; break;
+    case 'solid':    $bg_style = 'background-color: ' . $bg_value . ';'; break;
+    case 'image':    $bg_style = 'background: url(\'assets/logos/' . $bg_value . '\') center/cover no-repeat;'; break;
     case 'white':
-    default:
-        $bg_style = 'background: #FFFFFF;';
-        break;
+    default:         $bg_style = 'background: #FFFFFF;'; break;
 }
 
 $is_dark = in_array($bg_type, ['gradient', 'image']) || ($bg_type === 'solid' && $bg_value !== '#FFFFFF' && $bg_value !== '#fff');
@@ -38,14 +31,15 @@ $is_dark = in_array($bg_type, ['gradient', 'image']) || ($bg_type === 'solid' &&
 $text_color   = $closing['text_color']   ?? ($is_dark ? '#FFFFFF' : '#111111');
 $accent_color = $closing['accent_color'] ?? '#FEDD00';
 
-$closing_line   = $closing['closing_line']   ?? null;
-$crafted_by     = $closing['crafted_by_text'] ?? 'Crafted by Stark Social';
-$cta_text       = $closing['cta_text'] ?? '';
+$crafted_by  = $closing['crafted_by_text'] ?? 'Crafted by Stark Social';
+$cta_text    = $closing['cta_text'] ?? '';
 
 $logo_file = $closing['logo']['file'] ?? null;
 $logo_max  = $closing['logo']['max_width'] ?? '90px';
 
 $footer_bar = $closing['footer_bar'] ?? null;
+
+$brand_email = $contact['brand_questions'] ?? 'hello@starksocial.com';
 ?>
 
 <section class="bs-closing<?= $is_dark ? ' bs-closing--dark' : ' bs-closing--light' ?>"
@@ -62,15 +56,15 @@ $footer_bar = $closing['footer_bar'] ?? null;
 
     <p class="bs-closing__crafted-by"><?= htmlspecialchars($crafted_by) ?></p>
 
-    <?php if ($closing_line): ?>
-      <h2 class="bs-closing__line"><?= htmlspecialchars($closing_line) ?></h2>
-    <?php endif; ?>
-
     <?php if ($cta_text): ?>
       <p class="bs-closing__cta"><?= htmlspecialchars($cta_text) ?></p>
     <?php endif; ?>
 
     <p class="bs-closing__url">starksocial.com</p>
+
+    <p class="bs-closing__copyright">
+      Crafted as part of Stark Care Pro &middot; &copy; <?= date('Y') ?> Stark Social Media Agency
+    </p>
 
   </div>
 
