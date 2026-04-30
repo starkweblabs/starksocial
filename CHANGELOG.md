@@ -2,6 +2,51 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+## [2.0.6] — April 29 2026
+
+### Decided — Color naming convention (Phase 2)
+- Adopted dual-name pattern (evocative + functional) for the six brand colors
+- Variable names simplified from descriptive (`--stark-dark-blue`) to role-based (`--stark-anchor`)
+- New names locked in:
+  - `#004C97` → **Midnight Anchor** / `--stark-anchor` (was Dark Blue / `--stark-dark-blue`)
+  - `#F93822` → **Ember Pulse** / `--stark-pulse` (was Red / `--stark-primary-red`)
+  - `#307FE2` → **Sky Signal** / `--stark-signal` (was Light Blue / `--stark-primary-light-blue`)
+  - `#FEDD00` → **Caution Beacon** / `--stark-beacon` (was Yellow / `--stark-secondary-yellow`)
+  - `#00B140` → **Moss Affirm** / `--stark-affirm` (was Green / `--stark-secondary-green`)
+  - `#E31C79` → **Pop Spark** / `--stark-spark` (was Magenta / `--stark-secondary-magenta`)
+- Functional UI tokens (`--stark-text`, `--stark-muted`, `--stark-rule`, etc.) keep plain names — dual naming earns its keep on brand colors only
+
+### Decided — Variable rename strategy (Option 2)
+- Phase 2 child theme adopts new variable names from day one
+- Phase 1 production CSS (starksocial.com WPCode + hub.starksocial.com `custom.css`) keeps existing names until Phase 2 cutover
+- Brand sheet (`brand-sheet/stark/`) reflects Phase 2 conventions — it's the forward-looking authority
+- Mapping table for the transition period documented in STYLEGUIDE.md and rendered in the brand sheet's Tokens section
+- No live-site changes during Phase 2 build per existing rule (BUILDPLAN policy)
+
+### Added — Brand Sheet v2.0.6 (Phase 3.3)
+- `sections/tokens.php` — full CSS variable reference rendered in the brand sheet
+  - Functional UI subsection (text, surface, rule colors with alpha values)
+  - Dynamic accent subsection (live accent triplet)
+  - Seasonal overrides subsection (all four seasons with `data-stark-season` selectors)
+  - Layout subsection (radii and max widths)
+  - Phase 1 → Phase 2 legacy mapping table (3 columns: canonical, Phase 1 marketing, Phase 1 Hub)
+- Color section redesigned: dual name as headline, role as small label, five copyable values per color (HEX/RGB/CMYK/Pantone/Variable), no more tint/shade family chips
+- Tints/shades dropped from active rendering — modern design tools generate algorithmically; original brand standards PDF retained in Drive at `Stark Social Media Agency → Tech → Reference/` for press use
+
+### Modified
+- `STYLEGUIDE.md` — major rewrite of Brand Colors section: Phase 2 naming table leads, Pantone/RGB/CMYK reference table, "Why dual names" explainer, Phase 1 → Phase 2 rename mapping, naming policy for functional vs evocative tokens. Component descriptions throughout updated to use new vocabulary (Anchor gradient, Sky Signal accent, Spark CTA, etc.)
+- `config.php` — color entries restructured with `name` (full evocative+functional), `role` (legacy descriptive), `variable` (CSS var), full token system added
+- `sections/colors.php` — renders dual name + role + variable; family chip rendering removed
+- `assets/css/brand-sheet.css` — added styles for `.bs-color__head`, `.bs-color__role`, `.bs-token-grid`, `.bs-token`, `.bs-legacy-table`, with print rules for all new components
+
+### Open for next session
+- Logos: drop SVG/PNG variants in `assets/logos/`, populate `'logos' => []` in config
+- Voice section: short, draws from STYLEGUIDE
+- Hosting buildout: `brand.starksocial.com` apex + dispatcher + custom domain support via CNAME
+- Email signature generator: port from Hub when ready
+- Cover headline letter-spacing fix (Barlow "a A" glyph collision at 36pt on PDF cover)
+- Type scale `.bs-scale` page-break-inside refinement
+
 ## [2.0.5] — April 29 2026
 
 ### Added — Brand Sheet stark/ scaffold + full data layer (Phase 3.3)
