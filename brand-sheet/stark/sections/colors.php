@@ -1,12 +1,8 @@
 <?php
 /**
  * Section: Colors
- *
- * Each color renders with: dual name (Midnight Anchor), role (Dark Blue),
- * full data block (HEX/RGB/CMYK/Pantone), variable name, and usage prose.
- *
- * Tints and shades dropped April 29 2026 — modern design tools generate
- * algorithmically; print designers work from canonical Pantone/CMYK.
+ * v8.11: Primary/Secondary subheads quieted with bs-h3--group modifier
+ *        so the brand palette grid reads as one unified composition.
  */
 
 declare(strict_types=1);
@@ -82,14 +78,14 @@ if (!function_exists('bs_render_color')) {
     <p class="bs-section__lede">Six colors. Each one earns its place — there's nothing here that doesn't get used. Hex, RGB, CMYK, and Pantone are canonical for press work; variables are for build. Click any value to copy.</p>
 
     <?php if (!empty($colors['primary'])): ?>
-      <h3 class="bs-h3">Primary</h3>
+      <p class="bs-h3 bs-h3--group">Primary</p>
       <div class="bs-color-grid">
         <?php foreach ($colors['primary'] as $c) bs_render_color($c); ?>
       </div>
     <?php endif; ?>
 
     <?php if (!empty($colors['secondary'])): ?>
-      <h3 class="bs-h3">Secondary</h3>
+      <p class="bs-h3 bs-h3--group">Secondary</p>
       <div class="bs-color-grid">
         <?php foreach ($colors['secondary'] as $c) bs_render_color($c); ?>
       </div>

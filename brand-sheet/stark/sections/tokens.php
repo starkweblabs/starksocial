@@ -1,13 +1,8 @@
 <?php
 /**
  * Section: Tokens
- *
- * Renders the CSS variable system actually used in production. Each token
- * shows variable name, computed value, optional swatch (color tokens),
- * usage prose, and click-to-copy on the variable name.
- *
- * Closes with the Phase 1 → Phase 2 legacy mapping table for the rename
- * cutover. Source of truth: STYLEGUIDE.md §UI Tokens.
+ * v8.14: Seasonal overrides group removed (still in config.php for runtime use,
+ *        just not rendered on the brand guide page).
  */
 
 declare(strict_types=1);
@@ -25,8 +20,6 @@ if (!function_exists('bs_render_token_row')) {
         $type     = $t['type'] ?? 'text';
         $usage    = $t['usage'] ?? '';
 
-        // For seasonal accent rows, the "variable" is the season name;
-        // the actual CSS selector is html[data-stark-season="X"]
         $copy_value = $is_seasonal
             ? 'html[data-stark-season="' . $variable . '"] { --stark-accent: ' . $value . '; }'
             : $variable;
@@ -62,7 +55,7 @@ if (!function_exists('bs_render_token_row')) {
     <p class="bs-section__lede">The CSS variables that build every Stark surface. Click any variable name to copy. Source of truth: <code>STYLEGUIDE.md</code> in the Phase 2 repo.</p>
 
     <?php if (!empty($tokens['ui'])): ?>
-      <h3 class="bs-h3">Functional UI</h3>
+      <p class="bs-h3 bs-h3--group">Functional UI</p>
       <p class="bs-token-group__lede">Text, surface, and rule colors. The everyday tokens.</p>
       <div class="bs-token-grid">
         <?php foreach ($tokens['ui'] as $t) bs_render_token_row($t); ?>
@@ -70,23 +63,15 @@ if (!function_exists('bs_render_token_row')) {
     <?php endif; ?>
 
     <?php if (!empty($tokens['accent'])): ?>
-      <h3 class="bs-h3">Dynamic accent</h3>
-      <p class="bs-token-group__lede">Live accent values. Default = Sky Signal at 0.85 alpha. Overridden seasonally — see below.</p>
+      <p class="bs-h3 bs-h3--group">Dynamic accent</p>
+      <p class="bs-token-group__lede">Live accent values. Default = Sky Signal at 0.85 alpha.</p>
       <div class="bs-token-grid">
         <?php foreach ($tokens['accent'] as $t) bs_render_token_row($t); ?>
       </div>
     <?php endif; ?>
 
-    <?php if (!empty($tokens['seasons'])): ?>
-      <h3 class="bs-h3">Seasonal overrides</h3>
-      <p class="bs-token-group__lede">Set on <code>&lt;html data-stark-season="…"&gt;</code> at runtime. Each one overrides <code>--stark-accent</code>.</p>
-      <div class="bs-token-grid">
-        <?php foreach ($tokens['seasons'] as $t) bs_render_token_row($t, true); ?>
-      </div>
-    <?php endif; ?>
-
     <?php if (!empty($tokens['layout'])): ?>
-      <h3 class="bs-h3">Layout</h3>
+      <p class="bs-h3 bs-h3--group">Layout</p>
       <p class="bs-token-group__lede">Radii and max widths. Every dimensional decision lives here.</p>
       <div class="bs-token-grid">
         <?php foreach ($tokens['layout'] as $t) bs_render_token_row($t); ?>
@@ -94,7 +79,7 @@ if (!function_exists('bs_render_token_row')) {
     <?php endif; ?>
 
     <?php if (!empty($legacy_mapping)): ?>
-      <h3 class="bs-h3">Phase 1 → Phase 2 rename</h3>
+      <p class="bs-h3 bs-h3--group">Phase 1 → Phase 2 rename</p>
       <p class="bs-token-group__lede">Phase 2 simplifies brand color naming. Phase 1 production CSS keeps its current names until cutover. Mapping below documents both for the transition period. Hub uses a separate <code>--ss-*</code> namespace; mapped here too.</p>
       <div class="bs-legacy-table-wrap">
         <table class="bs-legacy-table">

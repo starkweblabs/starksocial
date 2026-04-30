@@ -1,8 +1,8 @@
 <?php
 /**
  * Section: Cover Page
- * v8.3: BRAND GUIDE label moved above logo. Meta block removed.
- *       Tagline larger. Strict left-aligned column.
+ * v8.8: Tagline removed. BRAND GUIDE gets a short underline accent.
+ *       Content flush left at container edge.
  */
 
 declare(strict_types=1);
@@ -30,14 +30,13 @@ $text_color   = $cover['text_color']   ?? ($is_dark ? '#FFFFFF' : '#111111');
 $accent_color = $cover['accent_color'] ?? '#FEDD00';
 
 $logo_file  = $cover['logo']['file']      ?? null;
-$logo_max   = $cover['logo']['max_width'] ?? '320px';
+$logo_max   = $cover['logo']['max_width'] ?? '448px';
 
 $doc_label  = $cover['doc_type_label'] ?? 'BRAND GUIDE';
 
 $top_bar = $cover['top_bar'] ?? null;
 
 $client_name = $client['name'] ?? 'Brand Guide';
-$tagline     = $config['identity']['tagline'] ?? '';
 ?>
 
 <section class="bs-cover<?= $is_dark ? ' bs-cover--dark' : ' bs-cover--light' ?>"
@@ -52,16 +51,15 @@ $tagline     = $config['identity']['tagline'] ?? '';
 
   <div class="bs-cover__inner">
 
-    <p class="bs-cover__doc-label"><?= htmlspecialchars($doc_label) ?></p>
+    <div class="bs-cover__eyebrow">
+      <p class="bs-cover__doc-label"><?= htmlspecialchars($doc_label) ?></p>
+      <span class="bs-cover__rule" aria-hidden="true"></span>
+    </div>
 
     <?php if ($logo_file): ?>
       <div class="bs-cover__logo" style="max-width: <?= htmlspecialchars($logo_max) ?>;">
         <img src="assets/logos/<?= htmlspecialchars($logo_file) ?>" alt="<?= htmlspecialchars($client_name) ?>">
       </div>
-    <?php endif; ?>
-
-    <?php if ($tagline): ?>
-      <h1 class="bs-cover__tagline"><?= htmlspecialchars($tagline) ?></h1>
     <?php endif; ?>
 
   </div>

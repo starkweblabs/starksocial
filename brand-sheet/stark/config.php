@@ -1,11 +1,7 @@
 <?php
 /**
  * Brand Guide Configuration — Stark Social Media Agency
- *
- * v8.1: Stewarded → Crafted (per Nathan, "Stewarded sounds like a church word").
- *       Cover meta: "Stewarded by" → "Maintained by" (different word for ongoing
- *       service vs the work itself).
- *       Identity description softened from "Brand stewardship" → "Brand work".
+ * v8.13: Added 'kind' field to each logo (wordmark | icon).
  */
 
 declare(strict_types=1);
@@ -13,12 +9,16 @@ declare(strict_types=1);
 return [
 
     'client' => [
-        'slug'        => 'stark',
-        'name'        => 'Stark Social Media Agency',
-        'short_name'  => 'Stark Social',
-        'website'     => 'https://starksocial.com',
-        'updated'     => '2026-04-29',
-        'active'      => true,
+        'slug'         => 'stark',
+        'name'         => 'Stark Social Media Agency',
+        'short_name'   => 'Stark Social',
+        'website'      => 'starksocial.com',
+        'website_url'  => 'https://starksocial.com',
+        'updated'      => '2026-04-29',
+        'founded'      => '2012',
+        'headquarters' => 'Santa Clarita, California',
+        'serving'      => 'Nationwide',
+        'active'       => true,
     ],
 
     'cover' => [
@@ -28,7 +28,7 @@ return [
         ],
         'logo' => [
             'file'      => 'stark-wordmark-light.svg',
-            'max_width' => '320px',
+            'max_width' => '448px',
         ],
         'doc_type_label' => 'BRAND GUIDE',
         'accent_color'   => '#FEDD00',
@@ -62,7 +62,7 @@ return [
     'identity' => [
         'tagline'     => 'Marketing that earns its keep',
         'mission'     => 'We run full-service marketing for small and mid-sized businesses across Southern California — social, ads, web, SEO, brand, content, fractional CMO. The work over the words.',
-        'description' => 'Stark Social Media Agency is a full-service marketing agency based in Southern California, working with small and mid-sized businesses across the region. The team handles social media management, paid advertising, web design, SEO, content creation, brand strategy, audit and consulting, and fractional CMO services. The agency was founded by Nathan Imhoff and operates on a small-team, deep-focus model — fewer clients, more attention. Brand work — including the upkeep of this brand guide — is part of an ongoing Stark Care Pro retainer.',
+        'description' => 'Stark Social Media Agency is a full-service marketing agency based in Southern California, working with small and mid-sized businesses across the region. The team handles social media management, paid advertising, web design, SEO, content creation, brand strategy, audit and consulting, and fractional CMO services. The agency was founded by Nathan Imhoff and operates on a small-team, deep-focus model — fewer clients, more attention.',
     ],
 
     'colors' => [
@@ -178,6 +178,7 @@ return [
             'description' => 'The Stark wordmark in full color with "SOCIAL MEDIA AGENCY" beneath. Default lockup for any light surface — paper, white screens, photos with light areas.',
             'file'        => 'stark-wordmark-dark.svg',
             'background'  => 'light',
+            'kind'        => 'wordmark',
         ],
         [
             'name'        => 'Wordmark — Light',
@@ -185,6 +186,7 @@ return [
             'description' => 'The Stark wordmark adapted for dark surfaces. Use on photos, dark blocks, and the Anchor gradient.',
             'file'        => 'stark-wordmark-light.svg',
             'background'  => 'dark',
+            'kind'        => 'wordmark',
         ],
         [
             'name'        => 'Stark Social Icon',
@@ -192,6 +194,7 @@ return [
             'description' => 'The original cloud lockup — Stark Social Agency\'s historical mark. Use as an avatar, social profile, or wherever a recognizable square brand element is needed.',
             'file'        => 'stark-icon.svg',
             'background'  => 'light',
+            'kind'        => 'icon',
         ],
         [
             'name'        => 'Web Icon',
@@ -199,6 +202,7 @@ return [
             'description' => 'The icon Stark places on websites it builds — a small "designed by Stark" signature on client sites.',
             'file'        => 'stark-web-icon.svg',
             'background'  => 'light',
+            'kind'        => 'icon',
         ],
     ],
 

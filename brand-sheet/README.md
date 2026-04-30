@@ -191,3 +191,15 @@ The brand sheet is the answer to a specific problem every brand-conscious client
 The brand sheet eliminates that. One URL. Always current. Always correct.
 
 It's a tangible, ongoing deliverable that justifies a retainer. Most agencies don't offer this — they hand off a brand PDF at launch and disappear. Stark Care Pro means the brand stewardship continues.
+
+---
+
+## Printing / Saving as PDF
+
+**Recommended browser: Google Chrome.** The brand sheet's print CSS is optimized for Chrome's print engine. Other browsers have limitations:
+
+- **Chrome** — Works perfectly. Use the in-page "Print / Save PDF" button or Cmd+P → Save as PDF. Output is 10 pages, landscape letter, no phantom pages.
+- **Firefox** — Landscape works, but renders an additional blank page at the end. Cosmetic only; if you need a clean PDF, use Chrome.
+- **Safari** — Does not honor the `@page { size: letter landscape }` directive. Prints portrait by default. To work around: in the print dialog, manually set Orientation to Landscape and Paper Size to US Letter before saving.
+
+If you're sharing the PDF with a vendor who needs a clean output, generate it from Chrome.

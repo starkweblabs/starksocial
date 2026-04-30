@@ -1,9 +1,8 @@
 <?php
 /**
  * Section: Closing Page
- * v8.3: Hidden on web (display: none), only shows in print/PDF.
- *       Footer text now lives inside the closing section so it's
- *       on the blue, not on a separate white block.
+ * v8.17: Copyright line simplified to "© [YEAR] Crafted by Stark Social Media Agency"
+ *        (removed "Crafted as part of Stark Care Pro ·" prefix)
  */
 
 declare(strict_types=1);
@@ -63,7 +62,7 @@ $brand_email = $contact['brand_questions'] ?? 'hello@starksocial.com';
     <p class="bs-closing__url">starksocial.com</p>
 
     <p class="bs-closing__copyright">
-      Crafted as part of Stark Care Pro &middot; &copy; <?= date('Y') ?> Stark Social Media Agency
+      &copy; <?= date('Y') ?> Crafted by Stark Social Media Agency
     </p>
 
   </div>

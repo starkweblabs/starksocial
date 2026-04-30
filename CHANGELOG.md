@@ -2,6 +2,21 @@
 **Project:** starksocial.com
 **Format:** newest first
 
+## [2.0.16] — April 30 2026
+
+### Fixed — Brand Sheet PDF
+- **Chrome phantom blank page eliminated.** Root cause: `100vh` in print evaluates to screen viewport height in Chrome (10+ inches on most displays), not page height (~7.5 inches landscape letter). Closing element was 10in tall on a 7.5in page → forced a 2nd page that rendered with default `@page` template (the phantom). Fixed by replacing all `100vh` with explicit inch values on print-specific elements.
+- **Cover page logo position** — north-shifted in PDF only via print-specific padding override; web cover unchanged
+- **Color palette** — all 6 colors fit one PDF page (chip 38pt, body padding 5pt 7pt)
+- **Logos section** — wordmarks + icons all fit one PDF page (max-based sizing, contained properly)
+
+### Decided — Brand Sheet print recommendation
+- **Print from Chrome.** Firefox renders a phantom trailing page in print; Safari ignores `@page { size: letter landscape }`. Both require browser-specific workarounds we're not pursuing. Chrome is the recommended browser, documented in `brand-sheet/README.md`.
+
+### Architectural changes
+- `.bs-closing` rendered as `<body>` sibling instead of inside `<main>` — cleaner pagination isolation
+- Print CSS uses `body > *:not(.bs-main):not(.bs-closing) { display: none }` to whitelist only main content + closing in print
+
 ## [2.0.8] — April 30 2026
 
 ### Added — Brand Guide functional product

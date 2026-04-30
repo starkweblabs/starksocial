@@ -1,8 +1,9 @@
 <?php
 /**
  * Stark Brand Guide — orchestrator
- * v8.3: Top bar gets dynamic class for transparency over cover.
- *       Site footer removed (now lives inside closing page on blue).
+ * v8.18: .bs-closing now lives OUTSIDE <main> as a body-level sibling.
+ *        This isolates it from main's pagination flow and lets
+ *        page: bs-closing-page actually take effect cleanly.
  */
 
 declare(strict_types=1);
@@ -31,6 +32,8 @@ $updated     = $config['client']['updated']    ?? '';
 </head>
 <body>
 
+  <div class="bs-redbar-top" aria-hidden="true"></div>
+
   <header class="bs-bar bs-bar--over-cover" id="bs-bar">
     <div class="bs-bar__inner">
       <div class="bs-brand">
@@ -48,8 +51,10 @@ $updated     = $config['client']['updated']    ?? '';
 
   <main class="bs-main">
     <?php
+      // Render every section EXCEPT 'closing' — closing renders below as a sibling
       $sections = $config['sections'] ?? [];
       foreach ($sections as $section_name) {
+          if ($section_name === 'closing') continue;
           $section_file = __DIR__ . '/sections/' . $section_name . '.php';
           if (file_exists($section_file)) {
               include $section_file;
@@ -58,18 +63,33 @@ $updated     = $config['client']['updated']    ?? '';
     ?>
   </main>
 
+  <?php
+    // Closing rendered OUTSIDE main as a body-level sibling.
+    // This keeps it isolated from main's pagination flow.
+    if (in_array('closing', $sections, true)) {
+        $closing_file = __DIR__ . '/sections/closing.php';
+        if (file_exists($closing_file)) {
+            include $closing_file;
+        }
+    }
+  ?>
+
+  <footer class="bs-footer">
+    <div class="bs-footer__inner">
+      <p class="bs-footer__cta">Branding Questions? <a href="https://starksocial.com/contact/" target="_blank" rel="noopener">Let's Chat</a></p>
+      <p class="bs-footer__copyright">&copy; <?= date('Y') ?> Crafted by Stark Social Media Agency.</p>
+    </div>
+  </footer>
+
   <script src="assets/js/brand-sheet.js"></script>
   <script>
-    // Top bar transparency over cover, frosted glass on scroll
     (function() {
       const bar = document.getElementById('bs-bar');
       const cover = document.getElementById('cover');
       if (!bar || !cover) return;
-
       function updateBar() {
         const coverBottom = cover.getBoundingClientRect().bottom;
-        // Switch to frosted state once we've scrolled past the cover
-        if (coverBottom <= 60) {
+        if (coverBottom <= 80) {
           bar.classList.remove('bs-bar--over-cover');
           bar.classList.add('bs-bar--frosted');
         } else {
@@ -77,7 +97,6 @@ $updated     = $config['client']['updated']    ?? '';
           bar.classList.remove('bs-bar--frosted');
         }
       }
-
       updateBar();
       window.addEventListener('scroll', updateBar, { passive: true });
       window.addEventListener('resize', updateBar, { passive: true });
